@@ -1,0 +1,5 @@
+
+enum ButtonColor {
+  green,
+  grey
+}

@@ -1,0 +1,4 @@
+enum ButtonSize {
+  S,
+  M
+}
