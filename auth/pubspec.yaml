@@ -1,8 +1,8 @@
-name: ui_components
+name: auth
 description: "A new Flutter package project."
 version: 0.0.1
-homepage:
 publish_to: none
+homepage:
 
 environment:
   sdk: '>=3.4.4 <4.0.0'
@@ -11,10 +11,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  ui_utils:
-    path: ../ui_utils
   ui_theming:
     path: ../ui_theming
+  ui_utils:
+    path: ../ui_utils 
+  ui_components:
+    path: ../ui_components
   flutter_svg: ^2.0.10+1
 
 dev_dependencies:
@@ -22,9 +24,9 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^3.0.0
 
-
 flutter:
   assets:
-    - packages/ui_components/assets/logo/random_walk_logo.svg
+    - packages/auth/assets/icons/vk.svg
+    - packages/auth/assets/icons/google.svg
+    - packages/auth/assets/icons/yandex.svg
   uses-material-design: true
-

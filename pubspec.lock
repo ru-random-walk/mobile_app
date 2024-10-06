@@ -17,6 +17,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
+  auth:
+    dependency: "direct main"
+    description:
+      path: auth
+      relative: true
+    source: path
+    version: "0.0.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -255,7 +262,7 @@ packages:
     source: path
     version: "0.0.1"
   ui_utils:
-    dependency: transitive
+    dependency: "direct main"
     description:
       path: ui_utils
       relative: true

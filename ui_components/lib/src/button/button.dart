@@ -11,12 +11,14 @@ class CustomButton extends StatelessWidget {
   final Widget? leftIcon;
   final Widget? rightIcon;
   final String text;
+  final TextStyle? textStyle;
   final ButtonSize size;
   final ButtonColor color;
   final ButtonType type;
 
   const CustomButton({
     super.key,
+    this.textStyle,
     this.onPressed,
     this.leftIcon,
     this.rightIcon,
@@ -28,15 +30,14 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
-    final style = _getStyle(colors);
+    final style = _getStyle(context);
     return SizedBox(
       height: _height,
       width: double.infinity,
       child: OutlinedButton(
         style: style,
         onPressed: onPressed,
-        child: child,
+        child: child(context.textTheme),
       ),
     );
   }
@@ -46,20 +47,20 @@ class CustomButton extends StatelessWidget {
         ButtonSize.M => 52.toFigmaSize,
       };
 
-  Widget get child {
+  Widget child(TextThemeExtension textStyles) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         if (leftIcon != null) leftIcon!,
-        Text(text),
+        Text(text, style: textStyle),
         if (rightIcon != null) rightIcon!,
       ],
     );
   }
 
-  ButtonStyle _getStyle(ExtendedTheme theme) => switch (type) {
-        ButtonType.primary => _getPrimaryStyle(theme),
-        ButtonType.secondary => _getSecondaryStyle(theme),
+  ButtonStyle _getStyle(BuildContext context) => switch (type) {
+        ButtonType.primary => _getPrimaryStyle(context),
+        ButtonType.secondary => _getSecondaryStyle(context),
         ButtonType.tertiary => throw UnimplementedError(),
       };
 
@@ -81,10 +82,19 @@ class CustomButton extends StatelessWidget {
     }
   }
 
-  ButtonStyle _getPrimaryStyle(ExtendedTheme theme) {
+  ButtonStyle _getPrimaryStyle(BuildContext context) {
+    final theme = context.colors;
+    final textStyles = context.textTheme;
     return ButtonStyle(
+      textStyle: WidgetStatePropertyAll(_getTextStyleForPrimary(textStyles)),
       side: const WidgetStatePropertyAll(BorderSide.none),
       shape: WidgetStateProperty.all(_border),
+      foregroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+        if (states.contains(WidgetState.pressed)) {
+          return _getOnPressedColor(theme);
+        }
+        return _getColor(theme);
+      }),
       backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
         if (states.contains(WidgetState.pressed)) {
           return _getOnPressedColor(theme);
@@ -94,17 +104,50 @@ class CustomButton extends StatelessWidget {
     );
   }
 
+  TextStyle _getTextStyleForPrimary(TextThemeExtension textTheme) =>
+      switch (size) {
+        ButtonSize.S => textTheme.bodySMediumBase0,
+        ButtonSize.M => textTheme.bodyMRegularBase0,
+      };
+
+  TextStyle _getTextStyleForSecondary(
+          TextThemeExtension textTheme, bool isPressed) =>
+      switch (size) {
+        ButtonSize.S when !isPressed => textTheme.bodySMediumMain50,
+        ButtonSize.S when isPressed => textTheme.bodySMediumMain70,
+        ButtonSize.M when !isPressed => textTheme.bodyMRegularMain50,
+        ButtonSize.M when isPressed => textTheme.bodyMRegularMain70,
+        _ => throw UnimplementedError(),
+      };
+
   OutlinedBorder get _border => RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(6.toFigmaSize),
       );
 
-  ButtonStyle _getSecondaryStyle(ExtendedTheme theme) {
+  ButtonStyle _getSecondaryStyle(BuildContext context) {
+    final theme = context.colors;
+    final textStyles = context.textTheme;
     final side = BorderSide(
       color: _getColor(theme),
       width: 1.toFigmaSize,
     );
     return ButtonStyle(
-      foregroundColor:  WidgetStateProperty.all<Color>(Colors.yellow),
+      foregroundColor: WidgetStateProperty.resolveWith<Color>(
+        (states) {
+          if (states.contains(WidgetState.pressed)) {
+            return _getOnPressedColor(theme);
+          }
+          return _getColor(theme);
+        },
+      ),
+      textStyle: WidgetStateProperty.resolveWith<TextStyle>(
+        (states) {
+          if (states.contains(WidgetState.pressed)) {
+            return _getTextStyleForSecondary(textStyles, true);
+          }
+          return _getTextStyleForSecondary(textStyles, true);
+        },
+      ),
       overlayColor: WidgetStateProperty.all<Color>(Colors.transparent),
       surfaceTintColor: WidgetStateProperty.all<Color>(Colors.transparent),
       backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
