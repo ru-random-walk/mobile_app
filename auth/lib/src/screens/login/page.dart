@@ -5,6 +5,8 @@ import 'package:ui_components/ui_components.dart';
 import 'package:ui_utils/ui_utils.dart';
 
 class AuthScreen extends StatelessWidget {
+  const AuthScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     final dividerBig = SizedBox(
@@ -21,7 +23,7 @@ class AuthScreen extends StatelessWidget {
               dividerBig,
               const AppLogoWithTitle(),
               dividerBig,
-              Expanded(
+              const Expanded(
                 child: LoginButtonGroup(),
               ),
               dividerBig,

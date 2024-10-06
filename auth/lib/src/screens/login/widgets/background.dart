@@ -21,8 +21,8 @@ class LoginScreenBackground extends StatelessWidget {
             width: 270.toFigmaSize,
             height: 270.toFigmaSize,
             child: Container(
-              decoration: BoxDecoration(
-                color: const Color(0xFF05CC31),
+              decoration: const BoxDecoration(
+                color: Color(0xFF05CC31),
                 shape: BoxShape.circle,
               ),
             ),
@@ -33,8 +33,8 @@ class LoginScreenBackground extends StatelessWidget {
             width: 270.toFigmaSize,
             height: 270.toFigmaSize,
             child: Container(
-              decoration: BoxDecoration(
-                color: const Color(0xFF08B42B),
+              decoration: const BoxDecoration(
+                color: Color(0xFF08B42B),
                 shape: BoxShape.circle,
               ),
             ),
@@ -45,8 +45,8 @@ class LoginScreenBackground extends StatelessWidget {
             child: Container(
               width: 260.toFigmaSize,
               height: 260.toFigmaSize,
-              decoration: BoxDecoration(
-                color: const Color(0xFF32CE32),
+              decoration: const BoxDecoration(
+                color: Color(0xFF32CE32),
                 shape: BoxShape.circle,
               ),
             ),
