@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:ui_components/ui_components.dart';
 import 'package:ui_utils/ui_utils.dart';
 
@@ -26,7 +27,26 @@ class LoginButtonGroup extends StatelessWidget {
             type: ButtonType.secondary,
             text: 'Войти через Google',
             textStyle: context.textTheme.bodyMRegularBase90,
-            onPressed: () {
+            onPressed: () async {
+              final scopes = [
+                'https://www.googleapis.com/auth/userinfo.email',
+                'https://www.googleapis.com/auth/userinfo.profile',
+              ];
+              final gogleSignIn = GoogleSignIn(
+                scopes: scopes,
+                clientId:
+                    '1054943845569-pjnjpb4lpm8irkh5jt5m28a0l5i5br70.apps.googleusercontent.com',
+              );
+              try {
+                final acc = await gogleSignIn.signIn();
+                final auth = await acc?.authentication;
+                final idToken = auth?.idToken;
+                final token = auth?.accessToken;
+                print(token);
+              } catch (e, s) {
+                print(e);
+                print(s);
+              }
               print('Pressed');
             },
           ),

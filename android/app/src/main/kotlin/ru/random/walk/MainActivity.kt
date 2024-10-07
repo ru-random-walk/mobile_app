@@ -1,4 +1,4 @@
-package ru.hse_diploma.random_walk.random_walk
+package ru.random.walk
 
 import io.flutter.embedding.android.FlutterActivity
 
