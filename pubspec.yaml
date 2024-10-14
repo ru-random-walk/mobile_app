@@ -11,11 +11,11 @@ dependencies:
   flutter:
     sdk: flutter
   ui_components:
-    path: ui_components
+    path: common/ui_components
   ui_theming:
-    path: ui_theming
+    path: common/ui_theming
   ui_utils:
-    path: ui_utils 
+    path: common/ui_utils 
   auth:
     path: auth
   flutter_svg: ^2.0.10+1

@@ -335,21 +335,21 @@ packages:
   ui_components:
     dependency: "direct main"
     description:
-      path: ui_components
+      path: "common/ui_components"
       relative: true
     source: path
     version: "0.0.1"
   ui_theming:
     dependency: "direct main"
     description:
-      path: ui_theming
+      path: "common/ui_theming"
       relative: true
     source: path
     version: "0.0.1"
   ui_utils:
     dependency: "direct main"
     description:
-      path: ui_utils
+      path: "common/ui_utils"
       relative: true
     source: path
     version: "0.0.1"
