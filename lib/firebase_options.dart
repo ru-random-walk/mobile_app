@@ -50,19 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDpgf-4HG9C0FBNWRbLAKEDpRZr3xdKfXI',
-    appId: '1:1054943845569:android:7c3f7692e8d68be4b0c840',
-    messagingSenderId: '1054943845569',
-    projectId: 'random-walk-f9c55',
-    storageBucket: 'random-walk-f9c55.appspot.com',
+    apiKey: 'AIzaSyCcm2P9q4OyO3gDY3h9Udkf0veWQCwxyKs',
+    appId: '1:402464264412:android:33f6be819d43dafeea6419',
+    messagingSenderId: '402464264412',
+    projectId: 'random-walk-app',
+    storageBucket: 'random-walk-app.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDXmI5Ifn-ybx97aBNPTtXDObhxslSMzNo',
-    appId: '1:1054943845569:ios:1c21087f9d0eab95b0c840',
-    messagingSenderId: '1054943845569',
-    projectId: 'random-walk-f9c55',
-    storageBucket: 'random-walk-f9c55.appspot.com',
-    iosBundleId: 'ru.hsediploma.randomwalk.randomWalk',
+    apiKey: 'AIzaSyC5kLDfDTEoldNKg9LNpzy5dCI2EsWWLVk',
+    appId: '1:402464264412:ios:bd98295f4b105c1aea6419',
+    messagingSenderId: '402464264412',
+    projectId: 'random-walk-app',
+    storageBucket: 'random-walk-app.appspot.com',
+    iosBundleId: 'ru.hse.random.walk',
   );
 }

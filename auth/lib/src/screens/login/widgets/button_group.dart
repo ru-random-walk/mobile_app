@@ -34,8 +34,6 @@ class LoginButtonGroup extends StatelessWidget {
               ];
               final gogleSignIn = GoogleSignIn(
                 scopes: scopes,
-                clientId:
-                    '1054943845569-pjnjpb4lpm8irkh5jt5m28a0l5i5br70.apps.googleusercontent.com',
               );
               try {
                 final acc = await gogleSignIn.signIn();

@@ -1,4 +1,4 @@
-package ru.random.walk
+package ru.hse.random.walk
 
 import io.flutter.embedding.android.FlutterActivity
 
