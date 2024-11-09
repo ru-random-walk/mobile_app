@@ -17,13 +17,24 @@ dependencies:
     path: ../common/ui_utils 
   ui_components:
     path: ../common/ui_components
+  utils:
+    path: ../common/utils
+  core:
+    path: ../core
   flutter_svg: ^2.0.10+1
   google_sign_in: ^6.2.1
+  json_annotation: ^4.9.0
+  flutter_dotenv: ^5.2.1
+  flutter_bloc: ^8.1.6
+  retrofit: ^4.4.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  retrofit_generator: '>=8.0.0 <10.0.0'
   flutter_lints: ^3.0.0
+  build_runner: ^2.3.3
+  json_serializable: ^6.8.0
 
 flutter:
   assets:

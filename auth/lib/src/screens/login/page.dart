@@ -13,22 +13,22 @@ class AuthScreen extends StatelessWidget {
       height: 40.toFigmaSize,
     );
     return LoginScreenBackground(
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 32.toFigmaSize),
-          child: Column(
-            children: [
-              dividerBig,
-              dividerBig,
-              const AppLogoWithTitle(),
-              dividerBig,
-              const Expanded(
-                child: LoginButtonGroup(),
-              ),
-              dividerBig,
-              dividerBig,
-            ],
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 32.toFigmaSize),
+            child: Column(
+              children: [
+                dividerBig,
+                const AppLogoWithTitle(),
+                dividerBig,
+                const Expanded(
+                  child: LoginButtonGroup(),
+                ),
+                dividerBig,
+              ],
+            ),
           ),
         ),
       ),

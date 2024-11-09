@@ -1,5 +1,7 @@
+import 'dart:async';
+
 import 'package:utils/src/either/either.dart';
 
-abstract interface class BaseUseCase<Result, Error, Params> {
-  Either<Result, Error> call([Params params]);
+abstract interface class BaseUseCase<Error, Result, Params> {
+  FutureOr<Either<Error, Result>> call(Params params);
 }

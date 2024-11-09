@@ -6,4 +6,7 @@ sealed class Either<L,R>{
 
   bool get isRight => this is Right<L,R>;
   bool get isLeft => this is Left<L,R>;
+
+  L get leftValue => (this as Left<L,R>)._value;
+  R get rightValue => (this as Right<L,R>)._value;
 }
