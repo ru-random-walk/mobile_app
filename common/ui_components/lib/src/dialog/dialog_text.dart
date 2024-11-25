@@ -19,7 +19,12 @@ class DialogTextColumnWigdet extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(name, style: context.textTheme.h5),
+        Text(
+          name,
+          style: context.textTheme.h5,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
         SizedBox(height: 8.toFigmaSize),
         _getText(context)
       ],
@@ -35,6 +40,11 @@ class DialogTextColumnWigdet extends StatelessWidget {
         ),
       );
     }
-    return Text(text, style: context.textTheme.bodyMRegularBase90);
+    return Text(
+      text,
+      style: context.textTheme.bodyMRegularBase90,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+    );
   }
 }
