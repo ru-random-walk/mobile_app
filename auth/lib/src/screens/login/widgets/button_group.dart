@@ -1,6 +1,8 @@
+import 'package:auth/src/domain/entities/auth_type/enum.dart';
+import 'package:auth/src/screens/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:ui_components/ui_components.dart';
 import 'package:ui_utils/ui_utils.dart';
 
@@ -14,6 +16,7 @@ class LoginButtonGroup extends StatelessWidget {
     final dividerSmall = SizedBox(
       height: 16.toFigmaSize,
     );
+    final bloc = context.read<AuthBloc>();
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -27,26 +30,7 @@ class LoginButtonGroup extends StatelessWidget {
             type: ButtonType.secondary,
             text: 'Войти через Google',
             textStyle: context.textTheme.bodyMRegularBase90,
-            onPressed: () async {
-              final scopes = [
-                'https://www.googleapis.com/auth/userinfo.email',
-                'https://www.googleapis.com/auth/userinfo.profile',
-              ];
-              final gogleSignIn = GoogleSignIn(
-                scopes: scopes,
-              );
-              try {
-                final acc = await gogleSignIn.signIn();
-                final auth = await acc?.authentication;
-                final idToken = auth?.idToken;
-                final token = auth?.accessToken;
-                print(token);
-              } catch (e, s) {
-                print(e);
-                print(s);
-              }
-              print('Pressed');
-            },
+            onPressed: () => bloc.add(LoginVia(AuthProvider.google)),
           ),
           dividerSmall,
           CustomButton(

@@ -11,8 +11,8 @@ abstract class TokenRequestModel {
 
   factory TokenRequestModel.via(AuthType authType) => TokenExchangeRequestModel(
         grantType: 'urn:ietf:params:oauth:grant-type:token-exchange',
-        subjectTokenProvider: authType.accessToken,
-        subjectToken: authType.provider.name,
+        subjectTokenProvider: authType.provider.name,
+        subjectToken: authType.accessToken,
         subjectTokenType: 'Access Token',
       );
 

@@ -1,11 +1,10 @@
-name: auth
+name: chats
 description: "A new Flutter package project."
 version: 0.0.1
 publish_to: none
-homepage:
 
 environment:
-  sdk: '>=3.4.4 <4.0.0'
+  sdk: ^3.5.3
   flutter: ">=1.17.0"
 
 dependencies:
@@ -33,13 +32,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   retrofit_generator: '>=8.0.0 <10.0.0'
-  flutter_lints: ^3.0.0
+  flutter_lints: ^4.0.0
   build_runner: ^2.3.3
   json_serializable: ^6.8.0
 
 flutter:
-  assets:
-    - packages/auth/assets/icons/vk.svg
-    - packages/auth/assets/icons/google.svg
-    - packages/auth/assets/icons/yandex.svg
-  uses-material-design: true
+

@@ -9,10 +9,10 @@ part 'token.g.dart';
 abstract class AuthDataSource {
   factory AuthDataSource(Dio dio, {String? baseUrl}) = _AuthDataSource;
 
-  @POST('/token')
-  @Headers({'Content-Type': 'x-www-form-urlencoded'})
+  @POST('/auth/token')
+  @Headers({'Content-Type': 'application/x-www-form-urlencoded'})
   Future<TokenResponseModel> auth(
     @Body() TokenRequestModel request,
-    @Header('Authathorization') String authorization,
+    @Header('Authorization') String authorization,
   );
 }
