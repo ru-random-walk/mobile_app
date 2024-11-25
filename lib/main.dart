@@ -1,10 +1,10 @@
 import 'package:auth/auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:ui_components/ui_components.dart';
 import 'package:ui_theming/ui_theming.dart';
 
 import 'firebase_options.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,6 +34,18 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return const AuthPage();
+    return Scaffold(
+      body: Center(
+        child: DialogWidget(
+          isInvitation: true,
+          type: Recieved(4),
+          name: 'Селезнев Максим',
+          text: 'Привет',
+          avatar: Image.network(
+            'https://www.clipartmax.com/png/full/258-2582267_circled-user-male-skin-type-1-2-icon-male-user-icon.png',
+          ),
+        ),
+      ),
+    );
   }
 }

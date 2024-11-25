@@ -1,7 +1,5 @@
 name: ui_components
 description: "A new Flutter package project."
-version: 0.0.1
-homepage:
 publish_to: none
 
 environment:
@@ -26,5 +24,7 @@ dev_dependencies:
 flutter:
   assets:
     - packages/ui_components/assets/logo/random_walk_logo.svg
+    - packages/ui_components/assets/icons/checked.svg
+    - packages/ui_components/assets/icons/double_tick.svg
   uses-material-design: true
 

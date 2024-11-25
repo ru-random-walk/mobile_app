@@ -417,7 +417,7 @@ packages:
       path: "common/ui_components"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.0.0"
   ui_theming:
     dependency: "direct main"
     description:
