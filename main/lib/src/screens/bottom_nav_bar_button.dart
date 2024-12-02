@@ -20,8 +20,8 @@ class _BottomNavBarButton extends StatelessWidget {
       onTap: onTap,
       child: SvgPicture.asset(
         isSelected ? pathForActive : pathForIncative,
-        width: 24.toFigmaSize,
-        height: 24.toFigmaSize,
+        width: 28.toFigmaSize,
+        height: 28.toFigmaSize,
       ),
     );
   }
