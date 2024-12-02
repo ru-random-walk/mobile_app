@@ -16,6 +16,8 @@ dependencies:
     path: common/ui_theming
   ui_utils:
     path: common/ui_utils 
+  main:
+    path: main
   auth:
     path: auth
   flutter_svg: ^2.0.10+1

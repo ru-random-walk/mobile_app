@@ -1,6 +1,7 @@
 import 'package:auth/auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:main/main.dart';
 import 'package:ui_components/ui_components.dart';
 import 'package:ui_theming/ui_theming.dart';
 
@@ -34,18 +35,24 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: DialogWidget(
-          isInvitation: true,
-          type: Recieved(4),
-          name: 'Селезнев Максим',
-          text: 'Привет',
-          avatar: Image.network(
-            'https://www.clipartmax.com/png/full/258-2582267_circled-user-male-skin-type-1-2-icon-male-user-icon.png',
-          ),
+    return const MainPage(
+      pages: [
+        Center(
+          child: Text('1'),
         ),
-      ),
+        Center(
+          child: Text('2'),
+        ),
+        Center(
+          child: Text('3'),
+        ),
+        Center(
+          child: Text('4'),
+        ),
+        Center(
+          child: Text('5'),
+        ),
+      ],
     );
   }
 }

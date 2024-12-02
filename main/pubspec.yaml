@@ -11,6 +11,13 @@ dependencies:
     sdk: flutter
   chats:
     path: ../chats
+  flutter_svg: ^2.0.10+1
+  ui_theming:
+    path: ../common/ui_theming
+  ui_utils:
+    path: ../common/ui_utils 
+  utils:
+    path: ../common/utils
 
 dev_dependencies:
   flutter_test:
@@ -18,3 +25,13 @@ dev_dependencies:
   flutter_lints: ^4.0.0
 
 flutter:
+  uses-material-design: true
+  assets:
+    - packages/main/assets/chat_fill.svg
+    - packages/main/assets/chat.svg
+    - packages/main/assets/group_fill.svg
+    - packages/main/assets/group.svg
+    - packages/main/assets/logo_fill.svg
+    - packages/main/assets/logo.svg
+    - packages/main/assets/settings_fill.svg
+    - packages/main/assets/settings.svg
