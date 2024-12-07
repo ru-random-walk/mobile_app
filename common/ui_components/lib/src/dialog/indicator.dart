@@ -51,7 +51,7 @@ class DialogStatusIndicator extends StatelessWidget {
         dimension: 24.toFigmaSize,
         child: SvgPicture.asset(
           path,
-          fit: BoxFit.contain,
+          fit: BoxFit.scaleDown,
           package: 'ui_components',
         ),
       ),

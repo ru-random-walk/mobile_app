@@ -14,10 +14,7 @@ class UserAvatarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox.square(
       dimension: size,
-      child: DecoratedBox(
-        decoration: const BoxDecoration(
-          shape: BoxShape.circle,
-        ),
+      child: ClipOval(
         child: avatar,
       ),
     );

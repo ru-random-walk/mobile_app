@@ -1,4 +1,5 @@
 import 'package:auth/auth.dart';
+import 'package:chats/chats.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:main/main.dart';
@@ -43,14 +44,9 @@ class _MyHomePageState extends State<MyHomePage> {
         Center(
           child: Text('2'),
         ),
-        Center(
-          child: Text('3'),
-        ),
+        ChatsListPage(),
         Center(
           child: Text('4'),
-        ),
-        Center(
-          child: Text('5'),
         ),
       ],
     );

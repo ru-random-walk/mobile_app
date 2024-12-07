@@ -23,18 +23,23 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: widget.pages,
-      ),
-      bottomNavigationBar: _MainScreenBottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
+    return ColoredBox(
+      color: context.colors.base_0,
+      child: SafeArea(
+        child: Scaffold(
+          body: IndexedStack(
+            index: _currentIndex,
+            children: widget.pages,
+          ),
+          bottomNavigationBar: _MainScreenBottomNavigationBar(
+            currentIndex: _currentIndex,
+            onTap: (index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+          ),
+        ),
       ),
     );
   }
