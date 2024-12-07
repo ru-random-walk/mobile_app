@@ -37,4 +37,7 @@ dev_dependencies:
   json_serializable: ^6.8.0
 
 flutter:
+  uses-material-design: true
+  assets:
+    - packages/chats/assets/images/background.png
 
