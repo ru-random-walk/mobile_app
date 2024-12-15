@@ -43,7 +43,7 @@ class _ChatTextMessageWidget extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(bottom: 4.toFigmaSize),
                   child: Text(
-                    '17:41',
+                    DateFormat.Hm().format(message.timestamp),
                     style: context.textTheme.captionRegular.copyWith(
                       color: context.colors.base_40,
                     ),

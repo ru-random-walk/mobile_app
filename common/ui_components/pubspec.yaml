@@ -26,5 +26,7 @@ flutter:
     - packages/ui_components/assets/logo/random_walk_logo.svg
     - packages/ui_components/assets/icons/checked.svg
     - packages/ui_components/assets/icons/double_tick.svg
+    - packages/ui_components/assets/icons/send.svg
+
   uses-material-design: true
 

@@ -27,6 +27,9 @@ dependencies:
   flutter_bloc: ^8.1.6
   retrofit: ^4.4.0
   dio: ^5.7.0
+  sticky_grouped_list: ^3.1.0
+  intl: ^0.20.1
+
 
 dev_dependencies:
   flutter_test:
