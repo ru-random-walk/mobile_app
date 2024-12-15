@@ -53,6 +53,7 @@ class _InputWidgetState extends State<InputWidget> {
         controller: controller,
         decoration: InputDecoration(
           floatingLabelBehavior: FloatingLabelBehavior.never,
+          isDense: true,
           filled: true,
           fillColor: context.colors.base_0,
           focusedBorder: anyBorder,
