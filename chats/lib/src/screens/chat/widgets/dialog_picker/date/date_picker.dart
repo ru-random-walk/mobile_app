@@ -62,8 +62,9 @@ class _MeetDatePickerDialogState extends State<_MeetDatePickerDialog> {
 
   void setNewDate(int year, int month, int day) {
     if (selectedDate.year == year &&
-        selectedDate.month == month &&
-        selectedDate.day == day || isImplicitScrolling) {
+            selectedDate.month == month &&
+            selectedDate.day == day ||
+        isImplicitScrolling) {
       return;
     }
     final newMaxAmountOfDay = _checkAmountOfDays(month, year);
@@ -110,9 +111,11 @@ class _MeetDatePickerDialogState extends State<_MeetDatePickerDialog> {
 
   Future<void> scrollToDate(DateTime date) async {
     isImplicitScrolling = true;
-    await dayController.animateToIndex(date.day - 1);
-    await monthController.animateToIndex(date.month - 1);
-    await yearController.animateToIndex(date.year - DateTime.now().year);
+    await Future.wait([
+      dayController.animateToIndex(date.day - 1),
+      monthController.animateToIndex(date.month - 1),
+      yearController.animateToIndex(date.year - DateTime.now().year),
+    ]);
     isImplicitScrolling = false;
     selectedDate = date;
   }
