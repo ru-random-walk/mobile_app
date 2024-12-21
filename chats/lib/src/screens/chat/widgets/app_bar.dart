@@ -1,10 +1,13 @@
 part of '../page.dart';
 
 class _ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
+  
+  double get appBarHeight => 70.toFigmaSize;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 88.toFigmaSize,
+      height: appBarHeight,
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: context.colors.base_0,
@@ -75,5 +78,5 @@ class _ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(88.toFigmaSize);
+  Size get preferredSize => Size.fromHeight(appBarHeight);
 }

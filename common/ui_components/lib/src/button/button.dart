@@ -15,6 +15,8 @@ class CustomButton extends StatelessWidget {
   final ButtonSize size;
   final ButtonColor color;
   final ButtonType type;
+  final bool isMaxWidth;
+  final EdgeInsets? padding;
 
   const CustomButton({
     super.key,
@@ -23,6 +25,8 @@ class CustomButton extends StatelessWidget {
     this.leftIcon,
     this.rightIcon,
     required this.text,
+    this.isMaxWidth = true,
+    this.padding,
     this.size = ButtonSize.M,
     this.color = ButtonColor.green,
     this.type = ButtonType.primary,
@@ -33,7 +37,7 @@ class CustomButton extends StatelessWidget {
     final style = _getStyle(context);
     return SizedBox(
       height: _height,
-      width: double.infinity,
+      width: isMaxWidth ? double.infinity : null,
       child: OutlinedButton(
         style: style,
         onPressed: onPressed,
@@ -86,6 +90,12 @@ class CustomButton extends StatelessWidget {
     final theme = context.colors;
     final textStyles = context.textTheme;
     return ButtonStyle(
+      padding: WidgetStateProperty.resolveWith<EdgeInsets>(
+        (_) => padding ?? EdgeInsets.symmetric(
+          horizontal: 12.toFigmaSize,
+          vertical: 16.toFigmaSize,
+        ),
+      ),
       textStyle: WidgetStatePropertyAll(_getTextStyleForPrimary(textStyles)),
       side: const WidgetStatePropertyAll(BorderSide.none),
       shape: WidgetStateProperty.all(_border),
@@ -132,6 +142,12 @@ class CustomButton extends StatelessWidget {
       width: 1.toFigmaSize,
     );
     return ButtonStyle(
+      padding: WidgetStateProperty.resolveWith<EdgeInsets>(
+        (_) => padding ?? EdgeInsets.symmetric(
+          horizontal: 12.toFigmaSize,
+          vertical: 16.toFigmaSize,
+        ),
+      ),
       foregroundColor: WidgetStateProperty.resolveWith<Color>(
         (states) {
           if (states.contains(WidgetState.pressed)) {
@@ -145,7 +161,7 @@ class CustomButton extends StatelessWidget {
           if (states.contains(WidgetState.pressed)) {
             return _getTextStyleForSecondary(textStyles, true);
           }
-          return _getTextStyleForSecondary(textStyles, true);
+          return _getTextStyleForSecondary(textStyles, false);
         },
       ),
       overlayColor: WidgetStateProperty.all<Color>(Colors.transparent),

@@ -64,7 +64,12 @@ class _ChatScreen extends StatelessWidget {
                       SizedBox(
                         height: 4.toFigmaSize,
                       ),
-                      const InputWidget(),
+                      InputWidget(onLogoTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => _MeetDatePickerDialog(),
+                        );
+                      }),
                     ],
                   ),
                 ),

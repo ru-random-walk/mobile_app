@@ -11,6 +11,7 @@ class _LogoButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: onPressed,
       child: AppLogo(
         size: 28.toFigmaSize,
       ),
