@@ -1,4 +1,4 @@
 library chats;
 
-export 'src/screens/chat_list/page.dart';
+export 'src/presentation/screens/chat_list/page.dart';
 

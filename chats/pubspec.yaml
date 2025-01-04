@@ -29,6 +29,10 @@ dependencies:
   dio: ^5.7.0
   sticky_grouped_list: ^3.1.0
   intl: ^0.20.1
+  yandex_mapkit: ^4.1.0
+  permission_handler: ^11.3.1
+  bloc_concurrency: ^0.2.5
+
 
 
 dev_dependencies:
@@ -43,4 +47,10 @@ flutter:
   uses-material-design: true
   assets:
     - packages/chats/assets/images/background.png
+    - packages/chats/assets/icons/calendar.svg
+    - packages/chats/assets/icons/place.svg
+    - packages/chats/assets/icons/time.svg
+    - packages/chats/assets/icons/gps.svg
+    - packages/chats/assets/icons/place_fill.svg
+
 

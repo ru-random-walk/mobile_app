@@ -10,13 +10,16 @@ class CustomButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final Widget? leftIcon;
   final Widget? rightIcon;
-  final String text;
+  final String? text;
   final TextStyle? textStyle;
   final ButtonSize size;
   final ButtonColor color;
   final ButtonType type;
   final bool isMaxWidth;
   final EdgeInsets? padding;
+  final double? customHeight;
+  final double? customWidth;
+  final Color? secondaryStyleFillColor;
 
   const CustomButton({
     super.key,
@@ -30,6 +33,9 @@ class CustomButton extends StatelessWidget {
     this.size = ButtonSize.M,
     this.color = ButtonColor.green,
     this.type = ButtonType.primary,
+    this.customHeight,
+    this.customWidth,
+    this.secondaryStyleFillColor,
   });
 
   @override
@@ -37,7 +43,7 @@ class CustomButton extends StatelessWidget {
     final style = _getStyle(context);
     return SizedBox(
       height: _height,
-      width: isMaxWidth ? double.infinity : null,
+      width: _width,
       child: OutlinedButton(
         style: style,
         onPressed: onPressed,
@@ -46,7 +52,14 @@ class CustomButton extends StatelessWidget {
     );
   }
 
-  double get _height => switch (size) {
+  double? get _width {
+    if (customWidth != null) return customWidth;
+    return isMaxWidth ? double.infinity : null;
+  }
+
+  double get _height =>
+      customHeight ??
+      switch (size) {
         ButtonSize.S => 40.toFigmaSize,
         ButtonSize.M => 52.toFigmaSize,
       };
@@ -56,7 +69,7 @@ class CustomButton extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (leftIcon != null) leftIcon!,
-        Text(text, style: textStyle),
+        if (text != null) Text(text ?? '', style: textStyle),
         if (rightIcon != null) rightIcon!,
       ],
     );
@@ -91,20 +104,18 @@ class CustomButton extends StatelessWidget {
     final textStyles = context.textTheme;
     return ButtonStyle(
       padding: WidgetStateProperty.resolveWith<EdgeInsets>(
-        (_) => padding ?? EdgeInsets.symmetric(
-          horizontal: 12.toFigmaSize,
-          vertical: 16.toFigmaSize,
-        ),
+        (_) =>
+            padding ??
+            EdgeInsets.symmetric(
+              horizontal: 12.toFigmaSize,
+              vertical: 16.toFigmaSize,
+            ),
       ),
       textStyle: WidgetStatePropertyAll(_getTextStyleForPrimary(textStyles)),
       side: const WidgetStatePropertyAll(BorderSide.none),
       shape: WidgetStateProperty.all(_border),
-      foregroundColor: WidgetStateProperty.resolveWith<Color>((states) {
-        if (states.contains(WidgetState.pressed)) {
-          return _getOnPressedColor(theme);
-        }
-        return _getColor(theme);
-      }),
+      foregroundColor:
+          WidgetStateProperty.resolveWith<Color>((_) => context.colors.base_0),
       backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
         if (states.contains(WidgetState.pressed)) {
           return _getOnPressedColor(theme);
@@ -121,10 +132,12 @@ class CustomButton extends StatelessWidget {
       };
 
   TextStyle _getTextStyleForSecondary(
-          TextThemeExtension textTheme, bool isPressed) =>
+    TextThemeExtension textTheme,
+    bool isPressed,
+  ) =>
       switch (size) {
-        ButtonSize.S when !isPressed => textTheme.bodySMediumMain50,
-        ButtonSize.S when isPressed => textTheme.bodySMediumMain70,
+        ButtonSize.S when !isPressed => textTheme.bodySMediumBase90,
+        ButtonSize.S when isPressed => textTheme.bodySMediumBase90,
         ButtonSize.M when !isPressed => textTheme.bodyMRegularMain50,
         ButtonSize.M when isPressed => textTheme.bodyMRegularMain70,
         _ => throw UnimplementedError(),
@@ -143,10 +156,12 @@ class CustomButton extends StatelessWidget {
     );
     return ButtonStyle(
       padding: WidgetStateProperty.resolveWith<EdgeInsets>(
-        (_) => padding ?? EdgeInsets.symmetric(
-          horizontal: 12.toFigmaSize,
-          vertical: 16.toFigmaSize,
-        ),
+        (_) =>
+            padding ??
+            EdgeInsets.symmetric(
+              horizontal: 12.toFigmaSize,
+              vertical: 16.toFigmaSize,
+            ),
       ),
       foregroundColor: WidgetStateProperty.resolveWith<Color>(
         (states) {
@@ -166,7 +181,9 @@ class CustomButton extends StatelessWidget {
       ),
       overlayColor: WidgetStateProperty.all<Color>(Colors.transparent),
       surfaceTintColor: WidgetStateProperty.all<Color>(Colors.transparent),
-      backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
+      backgroundColor: WidgetStateProperty.all<Color>(
+        secondaryStyleFillColor ?? Colors.transparent,
+      ),
       shape: WidgetStateProperty.all(_border),
       side: WidgetStateProperty.resolveWith<BorderSide>(
         (states) {
