@@ -11,7 +11,7 @@ class _MeetPickDataDialogCloseButton extends StatelessWidget {
           bottom: 4.toFigmaSize,
           top: 8.toFigmaSize,
         ),
-        child: _DialogPickerHeaderCloseButton(),
+        child: DialogPickerHeaderCloseButton(),
       ),
     );
   }

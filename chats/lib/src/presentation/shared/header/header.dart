@@ -1,7 +1,10 @@
-part of '../../../../page.dart';
+import 'package:chats/src/presentation/shared/header/close_button.dart';
+import 'package:flutter/material.dart';
+import 'package:ui_utils/ui_utils.dart';
 
-class _DialogPickerHeader extends StatelessWidget {
-  const _DialogPickerHeader({
+class DialogPickerHeader extends StatelessWidget {
+  const DialogPickerHeader({
+    super.key,
     required this.title,
   });
 
@@ -27,7 +30,7 @@ class _DialogPickerHeader extends StatelessWidget {
         SizedBox(
           width: 4.toFigmaSize,
         ),
-        _DialogPickerHeaderCloseButton(),
+        DialogPickerHeaderCloseButton(),
         SizedBox(
           width: 4.toFigmaSize,
         ),

@@ -1,6 +1,13 @@
 part of '../../page.dart';
 
 class _ZoomToCurrentLocationButton extends StatelessWidget {
+  final VoidCallback? onPressed;
+
+  const _ZoomToCurrentLocationButton({
+    super.key,
+    this.onPressed,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -10,6 +17,7 @@ class _ZoomToCurrentLocationButton extends StatelessWidget {
           bottom: 20.toFigmaSize,
         ),
         child: _BaseMapInterfaceButton(
+          onPressed: onPressed,
           padding: EdgeInsets.symmetric(
             vertical: 12.toFigmaSize,
             horizontal: 14.toFigmaSize,

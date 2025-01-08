@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:ui_utils/ui_utils.dart';
 
 import '../logo/logo.dart';
+import 'text_field.dart';
 
 part 'logo_button.dart';
 part 'send_button.dart';
@@ -37,44 +38,19 @@ class _InputWidgetState extends State<InputWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final anyBorder = OutlineInputBorder(
-      borderSide: BorderSide(
-        color: context.colors.base_50,
-        width: 1.toFigmaSize,
-      ),
-      borderRadius: BorderRadius.circular(
-        16.toFigmaSize,
+    final suffix = Padding(
+      padding: EdgeInsets.only(right: 12.toFigmaSize),
+      child: _SuffixButton(
+        controller: controller,
+        onLogoTap: widget.onLogoTap,
+        onSend: widget.onSend,
       ),
     );
-    return SizedBox(
+    return CustomTextField(
       height: 48.toFigmaSize,
-      child: TextField(
-        onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
-        controller: controller,
-        decoration: InputDecoration(
-          floatingLabelBehavior: FloatingLabelBehavior.never,
-          isDense: true,
-          filled: true,
-          fillColor: context.colors.base_0,
-          focusedBorder: anyBorder,
-          border: anyBorder,
-          hintText: widget.hint,
-          suffixIconConstraints: BoxConstraints.loose(
-            Size(
-              (28 + 12).toFigmaSize,
-              28.toFigmaSize,
-            ),
-          ),
-          suffixIcon: Padding(
-            padding: EdgeInsets.only(right: 12.toFigmaSize),
-            child: _SuffixButton(
-              controller: controller,
-              onLogoTap: widget.onLogoTap,
-              onSend: widget.onSend,
-            ),
-          ),
-        ),
-      ),
+      controller: controller,
+      hint: widget.hint,
+      suffix: suffix,
     );
   }
 }

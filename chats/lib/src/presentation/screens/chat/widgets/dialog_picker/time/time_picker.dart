@@ -71,58 +71,50 @@ class _MeetTimePickerDialogState extends State<_MeetTimePickerDialog> {
   Widget build(BuildContext context) {
     final verticalSpacer = SizedBox(height: 16.toFigmaSize);
     final spacer = SizedBox(width: 8.toFigmaSize);
-    return Dialog(
-      child: SizedBox(
-        height: 351.toFigmaSize,
-        width: 351.toFigmaSize,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: context.colors.base_0,
-            borderRadius: BorderRadius.circular(16.toFigmaSize),
-          ),
-          child: Padding(
-            padding: EdgeInsets.all(16.toFigmaSize),
-            child: Center(
-              child: Column(
+    return BaseDialog(
+      height: 351.toFigmaSize,
+      width: 351.toFigmaSize,
+      child: Padding(
+        padding: EdgeInsets.all(16.toFigmaSize),
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const DialogPickerHeader(
+                title: 'Дата',
+              ),
+              verticalSpacer,
+              Row(
                 mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const _DialogPickerHeader(
-                    title: 'Дата',
+                  _PickHourListWidget(
+                    onHourChanged: (hour) => updateSelectedTime(hour: hour),
+                    controller: hoursController,
                   ),
-                  verticalSpacer,
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _PickHourListWidget(
-                        onHourChanged: (hour) => updateSelectedTime(hour: hour),
-                        controller: hoursController,
-                      ),
-                      spacer,
-                      _PickMinutesListWidget(
-                        onMinutesChanged: (minutes) => updateSelectedTime(
-                          minute: minutes,
-                        ),
-                        controller: minutesController,
-                      ),
-                    ],
-                  ),
-                  verticalSpacer,
-                  _SpecficTimePickButtonsGroup(
-                    on9Tap: pick9Hour,
-                    on12Tap: pick12Hour,
-                    on15Tap: pick15Hour,
-                    on18Tap: pick18Hour,
-                  ),
-                  verticalSpacer,
-                  PickerConfirmButton(
-                    onTap: () {
-                      Navigator.of(context).pop(selectedTime);
-                    },
+                  spacer,
+                  _PickMinutesListWidget(
+                    onMinutesChanged: (minutes) => updateSelectedTime(
+                      minute: minutes,
+                    ),
+                    controller: minutesController,
                   ),
                 ],
               ),
-            ),
+              verticalSpacer,
+              _SpecficTimePickButtonsGroup(
+                on9Tap: pick9Hour,
+                on12Tap: pick12Hour,
+                on15Tap: pick15Hour,
+                on18Tap: pick18Hour,
+              ),
+              verticalSpacer,
+              PickerConfirmButton(
+                onTap: () {
+                  Navigator.of(context).pop(selectedTime);
+                },
+              ),
+            ],
           ),
         ),
       ),

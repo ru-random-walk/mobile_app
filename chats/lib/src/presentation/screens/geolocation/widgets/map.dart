@@ -1,7 +1,12 @@
 part of '../page.dart';
 
 class _MapWidget extends StatefulWidget {
-  const _MapWidget({super.key});
+  final Stream<MapUIEvent> mapUIEventStream;
+
+  const _MapWidget({
+    super.key,
+    required this.mapUIEventStream,
+  });
 
   @override
   State<_MapWidget> createState() => __MapWidgetState();
@@ -10,6 +15,53 @@ class _MapWidget extends StatefulWidget {
 class __MapWidgetState extends State<_MapWidget> {
   late final YandexMapController _mapController;
   CameraPosition? _userLocation;
+  late final StreamSubscription<MapUIEvent> _mapUIEventsSubscription;
+  static const _mapAnimation = MapAnimation(
+    type: MapAnimationType.linear,
+    duration: 0.3,
+  );
+
+  @override
+  initState() {
+    super.initState();
+    _mapUIEventsSubscription = widget.mapUIEventStream.listen((event) {
+      switch (event) {
+        case ZoomInEvent():
+          zoomIn();
+        case ZoomOutEvent():
+          zoomOut();
+        case ZoomToCurrentPositionEvent _:
+          _zoomToUserCurrentPosition();
+      }
+    });
+  }
+
+  Future<void> _zoomToUserCurrentPosition() async {
+    _userLocation = await _mapController.getUserCameraPosition();
+    // если местоположение найдено, центрируем карту относительно этой точки
+    if (_userLocation != null) {
+      await _mapController.moveCamera(
+        CameraUpdate.newCameraPosition(
+          _userLocation!.copyWith(zoom: 20),
+        ),
+        animation: _mapAnimation,
+      );
+    }
+  }
+
+  Future<void> zoomIn() async {
+    await _mapController.moveCamera(
+      CameraUpdate.zoomIn(),
+      animation: _mapAnimation,
+    );
+  }
+
+  Future<void> zoomOut() async {
+    await _mapController.moveCamera(
+      CameraUpdate.zoomOut(),
+      animation: _mapAnimation,
+    );
+  }
 
   /// Метод, который включает слой местоположения пользователя на карте
   /// Выполняется проверка на доступ к местоположению, в случае отсутствия
@@ -48,25 +100,7 @@ class __MapWidgetState extends State<_MapWidget> {
       },
       onUserLocationAdded: (view) async {
         // получаем местоположение пользователя
-        _userLocation = await _mapController.getUserCameraPosition();
-        // если местоположение найдено, центрируем карту относительно этой точки
-        if (_userLocation != null) {
-          await _mapController.moveCamera(
-            CameraUpdate.newCameraPosition(
-              _userLocation!.copyWith(zoom: 10),
-            ),
-            animation: const MapAnimation(
-              type: MapAnimationType.linear,
-              duration: 0.3,
-            ),
-          );
-
-          final res = await YandexSearch.searchByPoint(
-              point: _userLocation!.target,
-              searchOptions: const SearchOptions());
-          final place = await res.$2;
-          print(place.items?.first.name);
-        }
+        _zoomToUserCurrentPosition();
         // меняем внешний вид маркера - делаем его непрозрачным
         return view.copyWith(
           pin: view.pin.copyWith(
@@ -75,5 +109,11 @@ class __MapWidgetState extends State<_MapWidget> {
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    _mapUIEventsSubscription.cancel();
+    super.dispose();
   }
 }

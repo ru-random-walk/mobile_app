@@ -124,61 +124,53 @@ class _MeetDatePickerDialogState extends State<_MeetDatePickerDialog> {
   Widget build(BuildContext context) {
     final verticalSpacer = SizedBox(height: 16.toFigmaSize);
     final spacer = SizedBox(width: 8.toFigmaSize);
-    return Dialog(
-      child: SizedBox(
-        height: 351.toFigmaSize,
-        width: 351.toFigmaSize,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: context.colors.base_0,
-            borderRadius: BorderRadius.circular(16.toFigmaSize),
-          ),
-          child: Padding(
-            padding: EdgeInsets.all(16.toFigmaSize),
-            child: Center(
-              child: Column(
+    return BaseDialog(
+      height: 351.toFigmaSize,
+      width: 351.toFigmaSize,
+      child: Padding(
+        padding: EdgeInsets.all(16.toFigmaSize),
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const DialogPickerHeader(
+                title: 'Дата',
+              ),
+              verticalSpacer,
+              Row(
                 mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const _DialogPickerHeader(
-                    title: 'Дата',
+                  _PickDayListWidget(
+                    onDayChanged: _onDayChanged,
+                    controller: dayController,
+                    amountOfDays: currentAmountOfDays,
                   ),
-                  verticalSpacer,
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _PickDayListWidget(
-                        onDayChanged: _onDayChanged,
-                        controller: dayController,
-                        amountOfDays: currentAmountOfDays,
-                      ),
-                      spacer,
-                      _PickMonthListWidget(
-                        onMonthChanged: _onMonthChanged,
-                        controller: monthController,
-                      ),
-                      spacer,
-                      _PickYearListWidget(
-                        onYearChanged: _onYearChanged,
-                        controller: yearController,
-                      ),
-                    ],
+                  spacer,
+                  _PickMonthListWidget(
+                    onMonthChanged: _onMonthChanged,
+                    controller: monthController,
                   ),
-                  verticalSpacer,
-                  _SpecficDatePickButtonsGroup(
-                    onTodayTap: pickToday,
-                    onTomorrowTap: pickTomorrow,
-                    onInAWeekTap: pickInAWeek,
-                  ),
-                  verticalSpacer,
-                  PickerConfirmButton(
-                    onTap: () {
-                      Navigator.of(context).pop(selectedDate);
-                    },
+                  spacer,
+                  _PickYearListWidget(
+                    onYearChanged: _onYearChanged,
+                    controller: yearController,
                   ),
                 ],
               ),
-            ),
+              verticalSpacer,
+              _SpecficDatePickButtonsGroup(
+                onTodayTap: pickToday,
+                onTomorrowTap: pickTomorrow,
+                onInAWeekTap: pickInAWeek,
+              ),
+              verticalSpacer,
+              PickerConfirmButton(
+                onTap: () {
+                  Navigator.of(context).pop(selectedDate);
+                },
+              ),
+            ],
           ),
         ),
       ),

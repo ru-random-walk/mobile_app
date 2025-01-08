@@ -5,8 +5,10 @@ sealed class GeolocationState {}
 
 final class GeolocationLoading extends GeolocationState {}
 
-final class GeolocationData extends GeolocationState {
-  final String name;
+final class GeolocationFailure extends GeolocationState {}
 
-  GeolocationData({required this.name});
+final class GeolocationData extends GeolocationState {
+  final Geolocation geolocation;
+
+  GeolocationData({required this.geolocation});
 }

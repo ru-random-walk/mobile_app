@@ -6,7 +6,6 @@ import 'package:auth/src/domain/entities/token/exchange/request.dart';
 import 'package:auth/src/domain/entities/token/response.dart';
 import 'package:auth/src/domain/repositories/auth.dart';
 import 'package:core/core.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:utils/utils.dart';
 
 class AuthRepositoryI implements AuthRepository {
@@ -20,8 +19,7 @@ class AuthRepositoryI implements AuthRepository {
   ) async {
     try {
       final model = TokenRequestModel.via(entity.authType);
-      await dotenv.load(fileName: 'auth.env');
-      final credentials = dotenv.env['USERNAME_AND_PASSWORD'];
+      final credentials = EnvironmentVariables().authCredentials;
       if (credentials == null) {
         return Left(BaseError('Credentials is null', StackTrace.current));
       }

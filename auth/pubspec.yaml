@@ -24,7 +24,6 @@ dependencies:
   flutter_svg: ^2.0.10+1
   google_sign_in: ^6.2.1
   json_annotation: ^4.9.0
-  flutter_dotenv: ^5.2.1
   flutter_bloc: ^8.1.6
   retrofit: ^4.4.0
   dio: ^5.7.0

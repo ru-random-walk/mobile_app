@@ -1,6 +1,15 @@
 part of '../../page.dart';
 
 class _ZoomMapButtons extends StatelessWidget {
+  final VoidCallback? onZoomIn;
+  final VoidCallback? onZoomOut;
+
+  const _ZoomMapButtons({
+    super.key,
+    this.onZoomIn,
+    this.onZoomOut,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -9,12 +18,14 @@ class _ZoomMapButtons extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           _BaseMapInterfaceButton(
+            onPressed: onZoomIn,
             child: getIcon(_PlusPaint()),
           ),
           SizedBox(
             height: 16.toFigmaSize,
           ),
           _BaseMapInterfaceButton(
+            onPressed: onZoomOut,
             child: getIcon(_MinusPaint()),
           ),
         ],

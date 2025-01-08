@@ -1,9 +1,11 @@
-part of '../../../../page.dart';
+import 'package:chats/src/presentation/shared/cross_paint.dart';
+import 'package:flutter/material.dart';
+import 'package:ui_utils/ui_utils.dart';
 
-class _DialogPickerHeaderCloseButton extends StatelessWidget {
+class DialogPickerHeaderCloseButton extends StatelessWidget {
   final double size;
 
-  _DialogPickerHeaderCloseButton({double? size})
+  DialogPickerHeaderCloseButton({double? size})
       : size = size ?? 16.toFigmaSize;
 
   @override

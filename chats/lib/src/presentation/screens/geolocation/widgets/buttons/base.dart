@@ -15,6 +15,7 @@ class _BaseMapInterfaceButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomButton(
+      onPressed: onPressed,
       type: ButtonType.secondary,
       size: ButtonSize.S,
       color: ButtonColor.grey,

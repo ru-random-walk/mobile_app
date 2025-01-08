@@ -8,6 +8,7 @@ class _CloseMapButton extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.all(4.toFigmaSize),
         child: _BaseMapInterfaceButton(
+          onPressed: Navigator.of(context).pop,
           child: SizedBox.square(
             dimension: 16.toFigmaSize,
             child: CustomPaint(

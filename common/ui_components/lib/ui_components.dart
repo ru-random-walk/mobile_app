@@ -10,3 +10,4 @@ export 'src/dialog/type.dart';
 export 'src/dialog/widget.dart';
 export 'src/input/widget.dart';
 export 'src/dialog/avatar.dart';
+export 'src/input/text_field.dart';

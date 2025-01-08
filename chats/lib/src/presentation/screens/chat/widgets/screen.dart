@@ -22,6 +22,7 @@ class _ChatScreen extends StatelessWidget {
       child: SafeArea(
         bottom: false,
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: context.colors.base_0,
           appBar: _ChatAppBarWidget(),
           body: Stack(
@@ -29,48 +30,55 @@ class _ChatScreen extends StatelessWidget {
               Positioned.fill(
                 child: Image.asset(
                   'packages/chats/assets/images/background.png',
+                  fit: BoxFit.cover,
                 ),
               ),
-              SafeArea(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.toFigmaSize),
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: StickyGroupedListView<MessageEntity, DateTime>(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 8.toFigmaSize,
-                            vertical: 4.toFigmaSize,
+              Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.viewInsetsOf(context).bottom,
+                ),
+                child: SafeArea(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.toFigmaSize),
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: StickyGroupedListView<MessageEntity, DateTime>(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 8.toFigmaSize,
+                              vertical: 4.toFigmaSize,
+                            ),
+                            groupBy: (message) => DateTime(
+                              message.timestamp.year,
+                              message.timestamp.month,
+                              message.timestamp.day,
+                            ),
+                            floatingHeader: true,
+                            reverse: true,
+                            order: StickyGroupedListOrder.DESC,
+                            itemBuilder: (_, message) => _ChatMessageWidget(
+                              message: message,
+                            ),
+                            groupSeparatorBuilder: (message) =>
+                                _ChatDateSeparatorWidget(
+                                    date: message.timestamp),
+                            separator: SizedBox(
+                              height: 8.toFigmaSize,
+                            ),
+                            elements: messages,
                           ),
-                          groupBy: (message) => DateTime(
-                            message.timestamp.year,
-                            message.timestamp.month,
-                            message.timestamp.day,
-                          ),
-                          floatingHeader: true,
-                          reverse: true,
-                          order: StickyGroupedListOrder.DESC,
-                          itemBuilder: (_, message) => _ChatMessageWidget(
-                            message: message,
-                          ),
-                          groupSeparatorBuilder: (message) =>
-                              _ChatDateSeparatorWidget(date: message.timestamp),
-                          separator: SizedBox(
-                            height: 8.toFigmaSize,
-                          ),
-                          elements: messages,
                         ),
-                      ),
-                      SizedBox(
-                        height: 4.toFigmaSize,
-                      ),
-                      InputWidget(onLogoTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => _MeetDataDialogWidget(),
-                        );
-                      }),
-                    ],
+                        SizedBox(
+                          height: 4.toFigmaSize,
+                        ),
+                        InputWidget(onLogoTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => _MeetDataDialogWidget(),
+                          );
+                        }),
+                      ],
+                    ),
                   ),
                 ),
               ),
