@@ -6,22 +6,31 @@ class _PickMeetPlaceRow extends StatefulWidget {
 }
 
 class _PickMeetPlaceRowState extends State<_PickMeetPlaceRow> {
-  DateTime? selectedDate;
+  Geolocation? selectedPlace;
 
   @override
   Widget build(BuildContext context) {
     return _MeetDataRowWidget(
       title: 'Место',
       button: _MeetDataPickButton(
-        title: '23.03.2023',
+        title: selectedPlace?.toString() ?? 'Не выбрано',
         icon: SvgPicture.asset(
           'packages/chats/assets/icons/place.svg',
         ),
-        onTap: () => Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => const PickGeolocationPage(),
-          ),
-        ),
+        onTap: () async {
+          final res = await Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => PickGeolocationPage(
+                initialGeolocation: selectedPlace,
+              ),
+            ),
+          );
+          if (res != null && res is Geolocation) {
+            setState(() {
+              selectedPlace = res;
+            });
+          }
+        },
       ),
     );
   }

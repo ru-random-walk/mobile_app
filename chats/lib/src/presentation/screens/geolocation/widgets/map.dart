@@ -2,10 +2,12 @@ part of '../page.dart';
 
 class _MapWidget extends StatefulWidget {
   final Stream<MapUIEvent> mapUIEventStream;
+  final Geolocation? initialGeolocation;
 
   const _MapWidget({
     super.key,
     required this.mapUIEventStream,
+    this.initialGeolocation,
   });
 
   @override
@@ -40,14 +42,17 @@ class __MapWidgetState extends State<_MapWidget> {
     _userLocation = await _mapController.getUserCameraPosition();
     // если местоположение найдено, центрируем карту относительно этой точки
     if (_userLocation != null) {
-      await _mapController.moveCamera(
+      await _moveCameraTo(_userLocation!);
+    }
+  }
+
+  Future<void> _moveCameraTo(CameraPosition cameraPosition) =>
+      _mapController.moveCamera(
         CameraUpdate.newCameraPosition(
-          _userLocation!.copyWith(zoom: 20),
+          cameraPosition.copyWith(zoom: 20),
         ),
         animation: _mapAnimation,
       );
-    }
-  }
 
   Future<void> zoomIn() async {
     await _mapController.moveCamera(
@@ -72,6 +77,13 @@ class __MapWidgetState extends State<_MapWidget> {
 
     if (locationPermissionIsGranted) {
       await _mapController.toggleUserLayer(visible: true);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (widget.initialGeolocation != null) {
+          final position =
+              CameraPosition(target: widget.initialGeolocation!.point);
+          _moveCameraTo(position);
+        }
+      });
     } else {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -99,8 +111,10 @@ class __MapWidgetState extends State<_MapWidget> {
         ));
       },
       onUserLocationAdded: (view) async {
-        // получаем местоположение пользователя
-        _zoomToUserCurrentPosition();
+        if (widget.initialGeolocation == null) {
+          // получаем местоположение пользователя
+          _zoomToUserCurrentPosition();
+        }
         // меняем внешний вид маркера - делаем его непрозрачным
         return view.copyWith(
           pin: view.pin.copyWith(

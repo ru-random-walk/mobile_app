@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:chats/src/domain/entity/meet_data/geolocation.dart';
 import 'package:chats/src/domain/entity/message/message.dart';
 import 'package:chats/src/presentation/screens/chat/widgets/flat_snapping_scroll/controller.dart';
 import 'package:chats/src/presentation/screens/chat/widgets/flat_snapping_scroll/list.dart';

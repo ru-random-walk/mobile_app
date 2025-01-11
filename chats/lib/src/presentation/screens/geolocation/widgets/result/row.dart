@@ -31,6 +31,7 @@ class _PickedAddressRow extends StatelessWidget {
           Expanded(
             flex: 250,
             child: CustomTextField(
+              maxLines: 1,
               radius: 6.toFigmaSize,
               controller: controller,
               height: 32.toFigmaSize,

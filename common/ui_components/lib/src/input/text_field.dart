@@ -8,6 +8,8 @@ class CustomTextField extends StatelessWidget {
   final double height;
   final double radius;
   final bool showDifferentBorders;
+  final int? maxLines;
+  final TextStyle? textStyle;
 
   CustomTextField({
     super.key,
@@ -17,6 +19,8 @@ class CustomTextField extends StatelessWidget {
     required this.height,
     double? radius,
     this.showDifferentBorders = true,
+    this.maxLines,
+    this.textStyle,
   }) : radius = radius ?? 16.toFigmaSize;
 
   @override
@@ -42,12 +46,13 @@ class CustomTextField extends StatelessWidget {
     return SizedBox(
       height: height,
       child: TextField(
-        style: context.textTheme.bodySRegular,
+        style: textStyle ?? context.textTheme.bodySRegular,
         onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
         controller: controller,
+        maxLines: maxLines,
         decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(horizontal: 4.toFigmaSize),
           floatingLabelBehavior: FloatingLabelBehavior.never,
-          isDense: true,
           filled: true,
           fillColor: context.colors.base_0,
           focusedBorder: focusedBorder,

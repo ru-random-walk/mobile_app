@@ -21,6 +21,31 @@ class _ApplyLocationResultDialogState
     cityController.text = pickedGeolocation.city;
     streetController.text = pickedGeolocation.street;
     buildingController.text = pickedGeolocation.building ?? '';
+    _initListeners();
+  }
+
+  void _cityListener() {
+    pickedGeolocation = pickedGeolocation.copyWith(
+      city: cityController.text,
+    );
+  }
+
+  void _streetListener() {
+    pickedGeolocation = pickedGeolocation.copyWith(
+      street: streetController.text,
+    );
+  }
+
+  void _buildingListener() {
+    pickedGeolocation = pickedGeolocation.copyWith(
+      building: buildingController.text,
+    );
+  }
+
+  void _initListeners() {
+    cityController.addListener(_cityListener);
+    streetController.addListener(_streetListener);
+    buildingController.addListener(_buildingListener);
   }
 
   @override
@@ -58,12 +83,27 @@ class _ApplyLocationResultDialogState
                 padding: EdgeInsets.symmetric(
                   horizontal: 16.toFigmaSize,
                 ),
-                child: PickerConfirmButton(),
+                child: PickerConfirmButton(
+                  onTap: () {
+                    Navigator.pop(context, pickedGeolocation);
+                  },
+                ),
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    cityController.removeListener(_cityListener);
+    streetController.removeListener(_streetListener);
+    buildingController.removeListener(_buildingListener);
+    cityController.dispose();
+    streetController.dispose();
+    buildingController.dispose();
   }
 }

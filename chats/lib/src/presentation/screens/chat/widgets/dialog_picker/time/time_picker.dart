@@ -1,6 +1,13 @@
 part of '../../../page.dart';
 
 class _MeetTimePickerDialog extends StatefulWidget {
+  final TimeOfDay? initialTime;
+
+  const _MeetTimePickerDialog({
+    super.key,
+    this.initialTime,
+  });
+
   @override
   State<_MeetTimePickerDialog> createState() => _MeetTimePickerDialogState();
 }
@@ -17,6 +24,9 @@ class _MeetTimePickerDialogState extends State<_MeetTimePickerDialog> {
   @override
   void initState() {
     super.initState();
+    if (widget.initialTime != null) {
+      selectedTime = widget.initialTime!;
+    }
     hoursController = FlatSnappingListController(
       itemExtent: _itemExtent,
       initialIndex: selectedTime.hour,

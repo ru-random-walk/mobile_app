@@ -6,25 +6,25 @@ class _PickMeetTimeRow extends StatefulWidget {
 }
 
 class _PickMeetTimeRowState extends State<_PickMeetTimeRow> {
-  TimeOfDay? selectedDate;
+  TimeOfDay? selectedTime;
 
   @override
   Widget build(BuildContext context) {
     return _MeetDataRowWidget(
       title: 'Время',
       button: _MeetDataPickButton(
-        title: selectedTime,
+        title: selectedTimeString,
         icon: SvgPicture.asset(
           'packages/chats/assets/icons/time.svg',
         ),
         onTap: () async {
           final res = await showDialog(
             context: context,
-            builder: (_) => _MeetTimePickerDialog(),
+            builder: (_) => _MeetTimePickerDialog(initialTime: selectedTime,),
           );
           if (res != null) {
             setState(() {
-              selectedDate = res;
+              selectedTime = res;
             });
           }
         },
@@ -32,10 +32,10 @@ class _PickMeetTimeRowState extends State<_PickMeetTimeRow> {
     );
   }
 
-  String get selectedTime {
-    if (selectedDate == null) {
+  String get selectedTimeString {
+    if (selectedTime == null) {
       return 'Не выбрано';
     }
-    return '${selectedDate!.hour.toString().padLeft(2, '0')}:${selectedDate!.minute.toString().padLeft(2, '0')}';
+    return '${selectedTime!.hour.toString().padLeft(2, '0')}:${selectedTime!.minute.toString().padLeft(2, '0')}';
   }
 }

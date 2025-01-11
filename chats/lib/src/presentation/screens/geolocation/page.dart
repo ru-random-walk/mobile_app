@@ -31,7 +31,12 @@ part 'widgets/result/dialog.dart';
 part 'widgets/result/row.dart';
 
 class PickGeolocationPage extends StatefulWidget {
-  const PickGeolocationPage({super.key});
+  final Geolocation? initialGeolocation;
+
+  const PickGeolocationPage({
+    super.key,
+    this.initialGeolocation,
+  });
 
   @override
   State<PickGeolocationPage> createState() => _PickGeolocationPageState();
@@ -54,6 +59,7 @@ class _PickGeolocationPageState extends State<PickGeolocationPage> {
         body: Stack(
           children: [
             _MapWidget(
+              initialGeolocation: widget.initialGeolocation,
               mapUIEventStream: _mapUIEventsController.stream,
             ),
             Center(

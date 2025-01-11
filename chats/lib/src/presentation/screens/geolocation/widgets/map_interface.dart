@@ -44,17 +44,21 @@ class _MapInterfaceWidgetState extends State<_MapInterfaceWidget> {
               ),
             ),
             PickerConfirmButton(
-              onTap: () {
+              onTap: () async {
                 final currentPickedGeolocation =
                     context.read<GeolocationBloc>().state;
                 if (currentPickedGeolocation is GeolocationData) {
-                  showDialog(
+                  final res = await showDialog(
                     context: context,
                     builder: (_) => _ApplyLocationResultDialog(),
                     routeSettings: RouteSettings(
                       arguments: currentPickedGeolocation.geolocation,
                     ),
                   );
+                  if (!context.mounted) return;
+                  if (res is Geolocation) {
+                    Navigator.pop(context, res);
+                  }
                 }
               },
             ),

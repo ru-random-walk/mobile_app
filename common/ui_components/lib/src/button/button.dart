@@ -69,7 +69,15 @@ class CustomButton extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (leftIcon != null) leftIcon!,
-        if (text != null) Text(text ?? '', style: textStyle),
+        if (text != null)
+          Flexible(
+            child: Text(
+              text ?? '',
+              style: textStyle,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
+          ),
         if (rightIcon != null) rightIcon!,
       ],
     );
@@ -103,6 +111,8 @@ class CustomButton extends StatelessWidget {
     final theme = context.colors;
     final textStyles = context.textTheme;
     return ButtonStyle(
+      minimumSize: const WidgetStatePropertyAll(Size.zero),
+      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       padding: WidgetStateProperty.resolveWith<EdgeInsets>(
         (_) =>
             padding ??
@@ -155,6 +165,8 @@ class CustomButton extends StatelessWidget {
       width: 1.toFigmaSize,
     );
     return ButtonStyle(
+      minimumSize: const WidgetStatePropertyAll(Size.zero),
+      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       padding: WidgetStateProperty.resolveWith<EdgeInsets>(
         (_) =>
             padding ??

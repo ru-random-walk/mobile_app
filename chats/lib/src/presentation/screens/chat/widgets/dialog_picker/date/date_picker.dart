@@ -5,6 +5,13 @@ final _itemExtent = 32.toFigmaSize;
 const _yearRange = 20;
 
 class _MeetDatePickerDialog extends StatefulWidget {
+  final DateTime? initialDate;
+
+  const _MeetDatePickerDialog({
+    super.key,
+    this.initialDate,
+  });
+
   @override
   State<_MeetDatePickerDialog> createState() => _MeetDatePickerDialogState();
 }
@@ -30,6 +37,9 @@ class _MeetDatePickerDialogState extends State<_MeetDatePickerDialog> {
   @override
   void initState() {
     super.initState();
+    if (widget.initialDate != null) {
+      selectedDate = widget.initialDate!;
+    }
     dayController = FlatSnappingListController(
       itemExtent: _itemExtent,
       initialIndex: selectedDate.day - 1,
@@ -41,6 +51,7 @@ class _MeetDatePickerDialogState extends State<_MeetDatePickerDialog> {
     );
     yearController = FlatSnappingListController(
       itemExtent: _itemExtent,
+      initialIndex: selectedDate.year - DateTime.now().year,
     );
   }
 

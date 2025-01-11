@@ -19,6 +19,7 @@ class _MeetDataPickButton extends StatelessWidget {
       child: CustomButton(
         padding: EdgeInsets.symmetric(
           vertical: 8.toFigmaSize,
+          horizontal: 2.toFigmaSize,
         ),
         type: ButtonType.secondary,
         text: title,

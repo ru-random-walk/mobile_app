@@ -21,7 +21,9 @@ class _PickMeetDateRowState extends State<_PickMeetDateRow> {
           final res = await showDialog(
             context: context,
             builder: (context) {
-              return _MeetDatePickerDialog();
+              return _MeetDatePickerDialog(
+                initialDate: selectedDate,
+              );
             },
           );
           if (res != null) {
