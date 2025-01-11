@@ -43,3 +43,5 @@ app.*.map.json
 /android/app/release
 *.env
 *.lock
+ios/Runner/YandexMapApiKey.swift
+android/app/src/main/kotlin/ru/hse/random/walk/YandexMapApiKey.kt
