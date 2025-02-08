@@ -1,0 +1,73 @@
+part of '../../page.dart';
+
+class _ChatBodyData extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final bloc = context.read<ChatBloc>();
+    return BlocSelector<ChatBloc, ChatState, List<MessageEntity>>(
+      selector: (state) => (state as ChatData).messages,
+      builder: (context, messages) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.viewInsetsOf(context).bottom,
+          ),
+          child: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8.toFigmaSize),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: StickyGroupedListView<MessageEntity, DateTime>(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 8.toFigmaSize,
+                        vertical: 4.toFigmaSize,
+                      ),
+                      groupBy: (message) => DateTime(
+                        message.timestamp.year,
+                        message.timestamp.month,
+                        message.timestamp.day,
+                      ),
+                      floatingHeader: true,
+                      reverse: true,
+                      order: StickyGroupedListOrder.DESC,
+                      itemBuilder: (_, message) => _ChatMessageWidget(
+                        message: message,
+                      ),
+                      groupSeparatorBuilder: (message) =>
+                          _ChatDateSeparatorWidget(
+                        date: message.timestamp,
+                      ),
+                      separator: SizedBox(
+                        height: 8.toFigmaSize,
+                      ),
+                      elements: messages,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 4.toFigmaSize,
+                  ),
+                  InputWidget(
+                    onLogoTap: () async {
+                      final res = await showDialog(
+                        context: context,
+                        builder: (context) => _MeetDataDialogWidget(),
+                      );
+                      if (res is InviteEntity) {
+                        bloc.add(
+                          InviteAdded(invite: res),
+                        );
+                      }
+                    },
+                    onSend: (text) => bloc.add(
+                      TextMessageAdded(message: text),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}

@@ -2,6 +2,7 @@ name: core
 description: "A new Flutter package project."
 version: 0.0.1
 homepage:
+publish_to: none
 
 environment:
   sdk: '>=3.4.4 <4.0.0'
@@ -11,7 +12,10 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_dotenv: ^5.2.1
-
+  flutter_secure_storage: ^9.2.4
+  dio: ^5.7.0
+  auth:
+    path: ../auth
 
 dev_dependencies:
   flutter_test:

@@ -21,6 +21,8 @@ dependencies:
     path: ../common/utils
   core:
     path: ../core
+  main: 
+    path: ../main
   flutter_svg: ^2.0.10+1
   google_sign_in: ^6.2.1
   json_annotation: ^4.9.0

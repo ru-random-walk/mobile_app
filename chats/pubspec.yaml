@@ -51,5 +51,6 @@ flutter:
     - packages/chats/assets/icons/time.svg
     - packages/chats/assets/icons/gps.svg
     - packages/chats/assets/icons/place_fill.svg
+    - packages/chats/assets/icons/logo.svg
 
 

@@ -3,6 +3,7 @@ import 'package:auth/src/screens/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:main/main.dart';
 import 'package:ui_components/ui_components.dart';
 import 'package:ui_utils/ui_utils.dart';
 
@@ -21,6 +22,18 @@ class LoginButtonGroup extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          CustomButton(
+            size: ButtonSize.M,
+            type: ButtonType.tertiary,
+            text: 'Демо-режим',
+            textStyle: context.textTheme.bodyMRegularBase90,
+            onPressed: () => Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (_) => const MainPage(),
+              ),
+            ),
+          ),
+          dividerSmall,
           CustomButton(
             size: ButtonSize.M,
             leftIcon: Padding(

@@ -11,6 +11,7 @@ class _SendButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: onPressed,
       child: SizedBox.square(
         dimension: 24.toFigmaSize,
         child: SvgPicture.asset(

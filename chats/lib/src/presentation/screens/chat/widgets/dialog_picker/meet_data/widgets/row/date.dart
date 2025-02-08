@@ -26,14 +26,21 @@ class _PickMeetDateRowState extends State<_PickMeetDateRow> {
               );
             },
           );
-          if (res != null) {
-            setState(() {
-              selectedDate = res;
-            });
+          if (res is DateTime && context.mounted) {
+            updateDate(res, context);
           }
         },
       ),
     );
+  }
+
+  void updateDate(DateTime date, BuildContext context) {
+    setState(() {
+      selectedDate = date;
+    });
+    final parentState =
+        context.findAncestorStateOfType<_MeetDataDialogWidgetState>();
+    parentState?.selectedDate = date;
   }
 
   String get formattedDate {

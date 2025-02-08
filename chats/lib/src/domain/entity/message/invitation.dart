@@ -1,19 +1,20 @@
 part of 'message.dart';
 
 class InvitationMessageEntity extends MessageEntity {
-  final DateTime planDateTimeOfMeeting;
-  final String place;
+  final DateTime planDateOfMeeting;
+  final TimeOfDay planTimeOfMeeting;
+  final Geolocation place;
   final InvitationStatus status;
-  final bool _isFromMe;
 
   InvitationMessageEntity({
     required super.timestamp,
-    required this.planDateTimeOfMeeting,
+    required super.isMy,
+    required super.isChecked,
+    required this.planDateOfMeeting,
+    required this.planTimeOfMeeting,
     required this.place,
-    required bool isFromMe,
     required this.status,
-  }) : _isFromMe = isFromMe;
+  });
 
-
-  bool get showControlButtons => _isFromMe && status == InvitationStatus.pending;
+  bool get showControlButtons => !isMy && status == InvitationStatus.pending;
 }

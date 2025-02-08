@@ -16,8 +16,16 @@ dependencies:
     path: ../common/ui_theming
   ui_utils:
     path: ../common/ui_utils 
+  ui_components:
+    path: ../common/ui_components
   utils:
     path: ../common/utils
+  core:
+    path: ../core
+  auth:
+    path: ../auth
+  flutter_bloc: ^8.1.6
+
 
 dev_dependencies:
   flutter_test:

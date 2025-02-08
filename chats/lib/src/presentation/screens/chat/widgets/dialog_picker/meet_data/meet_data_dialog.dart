@@ -10,6 +10,8 @@ class _MeetDataDialogWidgetState extends State<_MeetDataDialogWidget> {
 
   TimeOfDay? selectedTime;
 
+  Geolocation? geolocation;
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -37,7 +39,25 @@ class _MeetDataDialogWidgetState extends State<_MeetDataDialogWidget> {
                     padding: EdgeInsets.symmetric(
                       horizontal: 9.toFigmaSize,
                     ),
-                    child: PickerConfirmButton(),
+                    child: PickerConfirmButton(
+                      onTap: () {
+                        if (allFieldsFilled) {
+                          final invite = InviteEntity(
+                            date: selectedDate!,
+                            time: selectedTime!,
+                            place: geolocation!,
+                          );
+                          Navigator.of(context).pop(invite);
+                        } else {
+                          final snackBar = SnackBar(
+                            content: const Text('Заполните все поля'),
+                            backgroundColor: context.colors.base_0,
+                            duration: const Duration(milliseconds: 1500),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        }
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -47,4 +67,7 @@ class _MeetDataDialogWidgetState extends State<_MeetDataDialogWidget> {
       ),
     );
   }
+
+  bool get allFieldsFilled =>
+      selectedDate != null && selectedTime != null && geolocation != null;
 }

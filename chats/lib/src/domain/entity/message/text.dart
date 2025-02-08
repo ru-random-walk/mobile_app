@@ -1,10 +1,12 @@
 part of 'message.dart';
 
-sealed class TextMessageEntity extends MessageEntity {
+class TextMessageEntity extends MessageEntity {
   final String text;
 
   TextMessageEntity({
     required super.timestamp,
+    required super.isMy,
+    required super.isChecked,
     required this.text,
   });
 }

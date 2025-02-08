@@ -20,16 +20,25 @@ class _PickMeetTimeRowState extends State<_PickMeetTimeRow> {
         onTap: () async {
           final res = await showDialog(
             context: context,
-            builder: (_) => _MeetTimePickerDialog(initialTime: selectedTime,),
+            builder: (_) => _MeetTimePickerDialog(
+              initialTime: selectedTime,
+            ),
           );
-          if (res != null) {
-            setState(() {
-              selectedTime = res;
-            });
+          if (res is TimeOfDay && context.mounted) {
+            updateTime(res, context);
           }
         },
       ),
     );
+  }
+
+  void updateTime(TimeOfDay time, BuildContext context) {
+    setState(() {
+      selectedTime = time;
+    });
+    final parentState =
+        context.findAncestorStateOfType<_MeetDataDialogWidgetState>();
+    parentState?.selectedTime = time;
   }
 
   String get selectedTimeString {

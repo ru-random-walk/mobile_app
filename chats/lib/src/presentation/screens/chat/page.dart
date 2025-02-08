@@ -1,7 +1,9 @@
 import 'dart:ui';
 
 import 'package:chats/src/domain/entity/meet_data/geolocation.dart';
+import 'package:chats/src/domain/entity/meet_data/invite.dart';
 import 'package:chats/src/domain/entity/message/message.dart';
+import 'package:chats/src/presentation/screens/chat/bloc/chat_bloc.dart';
 import 'package:chats/src/presentation/screens/chat/widgets/flat_snapping_scroll/controller.dart';
 import 'package:chats/src/presentation/screens/chat/widgets/flat_snapping_scroll/list.dart';
 import 'package:chats/src/presentation/screens/geolocation/page.dart';
@@ -10,6 +12,7 @@ import 'package:chats/src/presentation/shared/dialog.dart';
 import 'package:chats/src/presentation/shared/header/close_button.dart';
 import 'package:chats/src/presentation/shared/header/header.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -40,13 +43,20 @@ part 'widgets/dialog_picker/meet_data/widgets/row/time.dart';
 part 'widgets/dialog_picker/meet_data/widgets/row/place.dart';
 part 'widgets/dialog_picker/meet_data/widgets/close_button.dart';
 part 'widgets/dialog_picker/meet_data/widgets/pickers.dart';
+part 'widgets/message/shared/base.dart';
+part 'widgets/message/invitation.dart';
+part 'widgets/body/data.dart';
+part 'widgets/body/loading.dart';
 
 class ChatPage extends StatelessWidget {
   const ChatPage({super.key});
 
   @override
-  Widget build(BuildContext context) {    
+  Widget build(BuildContext context) {
     initializeDateFormatting('ru');
-    return _ChatScreen();
+    return BlocProvider(
+      create: (_) => ChatBloc()..add(LoadData()),
+      child: _ChatScreen(),
+    );
   }
 }

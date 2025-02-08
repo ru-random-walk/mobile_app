@@ -25,13 +25,20 @@ class _PickMeetPlaceRowState extends State<_PickMeetPlaceRow> {
               ),
             ),
           );
-          if (res != null && res is Geolocation) {
-            setState(() {
-              selectedPlace = res;
-            });
+          if (res is Geolocation && context.mounted) {
+            updateGeo(res, context);
           }
         },
       ),
     );
+  }
+
+  void updateGeo(Geolocation geo, BuildContext context) {
+    setState(() {
+      selectedPlace = geo;
+    });
+    final parentState =
+        context.findAncestorStateOfType<_MeetDataDialogWidgetState>();
+    parentState?.geolocation = geo;
   }
 }

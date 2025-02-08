@@ -18,7 +18,10 @@ class GoogleSignInRepositoryI implements GoogleSignInRepository {
     final auth = await acc?.authentication;
     final token = auth?.accessToken;
     if (token == null) {
-      throw BaseError('Google token is null', StackTrace.current);
+      throw BaseError(
+        'Google token is null',
+        StackTrace.current,
+      );
     }
     return token;
   }

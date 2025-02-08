@@ -12,7 +12,7 @@ part 'suffix_button.dart';
 class InputWidget extends StatefulWidget {
   final TextEditingController? controller;
   final String hint;
-  final VoidCallback? onSend;
+  final void Function(String)? onSend;
   final VoidCallback? onLogoTap;
 
   const InputWidget({
@@ -43,7 +43,10 @@ class _InputWidgetState extends State<InputWidget> {
       child: _SuffixButton(
         controller: controller,
         onLogoTap: widget.onLogoTap,
-        onSend: widget.onSend,
+        onSend: () {
+          widget.onSend?.call(controller.text);
+          controller.clear();
+        },
       ),
     );
     return CustomTextField(
@@ -51,6 +54,8 @@ class _InputWidgetState extends State<InputWidget> {
       controller: controller,
       hint: widget.hint,
       suffix: suffix,
+      textStyle: context.textTheme.bodyMRegularBase90,
+      // maxLines: 4,
     );
   }
 }

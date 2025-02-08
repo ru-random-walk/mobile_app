@@ -86,7 +86,7 @@ class CustomButton extends StatelessWidget {
   ButtonStyle _getStyle(BuildContext context) => switch (type) {
         ButtonType.primary => _getPrimaryStyle(context),
         ButtonType.secondary => _getSecondaryStyle(context),
-        ButtonType.tertiary => throw UnimplementedError(),
+        ButtonType.tertiary => _getTeritaryStyle(context),
       };
 
   Color _getColor(ExtendedTheme theme) {
@@ -134,6 +134,40 @@ class CustomButton extends StatelessWidget {
       }),
     );
   }
+
+  ButtonStyle _getTeritaryStyle(BuildContext context) {
+    final theme = context.colors;
+    final textStyles = context.textTheme;
+    return ButtonStyle(
+      minimumSize: const WidgetStatePropertyAll(Size.zero),
+      padding: WidgetStateProperty.resolveWith<EdgeInsets>(
+        (_) =>
+            padding ??
+            EdgeInsets.symmetric(
+              horizontal: 12.toFigmaSize,
+              vertical: 16.toFigmaSize,
+            ),
+      ),
+      textStyle: WidgetStatePropertyAll(_getTextStyleForTeritary(textStyles)),
+      side: const WidgetStatePropertyAll(BorderSide.none),
+      shape: WidgetStateProperty.all(_border),
+      foregroundColor: WidgetStateProperty.resolveWith<Color>(
+        (_) => context.colors.base_40,
+      ),
+      backgroundColor: WidgetStateProperty.resolveWith<Color?>((states) {
+        if (states.contains(WidgetState.pressed)) {
+          return theme.base_5;
+        }
+        return null;
+      }),
+    );
+  }
+
+  TextStyle _getTextStyleForTeritary(TextThemeExtension textTheme) =>
+      switch (size) {
+        ButtonSize.S => textTheme.bodySMediumBase0,
+        ButtonSize.M => textTheme.bodyMMedium,
+      };
 
   TextStyle _getTextStyleForPrimary(TextThemeExtension textTheme) =>
       switch (size) {

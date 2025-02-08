@@ -1,17 +1,15 @@
+import 'package:chats/chats.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:main/src/screens/paths.dart';
+import 'package:main/src/screens/main/paths.dart';
 import 'package:ui_utils/ui_utils.dart';
 
 part 'bottom_nav_bar.dart';
 part 'bottom_nav_bar_button.dart';
 
 class MainPage extends StatefulWidget {
-  final List<Widget> pages;
-
   const MainPage({
     super.key,
-    required this.pages,
   });
 
   @override
@@ -19,6 +17,19 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  final pages = [
+    const Center(
+      child: Text('1'),
+    ),
+    const Center(
+      child: Text('2'),
+    ),
+    const ChatsListPage(),
+    const Center(
+      child: Text('4'),
+    ),
+  ];
+
   var _currentIndex = 0;
 
   @override
@@ -29,7 +40,7 @@ class _MainPageState extends State<MainPage> {
         child: Scaffold(
           body: IndexedStack(
             index: _currentIndex,
-            children: widget.pages,
+            children: pages,
           ),
           bottomNavigationBar: _MainScreenBottomNavigationBar(
             currentIndex: _currentIndex,

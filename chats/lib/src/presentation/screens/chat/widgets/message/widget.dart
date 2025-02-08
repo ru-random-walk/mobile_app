@@ -10,7 +10,8 @@ class _ChatMessageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => switch (message) {
-    InvitationMessageEntity() => throw UnimplementedError(),
-    TextMessageEntity e => _ChatTextMessageWidget(message: e),
-  };
+        InvitationMessageEntity e =>
+          _ChatInvitationMessageWidget(invitation: e),
+        TextMessageEntity e => _ChatTextMessageWidget(message: e),
+      };
 }

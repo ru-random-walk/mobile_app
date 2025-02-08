@@ -43,8 +43,11 @@ class CustomTextField extends StatelessWidget {
         radius,
       ),
     );
-    return SizedBox(
-      height: height,
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        minHeight: height,
+        maxHeight: height * 2,
+      ),
       child: TextField(
         style: textStyle ?? context.textTheme.bodySRegular,
         onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),

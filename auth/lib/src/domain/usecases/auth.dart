@@ -9,8 +9,13 @@ import 'package:utils/utils.dart';
 class AuthUseCase implements BaseUseCase<BaseError, void, AuthProvider> {
   final GetGoogleAccessTokenUseCase _getGoogleAccessTokenUseCase;
   final AuthRepository _authRepository;
+  final TokenStorage _tokenStorage;
 
-  AuthUseCase(this._getGoogleAccessTokenUseCase, this._authRepository);
+  AuthUseCase(
+    this._getGoogleAccessTokenUseCase,
+    this._authRepository,
+    this._tokenStorage,
+  );
 
   @override
   Future<Either<BaseError, void>> call(AuthProvider type) async {
@@ -23,7 +28,9 @@ class AuthUseCase implements BaseUseCase<BaseError, void, AuthProvider> {
     };
     final response =
         await _authRepository.authVia(TokenExchangeRequestEntity(authType));
-    /// TODO: impement storing access token in shared preferences
+    if (response.isRight) {
+      _tokenStorage.updateData(response.rightValue);
+    }
     return response;
   }
 }
