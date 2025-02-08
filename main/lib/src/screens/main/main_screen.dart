@@ -2,6 +2,7 @@ import 'package:chats/chats.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:main/src/screens/main/paths.dart';
+import 'package:matcher_service/matcher_service.dart';
 import 'package:ui_utils/ui_utils.dart';
 
 part 'bottom_nav_bar.dart';
@@ -18,9 +19,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   final pages = [
-    const Center(
-      child: Text('1'),
-    ),
+    const MatcherPage(),
     const Center(
       child: Text('2'),
     ),

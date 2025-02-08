@@ -24,6 +24,8 @@ dependencies:
     path: ../core
   auth:
     path: ../auth
+  matcher_service:
+    path: ../matcher_service
   flutter_bloc: ^8.1.6
 
 

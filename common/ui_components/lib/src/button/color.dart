@@ -1,5 +1,6 @@
 
 enum ButtonColor {
   green,
-  grey
+  grey,
+  black;
 }

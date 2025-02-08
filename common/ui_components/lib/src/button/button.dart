@@ -95,6 +95,8 @@ class CustomButton extends StatelessWidget {
         return theme.main_50;
       case ButtonColor.grey:
         return theme.base_50;
+      case ButtonColor.black:
+        return theme.base_90;
     }
   }
 
@@ -104,6 +106,8 @@ class CustomButton extends StatelessWidget {
         return theme.main_70;
       case ButtonColor.grey:
         return theme.base_90;
+      case ButtonColor.black:
+        return Colors.black;
     }
   }
 
