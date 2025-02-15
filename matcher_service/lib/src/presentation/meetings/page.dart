@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:matcher_service/src/presentation/domain/entity/meeting_info/entity.dart';
-import 'package:matcher_service/src/presentation/domain/entity/meeting_info/preview.dart';
-import 'package:matcher_service/src/presentation/domain/entity/meeting_info/status.dart';
+import 'package:matcher_service/src/domain/entity/meeting_info/entity.dart';
+import 'package:matcher_service/src/domain/entity/meeting_info/preview.dart';
+import 'package:matcher_service/src/domain/entity/meeting_info/status.dart';
 import 'package:ui_components/ui_components.dart';
 import 'package:ui_utils/ui_utils.dart';
 

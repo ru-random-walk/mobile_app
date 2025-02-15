@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:matcher_service/src/presentation/domain/entity/meeting_info/status.dart';
+import 'package:matcher_service/src/domain/entity/meeting_info/status.dart';
 
 class MeetingPreviewInfoEntity {
   final TimeOfDay startTimeMeeting;

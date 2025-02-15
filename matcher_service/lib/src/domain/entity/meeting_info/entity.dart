@@ -1,4 +1,4 @@
-import 'package:matcher_service/src/presentation/domain/entity/meeting_info/preview.dart';
+import 'package:matcher_service/src/domain/entity/meeting_info/preview.dart';
 
 class MeetingsForDayEntity {
   final DateTime date;
