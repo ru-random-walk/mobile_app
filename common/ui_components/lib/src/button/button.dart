@@ -20,6 +20,8 @@ class CustomButton extends StatelessWidget {
   final double? customHeight;
   final double? customWidth;
   final Color? secondaryStyleFillColor;
+  final Color? customColor;
+  final double? customCornerRadius;
 
   const CustomButton({
     super.key,
@@ -36,6 +38,8 @@ class CustomButton extends StatelessWidget {
     this.customHeight,
     this.customWidth,
     this.secondaryStyleFillColor,
+    this.customColor,
+    this.customCornerRadius,
   });
 
   @override
@@ -90,6 +94,7 @@ class CustomButton extends StatelessWidget {
       };
 
   Color _getColor(ExtendedTheme theme) {
+    if (customColor != null) return customColor!;
     switch (color) {
       case ButtonColor.green:
         return theme.main_50;
@@ -192,7 +197,8 @@ class CustomButton extends StatelessWidget {
       };
 
   OutlinedBorder get _border => RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(6.toFigmaSize),
+        borderRadius:
+            BorderRadius.circular(customCornerRadius ?? 6.toFigmaSize),
       );
 
   ButtonStyle _getSecondaryStyle(BuildContext context) {

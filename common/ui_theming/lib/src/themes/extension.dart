@@ -20,7 +20,9 @@ class ExtendedTheme extends ThemeExtension<ExtendedTheme> {
   /// Main colors
   ///
   final Color main_5;
+  final Color main_7;
   final Color main_10;
+  final Color main_15;
   final Color main_20;
   final Color main_30;
   final Color main_40;
@@ -33,7 +35,9 @@ class ExtendedTheme extends ThemeExtension<ExtendedTheme> {
 
   const ExtendedTheme({
     required this.main_5,
+    required this.main_7,
     required this.main_10,
+    required this.main_15,
     required this.main_20,
     required this.main_30,
     required this.main_40,
@@ -48,7 +52,9 @@ class ExtendedTheme extends ThemeExtension<ExtendedTheme> {
   @override
   ExtendedTheme copyWith({
     Color? main_5,
+    Color? main_7,
     Color? main_10,
+    Color? main_15,
     Color? main_20,
     Color? main_30,
     Color? main_40,
@@ -59,9 +65,11 @@ class ExtendedTheme extends ThemeExtension<ExtendedTheme> {
     Color? main_90,
     Color? main_100,
   }) {
-    return ExtendedTheme(
+    return ExtendedTheme(      
       main_5: main_5 ?? this.main_5,
+      main_7: main_7 ?? this.main_7,
       main_10: main_10 ?? this.main_10,
+      main_15: main_15 ?? this.main_15,
       main_20: main_20 ?? this.main_20,
       main_30: main_30 ?? this.main_30,
       main_40: main_40 ?? this.main_40,
@@ -82,7 +90,9 @@ class ExtendedTheme extends ThemeExtension<ExtendedTheme> {
     }
     return ExtendedTheme(
       main_5: Color.lerp(main_5, other.main_5, t)!,
+      main_7: Color.lerp(main_7, other.main_7, t)!,
       main_10: Color.lerp(main_10, other.main_10, t)!,
+      main_15: Color.lerp(main_15, other.main_15, t)!,
       main_20: Color.lerp(main_20, other.main_20, t)!,
       main_30: Color.lerp(main_30, other.main_30, t)!,
       main_40: Color.lerp(main_40, other.main_40, t)!,

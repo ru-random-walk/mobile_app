@@ -52,7 +52,7 @@ class _ApplyLocationResultDialogState
   Widget build(BuildContext context) {
     return BaseDialog(
       width: 387.toFigmaSize,
-      height: 271.toFigmaSize,
+      height: 300.toFigmaSize,
       child: Padding(
         padding: EdgeInsets.all(8.toFigmaSize),
         child: Center(

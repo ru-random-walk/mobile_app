@@ -14,7 +14,9 @@ final lightTheme = ThemeData(
 
 const lightColorTheme = ExtendedTheme(
   main_5: GreenColors.green_5,
+  main_7: GreenColors.green_7,
   main_10: GreenColors.green_10,
+  main_15: GreenColors.green_15,
   main_20: GreenColors.green_20,
   main_30: GreenColors.green_30,
   main_40: GreenColors.green_40,
@@ -35,6 +37,7 @@ final lightTextTheme = TextThemeExtension(
   bodyMRegularBase90: TextStyles.bodyMRegular(BaseColors.base_90),
   bodyMRegularMain50: TextStyles.bodyMRegular(GreenColors.green_50),
   bodyMRegularMain70: TextStyles.bodyMRegular(GreenColors.green_70),
+  bodyLRegular: TextStyles.bodyLRegular(Colors.black),
   bodyMMedium: TextStyles.bodyMMedium(Colors.black),
   bodyMItalic: TextStyles.bodyMItalic(Colors.black),
   bodySRegular: TextStyles.bodySRegular(Colors.black),

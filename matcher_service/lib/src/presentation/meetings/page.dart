@@ -6,10 +6,12 @@ import 'package:matcher_service/src/presentation/domain/entity/meeting_info/stat
 import 'package:ui_components/ui_components.dart';
 import 'package:ui_utils/ui_utils.dart';
 
+import 'widgets/card/color_mode.dart';
+
 part 'widgets/app_bar.dart';
-part 'widgets/meeting_info.dart';
-part 'widgets/mettings_for_day.dart';
-part 'widgets/meetings_day.dart';
+part 'widgets/card/meeting_info.dart';
+part 'widgets/card/mettings_for_day.dart';
+part 'widgets/card/meetings_day.dart';
 part 'widgets/body.dart';
 
 class MatcherPage extends StatelessWidget {

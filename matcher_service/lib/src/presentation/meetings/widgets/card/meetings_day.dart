@@ -1,4 +1,4 @@
-part of '../page.dart';
+part of '../../page.dart';
 
 class _MettingsDayWigdet extends StatelessWidget {
   final DateTime date;
@@ -19,10 +19,16 @@ class _MettingsDayWigdet extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 4.toFigmaSize,
+          height: 8.toFigmaSize,
         ),
         Text(
-          '${date.day} $ofMonth',
+          date.day.toString(),
+          style: context.textTheme.h4.copyWith(
+            color: context.colors.base_90,
+          ),
+        ),
+        Text(
+          ofMonth,
           style: context.textTheme.h4.copyWith(
             color: context.colors.base_90,
           ),

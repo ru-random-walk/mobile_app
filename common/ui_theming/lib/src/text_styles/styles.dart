@@ -32,6 +32,13 @@ abstract class TextStyles {
         color: color,
       );
 
+  static TextStyle bodyLRegular(Color color) => TextStyle(
+        fontFamily: _fontFamily,
+        fontSize: 18.toFigmaSize,
+        fontWeight: FontWeight.w400,
+        color: color,
+      );
+
   static TextStyle bodyMMedium(Color color) => TextStyle(
         fontFamily: _fontFamily,
         fontSize: 16.toFigmaSize,

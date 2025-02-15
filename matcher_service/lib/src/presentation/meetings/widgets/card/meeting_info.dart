@@ -1,23 +1,29 @@
-part of '../page.dart';
+part of '../../page.dart';
 
 class MettingPreviewInfoWidget extends StatelessWidget {
   final MeetingPreviewInfoEntity info;
+  final Color buttonColor;
 
-  const MettingPreviewInfoWidget({super.key, required this.info});
+  const MettingPreviewInfoWidget({
+    super.key,
+    required this.info,
+    required this.buttonColor,
+  });
 
   @override
   Widget build(BuildContext context) {
     return CustomButton(
-      color: ButtonColor.black,
+      customColor: buttonColor,
+      customCornerRadius: 16,
       isMaxWidth: false,
       size: ButtonSize.M,
-      type: ButtonType.secondary,
       padding: EdgeInsets.symmetric(
         vertical: 8.toFigmaSize,
         horizontal: 22.5.toFigmaSize,
       ),
       text: _formattedTime(context),
       rightIcon: _rightIcon(),
+      textStyle: context.textTheme.bodyLRegular,
     );
   }
 
@@ -33,6 +39,10 @@ class MettingPreviewInfoWidget extends StatelessWidget {
       padding: EdgeInsets.only(left: 8.toFigmaSize),
       child: SvgPicture.asset(
         iconPath,
+        colorFilter: const ColorFilter.mode(
+          Colors.black,
+          BlendMode.srcIn,
+        ),
         // fit: BoxFit.scaleDown,
       ),
     );

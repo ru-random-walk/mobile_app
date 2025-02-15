@@ -53,29 +53,28 @@ class _MeetingsBodyDataList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.separated(
       padding: EdgeInsets.symmetric(
-        vertical: 4.toFigmaSize,
+        vertical: 16.toFigmaSize,
         horizontal: 12.toFigmaSize,
       ),
       itemBuilder: (_, index) => _MeetingsForDay(
-        backgroundColor: backgroundColor(
+        colorMode: backgroundColor(
           context,
           index.isEven,
         ),
         meetings: data[index],
       ),
       separatorBuilder: (_, __) => SizedBox(
-        height: 4.toFigmaSize,
+        height: 16.toFigmaSize,
       ),
       itemCount: data.length,
     );
   }
 
-  Color backgroundColor(BuildContext context, bool isEven) {
+  MeetingColorMode backgroundColor(BuildContext context, bool isEven) {
     if (isEven) {
-      return context.colors.main_20;
+      return MeetingColorMode.lightGreen_7;
     } else {
-      /// TODO: добаить в тему
-      return const Color(0xFFBBCBFF);
+      return MeetingColorMode.lightGreen_15;
     }
   }
 }

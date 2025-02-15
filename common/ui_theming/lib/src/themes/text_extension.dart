@@ -9,6 +9,7 @@ class TextThemeExtension extends ThemeExtension<TextThemeExtension> {
   final TextStyle bodyMRegularBase90;
   final TextStyle bodyMRegularMain50;
   final TextStyle bodyMRegularMain70;
+  final TextStyle bodyLRegular;
   final TextStyle bodyMMedium;
   final TextStyle bodyMItalic;
   final TextStyle bodySRegular;
@@ -31,6 +32,7 @@ class TextThemeExtension extends ThemeExtension<TextThemeExtension> {
     required this.bodyMRegularBase90,
     required this.bodyMRegularMain50,
     required this.bodyMRegularMain70,
+    required this.bodyLRegular,
     required this.bodyMMedium,
     required this.bodyMItalic,
     required this.bodySRegular,
@@ -55,6 +57,7 @@ class TextThemeExtension extends ThemeExtension<TextThemeExtension> {
     TextStyle? bodyMRegularBase90,
     TextStyle? bodyMRegularMain50,
     TextStyle? bodyMRegularMain70,
+    TextStyle? bodyLRegular,
     TextStyle? bodyMMedium,
     TextStyle? bodyMItalic,
     TextStyle? bodySRegular,
@@ -77,6 +80,7 @@ class TextThemeExtension extends ThemeExtension<TextThemeExtension> {
       bodyMRegularBase90: bodyMRegularBase90 ?? this.bodyMRegularBase90,
       bodyMRegularMain50: bodyMRegularMain50 ?? this.bodyMRegularMain50,
       bodyMRegularMain70: bodyMRegularMain70 ?? this.bodyMRegularMain70,
+      bodyLRegular: bodyLRegular ?? this.bodyLRegular,
       bodyMMedium: bodyMMedium ?? this.bodyMMedium,
       bodyMItalic: bodyMItalic ?? this.bodyMItalic,
       bodySRegular: bodySRegular ?? this.bodySRegular,
@@ -113,6 +117,7 @@ class TextThemeExtension extends ThemeExtension<TextThemeExtension> {
           TextStyle.lerp(bodyMRegularMain50, other.bodyMRegularMain50, t)!,
       bodyMRegularMain70:
           TextStyle.lerp(bodyMRegularMain70, other.bodyMRegularMain70, t)!,
+      bodyLRegular: TextStyle.lerp(bodyLRegular, other.bodyLRegular, t)!,
       bodyMMedium: TextStyle.lerp(bodyMMedium, other.bodyMMedium, t)!,
       bodyMItalic: TextStyle.lerp(bodyMItalic, other.bodyMItalic, t)!,
       bodySRegular: TextStyle.lerp(bodySRegular, other.bodySRegular, t)!,
