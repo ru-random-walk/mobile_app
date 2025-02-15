@@ -12,28 +12,19 @@ class GeoObjectModel {
   });
 
   factory GeoObjectModel.fromJson(Map<String, dynamic> json) {
-    final response = json['response'];
-    final geoObjects = response['GeoObjectCollection']['featureMember'] as List<dynamic>;
-    final mostRelevantResult = geoObjects.first;
-    final address = mostRelevantResult['GeoObject']['metaDataProperty']['GeocoderMetaData']['Address'];
-    final components = address['Components'] as List<dynamic>;
-    final country = extractName('country', components);
-    final city = extractName('locality', components);
-    final street = extractName('street', components);
-    final building = extractName('house', components);
+    final response = (json['suggestions'] as List<dynamic>).first;
+    final data = response['data'];
+    final country = data['country'] as String?;
+    final city = data['city'] as String?;
+    final street = data['street'] as String?;
+    final building = data['house'] as String?;
+    final blockType = data['block_type'] as String?;
+    final block = data['block'] as String?;
     return GeoObjectModel(
       country: country,
       city: city,
       street: street,
-      building: building,
+      building: (building ?? '') + (blockType ?? '') + (block ?? ''),
     );
-  }
-
-  static String? extractName(String key, List<dynamic> components) {
-    try {
-      return (components.firstWhere((e) => e['kind'] == key) as Map<String, dynamic>)['name'];
-    } catch (e) {
-      return null;
-    }
   }
 }

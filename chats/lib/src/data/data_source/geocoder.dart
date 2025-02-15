@@ -1,19 +1,28 @@
 import 'package:chats/src/data/models/geo_object.dart';
-import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' hide Headers;
 import 'package:retrofit/retrofit.dart';
+
+import '../models/query.dart';
 
 part 'geocoder.g.dart';
 
-const _yandexGeoCoderUrl = 'https://geocode-maps.yandex.ru';
+const _dadataGeoCoderUrl = 'http://suggestions.dadata.ru';
 
-@RestApi(baseUrl: _yandexGeoCoderUrl)
+@RestApi(baseUrl: _dadataGeoCoderUrl)
 abstract class GeocoderDataSource {
   factory GeocoderDataSource() => _GeocoderDataSource(Dio());
 
-  @GET('/1.x/')
+  @POST('/suggestions/api/4_1/rs/geolocate/address')
+  @Headers(headers)
   Future<GeoObjectModel> getGeolocationByPoint(
-    @Query('apikey') String apiKey,
-    @Query('geocode') String coordinates, [
-    @Query('format') String type = 'json',
+    @Body() GeocoderQueryModel queryModel, [
+    @Header('Authorization') String token = 'Token $dadataToken',
   ]);
 }
+
+const dadataToken = String.fromEnvironment('DADATA_API_KEY');
+
+const headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+};

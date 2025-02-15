@@ -1,4 +1,5 @@
 import 'package:chats/src/data/data_source/geocoder.dart';
+import 'package:chats/src/data/models/query.dart';
 import 'package:chats/src/domain/entity/meet_data/geolocation.dart';
 import 'package:chats/src/domain/repository/geocoder.dart';
 import 'package:core/core.dart';
@@ -18,9 +19,11 @@ class GeocoderRepositoryI implements GeocoderRepository {
     try {
       final latitude = point.latitude;
       final longitude = point.longitude;
-      final coordinates = '$longitude,$latitude';
-      final apiKey = EnvironmentVariables().yandexGeocoderApiKey;
-      final res = await _dataSource.getGeolocationByPoint(apiKey, coordinates);
+      final queryModel = GeocoderQueryModel(
+        latitude: latitude,
+        longitude: longitude,
+      );
+      final res = await _dataSource.getGeolocationByPoint(queryModel);
       final geoLocation = Geolocation(
         latitude: latitude,
         longitude: longitude,

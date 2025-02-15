@@ -49,3 +49,4 @@ core/lib/src/network/url.dart
 ios/Runner/Info.plist
 lib/firebase_options.dart
 /.vscode
+*.g.dart
