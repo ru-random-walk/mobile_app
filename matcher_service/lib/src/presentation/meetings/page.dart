@@ -13,6 +13,7 @@ part 'widgets/card/meeting_info.dart';
 part 'widgets/card/mettings_for_day.dart';
 part 'widgets/card/meetings_day.dart';
 part 'widgets/body.dart';
+part 'widgets/add_button.dart';
 
 class MatcherPage extends StatelessWidget {
   const MatcherPage({super.key});
@@ -22,6 +23,7 @@ class MatcherPage extends StatelessWidget {
     return Scaffold(
       appBar: _MeetingsAppBar(),
       body: _MeetingsBodyDataList(),
+      floatingActionButton: _AddMeetingButton(),
     );
   }
 }
