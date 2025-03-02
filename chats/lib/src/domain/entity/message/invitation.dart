@@ -18,3 +18,15 @@ class InvitationMessageEntity extends MessageEntity {
 
   bool get showControlButtons => !isMy && status == InvitationStatus.pending;
 }
+
+abstract class A<T> {
+  final String name;
+
+  final T value;
+
+  A({required this.name, required this.value});
+}
+
+class C extends A<InvitationMessageEntity> {
+  C({required super.name, required super.value});
+}
