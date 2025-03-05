@@ -1,19 +1,22 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:chats/src/domain/entity/meet_data/geolocation.dart';
 import 'package:chats/src/domain/entity/meet_data/invite.dart';
 import 'package:chats/src/domain/entity/message/message.dart';
+import 'package:chats/src/domain/use_case/get_messages.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:rxdart/rxdart.dart';
 
 part 'chat_event.dart';
 part 'chat_state.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
-  ChatBloc() : super(ChatLoading()) {
-    on<LoadData>((event, emit) async {
-      await Future.delayed(const Duration(milliseconds: 500));
-      emit(ChatData(_messages));
-    });
+  final GetMessagesUseCase _getMessagesUseCase;
+
+  ChatBloc(this._getMessagesUseCase) : super(ChatLoading()) {
+    on<LoadData>(_onLoadData);
     on<TextMessageAdded>((event, emit) {
       final newMessage = TextMessageEntity(
         timestamp: DateTime.now(),
@@ -39,8 +42,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           timestamp: DateTime.now(),
           isMy: true,
           isChecked: false,
-          planDateOfMeeting: invite.date,
-          planTimeOfMeeting: invite.time,
+          planDateTimeOfMeeting: invite.date,
           place: invite.place,
           status: InvitationStatus.pending,
         );
@@ -54,6 +56,28 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         );
       },
     );
+  }
+
+  void _onLoadData(LoadData event, Emitter emit) async {
+    if (_getMessagesUseCase.allPagesLoaded) return;
+    final res = await _getMessagesUseCase();
+    res.fold((e) {
+      /// TODO
+    }, (messages) {
+      emit(
+        ChatData(
+          _currentMessages..addAll(messages),
+        ),
+      );
+    });
+  }
+
+  List<MessageEntity> get _currentMessages {
+    final localState = state;
+    if (localState is ChatData) {
+      return localState.messages;
+    }
+    return [];
   }
 }
 
@@ -72,13 +96,13 @@ final _messages = List<MessageEntity>.generate(
           isMy: true,
           isChecked: true,
         ),
-)..add(
+)
+  ..add(
     InvitationMessageEntity(
       timestamp: DateTime.now(),
       isMy: false,
       isChecked: false,
-      planDateOfMeeting: DateTime.now()..add(const Duration(days: 1)),
-      planTimeOfMeeting: TimeOfDay.now(),
+      planDateTimeOfMeeting: DateTime.now()..add(const Duration(days: 1)),
       place: Geolocation(
         latitude: 341,
         longitude: 134,
@@ -88,5 +112,7 @@ final _messages = List<MessageEntity>.generate(
       ),
       status: InvitationStatus.pending,
     ),
-  )..sort(
-        (a, b) => b.timestamp.compareTo(a.timestamp),);
+  )
+  ..sort(
+    (a, b) => b.timestamp.compareTo(a.timestamp),
+  );

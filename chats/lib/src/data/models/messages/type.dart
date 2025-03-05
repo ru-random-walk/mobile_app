@@ -7,7 +7,7 @@ enum MessageType {
     switch (type) {
       case 'text':
         return MessageType.text;
-      case 'requestForWalk':
+      case 'request_for_walk':
         return MessageType.requestForWalk;
       default:
         return MessageType.unknown;

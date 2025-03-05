@@ -1,32 +1,21 @@
 part of 'message.dart';
 
 class InvitationMessageEntity extends MessageEntity {
-  final DateTime planDateOfMeeting;
-  final TimeOfDay planTimeOfMeeting;
+  final DateTime planDateTimeOfMeeting;
   final Geolocation place;
   final InvitationStatus status;
+
+  TimeOfDay get planTimeOfMeeting =>
+      TimeOfDay.fromDateTime(planDateTimeOfMeeting);
 
   InvitationMessageEntity({
     required super.timestamp,
     required super.isMy,
     required super.isChecked,
-    required this.planDateOfMeeting,
-    required this.planTimeOfMeeting,
+    required this.planDateTimeOfMeeting,
     required this.place,
     required this.status,
   });
 
   bool get showControlButtons => !isMy && status == InvitationStatus.pending;
-}
-
-abstract class A<T> {
-  final String name;
-
-  final T value;
-
-  A({required this.name, required this.value});
-}
-
-class C extends A<InvitationMessageEntity> {
-  C({required super.name, required super.value});
 }

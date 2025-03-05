@@ -25,7 +25,7 @@ class _ChatInvitationMessageWidget extends StatelessWidget {
             iconPath: 'packages/chats/assets/icons/calendar.svg',
             title: 'Дата',
             value:
-                DateFormat('dd.MM.yyyy').format(invitation.planDateOfMeeting),
+                DateFormat('dd.MM.yyyy').format(invitation.planDateTimeOfMeeting),
           ),
           spacer,
           _InvitationDataRowWidget(

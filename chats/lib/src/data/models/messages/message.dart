@@ -1,3 +1,4 @@
+import 'package:chats/src/data/models/date_converter.dart';
 import 'package:chats/src/data/models/messages/payload.dart';
 import 'package:chats/src/data/models/messages/text.dart';
 import 'package:chats/src/data/models/messages/type.dart';
@@ -41,8 +42,13 @@ class PayloadConverter implements JsonConverter<Payload, Map<String, dynamic>> {
 
   @override
   Payload fromJson(Map<String, dynamic> json) {
-    // TODO: implement fromJson
-    throw UnimplementedError();
+    final type = json['type'] as String;
+    final enumType = MessageType.fromString(type);
+    return switch (enumType) {
+      MessageType.text => TextPayloadModel.fromJson(json),
+      MessageType.requestForWalk => RequestForWalkPayloadModel.fromJson(json),
+      MessageType.unknown => throw UnimplementedError(),
+    };
   }
 
   @override

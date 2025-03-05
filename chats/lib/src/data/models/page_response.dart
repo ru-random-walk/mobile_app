@@ -1,4 +1,9 @@
-abstract class PageableResponseModel {
+import 'package:json_annotation/json_annotation.dart';
+
+part 'page_response.g.dart';
+
+@JsonSerializable()
+class PageableResponseModel {
   final int number;
   final int size;
   final int totalElements;
@@ -10,4 +15,7 @@ abstract class PageableResponseModel {
     required this.totalElements,
     required this.totalPages,
   });
+
+  factory PageableResponseModel.fromJson(Map<String, dynamic> json) =>
+      _$PageableResponseModelFromJson(json);
 }

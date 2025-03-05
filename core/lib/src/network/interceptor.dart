@@ -17,7 +17,7 @@ class RefreshTokenInterceptor extends QueuedInterceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    _addAuthHeaders(options.headers);
+    await _addAuthHeaders(options.headers);
     super.onRequest(options, handler);
   }
 
@@ -39,6 +39,8 @@ class RefreshTokenInterceptor extends QueuedInterceptor {
       } else {
         super.onError(err, handler);
       }
+    } else {
+      super.onError(err, handler);
     }
   }
 

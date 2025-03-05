@@ -1,5 +1,5 @@
 import 'package:auth/src/domain/entities/auth_type/enum.dart';
-import 'package:auth/src/screens/bloc/auth_bloc.dart';
+import 'package:auth/src/screens/login/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
