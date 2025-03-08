@@ -1,15 +1,18 @@
 import 'package:auth/auth.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
+import 'package:utils/utils.dart';
 
 class RefreshTokenInterceptor extends QueuedInterceptor {
   final TokenStorage _tokenStorage;
   final AuthWithRefreshTokenUseCase _authWithRefreshTokenUseCase;
   final _innerDio = Dio();
+  final void Function() onRefreshTokenExpired;
 
   RefreshTokenInterceptor(
     this._tokenStorage,
     this._authWithRefreshTokenUseCase,
+    this.onRefreshTokenExpired,
   );
 
   @override
@@ -27,26 +30,34 @@ class RefreshTokenInterceptor extends QueuedInterceptor {
     ErrorInterceptorHandler handler,
   ) async {
     if (err.response?.statusCode == 401) {
-      final success = await _loginWithRefreshToken();
-      if (success) {
-        try {
-          await _addAuthHeaders(err.requestOptions.headers);
-          final newResponse = await _innerDio.fetch(err.requestOptions);
-          handler.resolve(newResponse);
-        } catch (e) {
-          super.onError(err, handler);
-        }
-      } else {
-        super.onError(err, handler);
-      }
+      final refreshResult = await _loginWithRefreshToken();
+      refreshResult.fold(
+        (error) {
+          if (error is InvalidRefreshTokenError) {
+            handler.reject(err);
+            onRefreshTokenExpired();
+          } else {
+            super.onError(err, handler);
+          }
+        },
+        (_) async {
+          try {
+            await _addAuthHeaders(err.requestOptions.headers);
+            final newResponse = await _innerDio.fetch(err.requestOptions);
+            handler.resolve(newResponse);
+          } catch (e) {
+            super.onError(err, handler);
+          }
+        },
+      );
     } else {
       super.onError(err, handler);
     }
   }
 
-  Future<bool> _loginWithRefreshToken() async {
+  Future<Either<BaseError, void>> _loginWithRefreshToken() async {
     final res = await _authWithRefreshTokenUseCase();
-    return res.isRight;
+    return res;
   }
 
   Future<void> _addAuthHeaders(Map<String, dynamic> headers) async {

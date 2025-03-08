@@ -28,7 +28,12 @@ class _SplashScreenState extends State<_SplashScreen> {
               ),
             );
           case ProfileError():
-          // TODO: Handle this case.
+          case ProfileInvalidRefreshToken():
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (_) => const AuthPage(),
+              ),
+            );
         }
       },
       child: BlocListener<SplashCubit, SplashState>(

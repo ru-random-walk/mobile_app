@@ -1,12 +1,13 @@
 import 'package:auth/src/data/data_source/token.dart';
 import 'package:auth/src/data/repositories/auth.dart';
 import 'package:core/core.dart';
+import 'package:dio/dio.dart';
 import 'package:utils/utils.dart';
 
 class AuthWithRefreshTokenUseCase {
   final _authRepository = AuthRepositoryI(
     AuthDataSource(
-      NetworkConfig.instance.dio,
+      Dio(BaseOptions(baseUrl: NetworkConfig.instance.baseUrl)),
     ),
   );
   final _tokenStorage = TokenStorage();
@@ -23,11 +24,11 @@ class AuthWithRefreshTokenUseCase {
         ),
       );
     }
-    final res = await _authRepository.refreshToken();
-    return res.fold(
+    final res = await _authRepository.refreshToken(refreshToken);
+    return await res.fold(
       Left.new,
-      (data) {
-        _tokenStorage.updateData(data);
+      (data) async{
+        await _tokenStorage.updateData(data);
         return Right(null);
       },
     );

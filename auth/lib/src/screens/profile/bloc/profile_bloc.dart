@@ -8,9 +8,13 @@ part 'profile_state.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final GetProfileUseCase _getProfileUseCase;
+  final TokenStorage _tokenStorage;
 
-  ProfileBloc(this._getProfileUseCase) : super(ProfileLoading()) {
+  ProfileBloc(this._getProfileUseCase, this._tokenStorage)
+      : super(ProfileLoading()) {
+    NetworkConfig.instance.init(() => add(_UnauthorizeEvent()));
     on<ProfileLoadEvent>(_onProfileLoad);
+    on<_UnauthorizeEvent>(_onUnauthorize);
   }
 
   void _onProfileLoad(ProfileLoadEvent event, Emitter emit) async {
@@ -20,5 +24,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     }, (data) {
       emit(ProfileData(user: data));
     });
+  }
+
+  void _onUnauthorize(_UnauthorizeEvent event, Emitter emit) async {
+    await _tokenStorage.clear();
+    emit(ProfileInvalidRefreshToken());
   }
 }

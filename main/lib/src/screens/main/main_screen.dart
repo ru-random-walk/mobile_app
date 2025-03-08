@@ -1,5 +1,7 @@
+import 'package:auth/auth.dart';
 import 'package:chats/chats.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:main/src/screens/main/paths.dart';
 import 'package:matcher_service/matcher_service.dart';
@@ -33,21 +35,32 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ColoredBox(
-      color: context.colors.base_0,
-      child: SafeArea(
-        child: Scaffold(
-          body: IndexedStack(
-            index: _currentIndex,
-            children: pages,
-          ),
-          bottomNavigationBar: _MainScreenBottomNavigationBar(
-            currentIndex: _currentIndex,
-            onTap: (index) {
-              setState(() {
-                _currentIndex = index;
-              });
-            },
+    return BlocListener<ProfileBloc, ProfileState>(
+      listener: (context, state) {
+        if (state is ProfileInvalidRefreshToken) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (_) => const AuthPage(),
+            ),
+          );
+        }
+      },
+      child: ColoredBox(
+        color: context.colors.base_0,
+        child: SafeArea(
+          child: Scaffold(
+            body: IndexedStack(
+              index: _currentIndex,
+              children: pages,
+            ),
+            bottomNavigationBar: _MainScreenBottomNavigationBar(
+              currentIndex: _currentIndex,
+              onTap: (index) {
+                setState(() {
+                  _currentIndex = index;
+                });
+              },
+            ),
           ),
         ),
       ),

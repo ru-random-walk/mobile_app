@@ -39,6 +39,7 @@ class ChatsListPage extends StatelessWidget {
               ),
             ),
           ProfileError() => throw UnimplementedError(),
+          ProfileInvalidRefreshToken() => throw UnimplementedError(),
         };
       },
     );

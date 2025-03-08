@@ -30,6 +30,8 @@ class AuthScreen extends StatelessWidget {
             );
           case ProfileError():
           // TODO: Handle this case.
+          case ProfileInvalidRefreshToken():
+          // TODO: Handle this case.
         }
       },
       child: BlocListener<AuthBloc, AuthState>(

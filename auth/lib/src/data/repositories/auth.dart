@@ -13,18 +13,23 @@ class AuthRepositoryI implements AuthRepository {
 
   AuthRepositoryI(this._authDataSource);
 
+  Future<String> get _authCredentials async {
+    final credentials = EnvironmentVariables().authCredentials;
+    if (credentials == null) {
+      throw BaseError('Credentials is null', StackTrace.current);
+    }
+    final byteList = utf8.encode(credentials);
+    final basicAuthCredentials = base64Encode(byteList);
+    return basicAuthCredentials;
+  }
+
   @override
   Future<Either<BaseError, TokenResponseEntity>> authVia(
     TokenExchangeRequestEntity entity,
   ) async {
     try {
       final model = TokenRequestModel.via(entity.authType);
-      final credentials = EnvironmentVariables().authCredentials;
-      if (credentials == null) {
-        return Left(BaseError('Credentials is null', StackTrace.current));
-      }
-      final byteList = utf8.encode(credentials);
-      final basicAuthCredentials = base64Encode(byteList);
+      final basicAuthCredentials = await _authCredentials;
       final result =
           await _authDataSource.auth(model, 'Basic $basicAuthCredentials');
       final resultEntity = result.toEntity();
@@ -35,7 +40,18 @@ class AuthRepositoryI implements AuthRepository {
   }
 
   @override
-  Future<Either<BaseError, TokenResponseEntity>> refreshToken() {
-    throw UnimplementedError();
+  Future<Either<BaseError, TokenResponseEntity>> refreshToken(
+      String refreshToken) async {
+    try {
+      final model = TokenRequestModel.refresh(refreshToken);
+      final basicAuthCredentials = await _authCredentials;
+      final result =
+          await _authDataSource.auth(model, 'Basic $basicAuthCredentials');
+      final resultEntity = result.toEntity();
+      return Right(resultEntity);
+    } catch (e, s) {
+      /// TODO: разообраться с тем, что придет если refreshToken протух
+      return Left(BaseError(e.toString(), s));
+    }
   }
 }

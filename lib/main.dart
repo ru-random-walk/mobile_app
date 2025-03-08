@@ -25,7 +25,6 @@ void main() async {
   HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
   await EnvironmentVariables.load();
-  NetworkConfig.instance.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -44,6 +43,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (context) => ProfileBloc(
               context.read(),
+              TokenStorage(),
             ),
           ),
         ],

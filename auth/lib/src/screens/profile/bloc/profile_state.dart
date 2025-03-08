@@ -16,3 +16,5 @@ final class ProfileError extends ProfileState {
 
   ProfileError({required this.error});
 }
+
+final class ProfileInvalidRefreshToken extends ProfileState {}

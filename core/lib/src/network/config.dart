@@ -7,20 +7,23 @@ import 'package:dio/dio.dart';
 class NetworkConfig {
   final Dio dio;
 
+  String get baseUrl => NetworkUrl.baseUrl;
+
   static final _instance = NetworkConfig._();
 
   static NetworkConfig get instance => _instance;
 
   NetworkConfig._()
       : dio = Dio(
-          BaseOptions(baseUrl: Url.baseUrl),
+          BaseOptions(baseUrl: NetworkUrl.baseUrl),
         );
 
-  void init() {
+  void init(void Function() onRefreshTokenExpired) {
     dio.interceptors.add(
       RefreshTokenInterceptor(
         TokenStorage(),
         AuthWithRefreshTokenUseCase(),
+        onRefreshTokenExpired,
       ),
     );
   }

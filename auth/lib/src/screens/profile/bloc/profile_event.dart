@@ -4,3 +4,5 @@ part of 'profile_bloc.dart';
 sealed class ProfileEvent {}
 
 class ProfileLoadEvent extends ProfileEvent {}
+
+class _UnauthorizeEvent extends ProfileEvent {}

@@ -8,5 +8,5 @@ abstract interface class AuthRepository {
     TokenExchangeRequestEntity requestExchange,
   );
 
-  Future<Either<BaseError, TokenResponseEntity>> refreshToken();
+  Future<Either<BaseError, TokenResponseEntity>> refreshToken(String refreshToken);
 }
