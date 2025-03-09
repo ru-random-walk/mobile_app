@@ -1,3 +1,5 @@
+part of 'page_query.dart';
+
 class PageQuery {
   final int page;
   final int size;

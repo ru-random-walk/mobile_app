@@ -1,5 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
+part 'mapper.dart';
+part 'query_entity.dart';
 part 'page_query.g.dart';
 
 @JsonSerializable(includeIfNull: false, createFactory: false)

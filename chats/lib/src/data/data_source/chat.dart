@@ -1,6 +1,5 @@
 import 'package:chats/src/data/models/chat/paged_chat.dart';
 import 'package:chats/src/data/models/messages/pageable_messages.dart';
-import 'package:chats/src/data/models/page_query.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';

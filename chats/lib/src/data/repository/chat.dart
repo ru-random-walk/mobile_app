@@ -1,8 +1,6 @@
 import 'package:chats/src/data/data_source/chat.dart';
-import 'package:chats/src/data/mappers/page_query.dart';
 import 'package:chats/src/data/mappers/pageable_chats.dart';
 import 'package:chats/src/data/mappers/pageable_messages.dart';
-import 'package:chats/src/domain/entity/chat/page_query.dart';
 import 'package:chats/src/domain/entity/chat/pageable_chat.dart';
 import 'package:chats/src/domain/entity/message/pageable_messages.dart';
 import 'package:chats/src/domain/repository/chat.dart';

@@ -13,4 +13,6 @@ class UserModel {
     required this.fullName,
     required this.avatar,
   });
+
+  factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
 }

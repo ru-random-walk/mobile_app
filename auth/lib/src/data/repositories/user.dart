@@ -1,10 +1,11 @@
 import 'package:auth/src/data/data_source/user.dart';
 import 'package:auth/src/data/mappers/detailed_user.dart';
+import 'package:auth/src/data/mappers/pageable_users.dart';
 import 'package:auth/src/domain/entities/user/detailed.dart';
-import 'package:auth/src/domain/entities/user/user.dart';
+import 'package:auth/src/domain/entities/user/pageable_users.dart';
 import 'package:auth/src/domain/repositories/user.dart';
-import 'package:core/src/error/base.dart';
-import 'package:utils/src/either/either.dart';
+import 'package:core/core.dart';
+import 'package:utils/utils.dart';
 
 class UserRepository implements UserRepositoryI {
   final UsersDataSource _usersDataSource;
@@ -22,11 +23,14 @@ class UserRepository implements UserRepositoryI {
     }
   }
 
-
-
   @override
-  Future<Either<BaseError, List<UserEntity>>> getUsersInfo(List<String> ids) {
-    // TODO: implement getUsersInfo
-    throw UnimplementedError();
+  Future<Either<BaseError, PageableUsersEntity>> getUsersInfo(
+      PageQuery query, List<String> ids) async {
+    try {
+      final res = await _usersDataSource.getUsers(query.toModel(), ids);
+      return Right(res.toDomain());
+    } catch (e, s) {
+      return Left(BaseError(e.toString(), s));
+    }
   }
 }

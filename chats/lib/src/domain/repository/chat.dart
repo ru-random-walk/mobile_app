@@ -1,4 +1,3 @@
-import 'package:chats/src/domain/entity/chat/page_query.dart';
 import 'package:chats/src/domain/entity/chat/pageable_chat.dart';
 import 'package:chats/src/domain/entity/message/pageable_messages.dart';
 import 'package:core/core.dart';

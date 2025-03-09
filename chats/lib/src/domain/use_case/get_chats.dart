@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:chats/src/data/data_source/chat.dart';
 import 'package:chats/src/data/repository/chat.dart';
 import 'package:chats/src/domain/entity/chat/chat.dart';
-import 'package:chats/src/domain/entity/chat/page_query.dart';
 import 'package:chats/src/domain/repository/chat.dart';
 import 'package:core/core.dart';
 import 'package:utils/utils.dart';
