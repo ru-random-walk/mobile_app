@@ -1,6 +1,7 @@
 import 'package:auth/auth.dart';
 import 'package:chats/src/domain/entity/chat/chat.dart';
 import 'package:chats/src/domain/use_case/get_chats.dart';
+import 'package:chats/src/presentation/screens/chat/args.dart';
 import 'package:chats/src/presentation/screens/chat/page.dart';
 import 'package:chats/src/presentation/screens/chat_list/bloc/chats_list_bloc.dart';
 import 'package:flutter/material.dart';

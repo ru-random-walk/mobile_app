@@ -1,39 +1,25 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
-import 'package:chats/src/domain/entity/meet_data/geolocation.dart';
 import 'package:chats/src/domain/entity/meet_data/invite.dart';
 import 'package:chats/src/domain/entity/message/message.dart';
+import 'package:chats/src/domain/repository/chat_messaging.dart';
 import 'package:chats/src/domain/use_case/get_messages.dart';
+import 'package:chats/src/domain/use_case/send_message.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:rxdart/rxdart.dart';
 
 part 'chat_event.dart';
 part 'chat_state.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final GetMessagesUseCase _getMessagesUseCase;
+  final ChatMessagingRepositoryI _chatMessagingRepository;
+  final SendMessageUseCase _sendMessageUseCase;
 
-  ChatBloc(this._getMessagesUseCase) : super(ChatLoading()) {
+  ChatBloc(this._getMessagesUseCase, this._chatMessagingRepository,
+      this._sendMessageUseCase)
+      : super(ChatLoading()) {
     on<LoadData>(_onLoadData);
-    on<TextMessageAdded>((event, emit) {
-      final newMessage = TextMessageEntity(
-        timestamp: DateTime.now(),
-        isMy: true,
-        isChecked: false,
-        text: event.message,
-      );
-      final curMessages = (state as ChatData).messages;
-      emit(
-        ChatData(
-          [
-            ...curMessages,
-            newMessage,
-          ],
-        ),
-      );
-    });
+    on<TextMessageAdded>(_onTextMessageAdded);
     on<InviteAdded>(
       (event, emit) {
         final curMessages = (state as ChatData).messages;
@@ -58,6 +44,15 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     );
   }
 
+  void _onTextMessageAdded(TextMessageAdded event, Emitter emit) =>
+      _sendMessageUseCase(
+        TextMessageEntity(
+            text: event.message,
+            timestamp: DateTime.now(),
+            isMy: true,
+            isChecked: false),
+      );
+
   void _onLoadData(LoadData event, Emitter emit) async {
     if (_getMessagesUseCase.allPagesLoaded) return;
     final res = await _getMessagesUseCase();
@@ -80,39 +75,3 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     return [];
   }
 }
-
-final _messages = List<MessageEntity>.generate(
-  40,
-  (index) => index.isEven
-      ? TextMessageEntity(
-          text: 'Привет, как дела?',
-          timestamp: DateTime.now().subtract(Duration(hours: index * 5)),
-          isChecked: false,
-          isMy: false,
-        )
-      : TextMessageEntity(
-          timestamp: DateTime.now().subtract(Duration(hours: index * 5)),
-          text: 'Привет, как дела?',
-          isMy: true,
-          isChecked: true,
-        ),
-)
-  ..add(
-    InvitationMessageEntity(
-      timestamp: DateTime.now(),
-      isMy: false,
-      isChecked: false,
-      planDateTimeOfMeeting: DateTime.now()..add(const Duration(days: 1)),
-      place: Geolocation(
-        latitude: 341,
-        longitude: 134,
-        city: 'Москва',
-        street: 'Пушкинская',
-        building: '12',
-      ),
-      status: InvitationStatus.pending,
-    ),
-  )
-  ..sort(
-    (a, b) => b.timestamp.compareTo(a.timestamp),
-  );

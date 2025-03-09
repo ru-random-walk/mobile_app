@@ -6,9 +6,12 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'walk_request.g.dart';
 
-@JsonSerializable(converters: [
-  DateJsonConverter(),
-])
+@JsonSerializable(
+  converters: [
+    DateJsonConverter(),
+  ],
+  explicitToJson: true,
+)
 class RequestForWalkPayloadModel extends Payload {
   final GeolocationModel location;
   final DateTime startsAt;
@@ -22,4 +25,7 @@ class RequestForWalkPayloadModel extends Payload {
 
   factory RequestForWalkPayloadModel.fromJson(Map<String, dynamic> json) =>
       _$RequestForWalkPayloadModelFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$RequestForWalkPayloadModelToJson(this);
 }

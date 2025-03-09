@@ -1,11 +1,13 @@
 import 'dart:convert';
 
+import 'package:auth/auth.dart';
 import 'package:auth/src/data/data_source/token.dart';
 import 'package:auth/src/data/models/token/request/base.dart';
 import 'package:auth/src/domain/entities/token/exchange/request.dart';
 import 'package:auth/src/domain/entities/token/response.dart';
 import 'package:auth/src/domain/repositories/auth.dart';
 import 'package:core/core.dart';
+import 'package:dio/dio.dart';
 import 'package:utils/utils.dart';
 
 class AuthRepositoryI implements AuthRepository {
@@ -49,8 +51,14 @@ class AuthRepositoryI implements AuthRepository {
           await _authDataSource.auth(model, 'Basic $basicAuthCredentials');
       final resultEntity = result.toEntity();
       return Right(resultEntity);
+    } on DioException catch (e, s) {
+      final code = e.response?.statusCode;
+      if (code == 401) {
+        return Left(InvalidRefreshTokenError(s));
+      } else {
+        return Left(BaseError(e.toString(), s));
+      }
     } catch (e, s) {
-      /// TODO: разообраться с тем, что придет если refreshToken протух
       return Left(BaseError(e.toString(), s));
     }
   }

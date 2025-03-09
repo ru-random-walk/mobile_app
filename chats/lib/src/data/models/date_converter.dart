@@ -15,7 +15,11 @@ class DateJsonConverter extends JsonConverter<DateTime, String> {
 
   @override
   String toJson(DateTime object) {
-    // TODO: implement toJson
-    throw UnimplementedError();
+    final hour = object.hour.toString().padLeft(2, '0');
+    final minute = object.minute.toString().padLeft(2, '0');
+    final day = object.day.toString().padLeft(2, '0');
+    final month = object.month.toString().padLeft(2, '0');
+    final year = object.year.toString().padLeft(4, '0');
+    return '$hour:$minute $day-$month-$year';
   }
 }

@@ -1,7 +1,10 @@
 part of '../page.dart';
 
 class _ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
-  
+  final UserEntity companion;
+
+  const _ChatAppBarWidget({super.key, required this.companion});
+
   double get appBarHeight => 70.toFigmaSize;
 
   @override
@@ -35,7 +38,7 @@ class _ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
             ),
             UserAvatarWidget(
               avatar: Image.network(
-                'https://i.pinimg.com/736x/5b/11/02/5b110284d575411305607bd16b615104.jpg',
+                companion.avatar,
                 fit: BoxFit.cover,
               ),
               size: 52.toFigmaSize,
@@ -54,7 +57,7 @@ class _ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Maxim Selezsdfsdfsdfnevfsdfsdfdsf',
+                      companion.fullName,
                       style: context.textTheme.h5.copyWith(
                         color: context.colors.base_90,
                       ),

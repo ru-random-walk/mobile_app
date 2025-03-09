@@ -23,11 +23,19 @@ class _ChatListBodyData extends StatelessWidget {
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => ChatPage(
-                chatId: chat.id,
-                currentUserId: currentUserId,
-              ),
-            ),
+                builder: (_) => const ChatPage(),
+                settings: RouteSettings(
+                  arguments: ChatPageArgs(
+                    chatId: chat.id,
+                    companion: UserEntity(
+                      id: 'dfsdf',
+                      fullName: 'Test test',
+                      avatar:
+                          'https://lh3.googleusercontent.com/a/ACg8ocJswAiQ-PQJqqMXo9znoUDhTPkWRVbg8NCuk5zhUx6_DSTWMw=s576-c-no',
+                    ),
+                    currentUserId: currentUserId,
+                  ),
+                )),
           ),
           child: DialogWidget(
             isInvitation: true,

@@ -12,4 +12,7 @@ class TextPayloadModel extends Payload {
 
   factory TextPayloadModel.fromJson(Map<String, dynamic> json) =>
       _$TextPayloadModelFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$TextPayloadModelToJson(this);
 }

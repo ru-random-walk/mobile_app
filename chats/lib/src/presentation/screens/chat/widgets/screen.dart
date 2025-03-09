@@ -1,6 +1,13 @@
 part of '../page.dart';
 
 class _ChatScreen extends StatelessWidget {
+  final UserEntity companion;
+
+  const _ChatScreen({
+    super.key,
+    required this.companion,
+  });
+
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
@@ -10,7 +17,9 @@ class _ChatScreen extends StatelessWidget {
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: context.colors.base_0,
-          appBar: _ChatAppBarWidget(),
+          appBar: _ChatAppBarWidget(
+            companion: companion,
+          ),
           body: Stack(
             children: [
               Positioned.fill(
