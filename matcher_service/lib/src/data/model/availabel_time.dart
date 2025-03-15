@@ -1,5 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
+part 'availabel_time.g.dart';
+
 @JsonSerializable()
 class AvailabelTimeModel {
   final String date;
@@ -17,4 +19,9 @@ class AvailabelTimeModel {
     required this.latitude,
     required this.clubsInFilter,
   });
+
+  factory AvailabelTimeModel.fromJson(Map<String, dynamic> json) =>
+      _$AvailabelTimeModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AvailabelTimeModelToJson(this);
 }
