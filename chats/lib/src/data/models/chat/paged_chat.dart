@@ -1,5 +1,5 @@
 import 'package:chats/src/data/models/chat/chat.dart';
-import 'package:chats/src/data/models/page_response.dart';
+import 'package:core/core.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'paged_chat.g.dart';

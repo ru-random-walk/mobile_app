@@ -1,5 +1,5 @@
-import 'package:chats/src/domain/entity/chat/page_response.dart';
 import 'package:chats/src/domain/entity/message/message.dart';
+import 'package:core/core.dart';
 
 class PageableMessagesEntity {
   final List<MessageEntity> messages;

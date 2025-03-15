@@ -1,5 +1,5 @@
 import 'package:chats/src/domain/entity/chat/chat.dart';
-import 'package:chats/src/domain/entity/chat/page_response.dart';
+import 'package:core/core.dart';
 
 class PageableChats {
   final List<ChatEntity> chats;

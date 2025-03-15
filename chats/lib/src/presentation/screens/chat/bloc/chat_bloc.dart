@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:chats/src/domain/entity/meet_data/invite.dart';
 import 'package:chats/src/domain/entity/message/message.dart';
@@ -18,6 +20,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   ChatBloc(this._getMessagesUseCase, this._chatMessagingRepository,
       this._sendMessageUseCase)
       : super(ChatLoading()) {
+    _initMessagesListener();
     on<LoadData>(_onLoadData);
     on<TextMessageAdded>(_onTextMessageAdded);
     on<InviteAdded>(
@@ -42,6 +45,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         );
       },
     );
+  }
+
+  void _initMessagesListener() {
+    _chatMessagingRepository.messagesStream.listen((messages) {
+      log('Message received: ${messages.timestamp}');
+    });
   }
 
   void _onTextMessageAdded(TextMessageAdded event, Emitter emit) =>

@@ -75,12 +75,14 @@ class ChatMessagingSocketSource {
     }
   }
 
-  void sendMessage(SendMessageModel message) => _client.send(
-        destination: _messageSendTopic,
-        body: jsonEncode(
-          message.toJson(),
-        ),
-      );
+  void sendMessage(SendMessageModel message) {
+    final body = jsonEncode(message.toJson());
+    log('Message body:\n$body');
+    _client.send(
+      destination: _messageSendTopic,
+      body: body,
+    );
+  }
 
   void dispose() {
     _client.deactivate();

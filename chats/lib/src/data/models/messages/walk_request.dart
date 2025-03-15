@@ -27,5 +27,9 @@ class RequestForWalkPayloadModel extends Payload {
       _$RequestForWalkPayloadModelFromJson(json);
 
   @override
-  Map<String, dynamic> toJson() => _$RequestForWalkPayloadModelToJson(this);
+  Map<String, dynamic> toJson() {
+    final map = _$RequestForWalkPayloadModelToJson(this);
+    map['type'] = type.textValue;
+    return map;
+  }
 }

@@ -14,5 +14,9 @@ class TextPayloadModel extends Payload {
       _$TextPayloadModelFromJson(json);
 
   @override
-  Map<String, dynamic> toJson() => _$TextPayloadModelToJson(this);
+  Map<String, dynamic> toJson() {
+    final map = _$TextPayloadModelToJson(this);
+    map['type'] = type.textValue;
+    return map;
+  }
 }

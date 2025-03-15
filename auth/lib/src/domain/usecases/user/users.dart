@@ -26,7 +26,7 @@ class GetUsersUseCase
     );
     final res = await _userRepository.getUsersInfo(pageQuery, ids);
     return res.fold(Left.new, (data) {
-      _maxPages = data.totalPages;
+      _maxPages = data.pageInfo.totalPages;
       return Right(data.users);
     });
   }

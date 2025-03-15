@@ -27,12 +27,7 @@ class _ChatListBodyData extends StatelessWidget {
                 settings: RouteSettings(
                   arguments: ChatPageArgs(
                     chatId: chat.id,
-                    companion: UserEntity(
-                      id: 'dfsdf',
-                      fullName: 'Test test',
-                      avatar:
-                          'https://lh3.googleusercontent.com/a/ACg8ocJswAiQ-PQJqqMXo9znoUDhTPkWRVbg8NCuk5zhUx6_DSTWMw=s576-c-no',
-                    ),
+                    companion: chat.companion,
                     currentUserId: currentUserId,
                   ),
                 )),
@@ -42,9 +37,9 @@ class _ChatListBodyData extends StatelessWidget {
             type: Readed(),
             text:
                 'Lorem Ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-            name: 'Maxim Seleznev',
+            name: chat.companion.fullName,
             avatar: Image.network(
-              'https://static.wikia.nocookie.net/adventuretimewithfinnandjake/images/9/97/S1e25_Finn_with_five_fingers.png/revision/latest/scale-to-width-down/971?cb=20131128031157',
+              chat.companion.avatar,
               fit: BoxFit.cover,
             ),
           ),

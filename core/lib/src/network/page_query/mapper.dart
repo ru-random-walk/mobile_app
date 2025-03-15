@@ -1,6 +1,6 @@
 part of 'page_query.dart';
 
-extension PageableMapper on PageQuery {
+extension PageableQueryMapper on PageQuery {
   PageQueryModel toModel() => PageQueryModel(
         page: page,
         size: size,

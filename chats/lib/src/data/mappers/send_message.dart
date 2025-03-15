@@ -21,7 +21,7 @@ extension SendMessageMapper on SendMessageEntity {
       payload: payload,
       chatId: chatId,
       sender: sender,
-      recepient: recepient,
+      recipient: recepient,
       createdAt: createdAt,
     );
   }

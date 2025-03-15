@@ -1,6 +1,4 @@
-import 'package:json_annotation/json_annotation.dart';
-
-part 'page_response.g.dart';
+part of 'entity.dart';
 
 @JsonSerializable()
 class PageableResponseModel {

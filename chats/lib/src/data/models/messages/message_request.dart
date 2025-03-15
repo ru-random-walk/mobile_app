@@ -15,14 +15,14 @@ class SendMessageModel {
   Payload payload;
   String chatId;
   String sender;
-  String recepient;
+  String recipient;
   DateTime createdAt;
 
   SendMessageModel({
     required this.payload,
     required this.chatId,
     required this.sender,
-    required this.recepient,
+    required this.recipient,
     required this.createdAt,
   });
 

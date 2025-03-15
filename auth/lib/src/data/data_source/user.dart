@@ -15,7 +15,7 @@ abstract class UsersDataSource {
   @GET('$_prefix/userinfo/me')
   Future<DetailedUserModel> getMyProfileInfo();
 
-  @PUT('$_prefix/users')
+  @GET('$_prefix/users')
   Future<PageableUsersModel> getUsers(
     @Queries() PageQueryModel queryModel,
     @Query('ids') List<String> ids,

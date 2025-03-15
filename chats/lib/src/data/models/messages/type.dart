@@ -1,7 +1,11 @@
 enum MessageType {
-  text,
-  requestForWalk,
-  unknown;
+  text('text'),
+  requestForWalk('request_for_walk'),
+  unknown('unknown');
+
+  final String textValue;
+
+  const MessageType(this.textValue);
 
   static MessageType fromString(String type) {
     switch (type) {

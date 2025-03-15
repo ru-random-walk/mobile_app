@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:auth/auth.dart';
 import 'package:chats/src/data/data_source/chat.dart';
 import 'package:chats/src/data/repository/chat.dart';
 import 'package:chats/src/domain/entity/chat/chat.dart';
@@ -28,6 +29,7 @@ class GetChatsUseCase
       userId,
       ChatRepository(
         ChatDataSource(),
+        UsersDataSource(),
       ),
     );
   }
