@@ -23,18 +23,12 @@ dependencies:
   core:
     path: ../core
   flutter_svg: ^2.0.10+1
-  google_sign_in: ^6.2.1
   json_annotation: ^4.9.0
-  flutter_dotenv: ^5.2.1
   flutter_bloc: ^8.1.6
   retrofit: ^4.4.0
   dio: ^5.7.0
   sticky_grouped_list: ^3.1.0
   intl: ^0.20.1
-  yandex_mapkit: ^4.1.0
-  permission_handler: ^11.3.1
-  bloc_concurrency: ^0.2.5
-  rxdart: ^0.28.0
   provider: ^6.1.2
   stomp_dart_client: ^2.1.3
 

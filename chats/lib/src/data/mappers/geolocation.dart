@@ -1,5 +1,5 @@
 import 'package:chats/src/data/models/geolocation.dart';
-import 'package:chats/src/domain/entity/meet_data/geolocation.dart';
+import 'package:core/core.dart';
 
 extension GeolocationMapper on GeolocationModel {
   Geolocation toDomain() => Geolocation(

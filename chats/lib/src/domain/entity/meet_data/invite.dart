@@ -1,4 +1,4 @@
-import 'package:chats/src/domain/entity/meet_data/geolocation.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 class InviteEntity {
