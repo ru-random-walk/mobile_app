@@ -6,7 +6,7 @@ class _AddMeetingButton extends StatelessWidget {
     return CustomButton(
       text: null,
       type: ButtonType.secondary,
-      color: ButtonColor.black,
+      color: ButtonColor.grey,
       rightIcon: _PlusIcon(),
       isMaxWidth: false,
       padding: EdgeInsets.all(
@@ -14,6 +14,13 @@ class _AddMeetingButton extends StatelessWidget {
       ),
       customHeight: 60.toFigmaSize,
       customWidth: 60.toFigmaSize,
+      onPressed: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => const AvailableTimePage(),
+          ),
+        );
+      },
     );
   }
 }

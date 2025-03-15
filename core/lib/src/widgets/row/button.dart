@@ -1,21 +1,25 @@
-part of '../../../page.dart';
+part of 'widgets.dart';
 
 class _MeetDataPickButton extends StatelessWidget {
   final String title;
   final VoidCallback? onTap;
   final Widget? icon;
+  final double? width;
+  final ButtonSize size;
 
   const _MeetDataPickButton({
     super.key,
     required this.title,
     this.onTap,
     this.icon,
+    this.width,
+    required this.size,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 210.toFigmaSize,
+      width: width,
       child: CustomButton(
         padding: EdgeInsets.symmetric(
           vertical: 8.toFigmaSize,
@@ -24,8 +28,9 @@ class _MeetDataPickButton extends StatelessWidget {
         type: ButtonType.secondary,
         text: title,
         color: ButtonColor.grey,
-        size: ButtonSize.S,
+        size: size,
         rightIcon: rightIcon,
+        isMaxWidth: false,
         onPressed: onTap,
       ),
     );
@@ -37,9 +42,17 @@ class _MeetDataPickButton extends StatelessWidget {
         padding: EdgeInsets.only(
           left: 8.toFigmaSize,
         ),
-        child: icon,
+        child: SizedBox.square(
+          dimension: _iconSide,
+          child: icon,
+        ),
       );
     }
     return null;
   }
+
+  double get _iconSide => switch (size) {
+        ButtonSize.S => 16.toFigmaSize,
+        ButtonSize.M => 24.toFigmaSize,
+      };
 }

@@ -3,6 +3,8 @@ part of '../../../page.dart';
 class _MeetDataPickersGroupWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final parentState =
+        context.findAncestorStateOfType<_MeetDataDialogWidgetState>();
     final verticalSpacer = SizedBox(height: 4.toFigmaSize);
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -12,11 +14,33 @@ class _MeetDataPickersGroupWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           verticalSpacer,
-          _PickMeetDateRow(),
+          _MeetDataRowWidget(
+            title: 'Дата',
+            button: PickMeetDateButton(
+              width: 210.toFigmaSize,
+              size: ButtonSize.S,
+              onDateUpdated: (date) => parentState?.selectedDate = date,
+            ),
+          ),
           verticalSpacer,
-          _PickMeetTimeRow(),
+          _MeetDataRowWidget(
+            title: 'Время',
+            button: PickMeetTimeButton(
+              width: 210.toFigmaSize,
+              size: ButtonSize.S,
+              onTimeUpdated: (time) => parentState?.selectedTime = time,
+            ),
+          ),
           verticalSpacer,
-          _PickMeetPlaceRow(),
+          _MeetDataRowWidget(
+            title: 'Место',
+            button: PickMeetPlaceButton(
+              width: 210.toFigmaSize,
+              size: ButtonSize.S,
+              onGeolocationUpdated: (geolocation) =>
+                  parentState?.geolocation = geolocation,
+            ),
+          ),
         ],
       ),
     );

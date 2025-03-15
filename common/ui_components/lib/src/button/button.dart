@@ -82,7 +82,7 @@ class CustomButton extends StatelessWidget {
               maxLines: 1,
             ),
           ),
-        if (rightIcon != null) rightIcon!,
+        if (rightIcon != null) SizedBox.square(child: rightIcon!),
       ],
     );
   }

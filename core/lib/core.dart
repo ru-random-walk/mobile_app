@@ -12,4 +12,5 @@ export 'src/widgets/shared/header/close_button.dart';
 export 'src/widgets/time/time_picker.dart';
 export 'src/widgets/date_picker/date_picker.dart';
 export 'src/widgets/geolocation/geolocation_picker.dart';
+export 'src/widgets/row/widgets.dart';
 

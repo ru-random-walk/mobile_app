@@ -2,7 +2,7 @@ part of '../../../page.dart';
 
 class _MeetDataRowWidget extends StatelessWidget {
   final String title;
-  final _MeetDataPickButton button;
+  final Widget button;
 
   const _MeetDataRowWidget({
     super.key,
