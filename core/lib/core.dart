@@ -13,4 +13,6 @@ export 'src/widgets/time/time_picker.dart';
 export 'src/widgets/date_picker/date_picker.dart';
 export 'src/widgets/geolocation/geolocation_picker.dart';
 export 'src/widgets/row/widgets.dart';
+export 'src/data/models/geolocation.dart';
+export 'src/data/mappers/geolocation.dart';
 

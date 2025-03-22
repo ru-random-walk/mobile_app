@@ -1,3 +1,5 @@
+import 'package:core/core.dart';
+
 import '../../domain/entity/available_time.dart';
 import '../model/availabel_time.dart';
 
@@ -14,8 +16,7 @@ extension AvailableTimeEntityMapper on AvailableTimeEntity {
       date: dateString,
       timeFrom: startTime,
       timeUntil: endTime,
-      longitude: geolocation.longitude,
-      latitude: geolocation.latitude,
+      location: geolocation.toModel(),
       clubsInFilter: clubs.map((e) => e.id).toList(),
     );
   }

@@ -1,5 +1,7 @@
 enum MeetingStatus {
-  inProcess,
   searching,
-  find;
+  find,
+  inProcess,
+  done,
+  canceled;
 }

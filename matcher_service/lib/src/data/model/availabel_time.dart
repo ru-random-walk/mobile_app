@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'availabel_time.g.dart';
@@ -7,16 +8,14 @@ class AvailabelTimeModel {
   final String date;
   final String timeFrom;
   final String timeUntil;
-  final double longitude;
-  final double latitude;
+  final GeolocationModel location;
   final List<String> clubsInFilter;
 
   AvailabelTimeModel({
     required this.date,
     required this.timeFrom,
     required this.timeUntil,
-    required this.longitude,
-    required this.latitude,
+    required this.location,
     required this.clubsInFilter,
   });
 

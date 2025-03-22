@@ -1,7 +1,7 @@
 import 'package:chats/src/data/models/date_converter.dart';
-import 'package:chats/src/data/models/geolocation.dart';
 import 'package:chats/src/data/models/messages/payload.dart';
 import 'package:chats/src/data/models/messages/type.dart';
+import 'package:core/core.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'walk_request.g.dart';

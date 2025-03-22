@@ -1,6 +1,6 @@
-import 'package:core/src/error/base.dart';
+import 'package:core/core.dart';
 import 'package:matcher_service/src/data/mapper/available_time.dart';
-import 'package:utils/src/either/either.dart';
+import 'package:utils/utils.dart';
 
 import '../../domain/entity/available_time.dart';
 import '../../domain/repository/available_time.dart';

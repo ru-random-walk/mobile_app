@@ -1,27 +1,36 @@
 part of '../page.dart';
 
 class _AddMeetingButton extends StatelessWidget {
+  const _AddMeetingButton();
+
   @override
   Widget build(BuildContext context) {
-    return CustomButton(
-      text: null,
-      type: ButtonType.secondary,
-      color: ButtonColor.grey,
-      rightIcon: _PlusIcon(),
-      isMaxWidth: false,
-      padding: EdgeInsets.all(
-        18.toFigmaSize,
+    return Stack(children: [
+      Positioned.fill(
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+              color: context.colors.base_0,
+              borderRadius: BorderRadius.circular(
+                6.toFigmaSize,
+              )),
+        ),
       ),
-      customHeight: 60.toFigmaSize,
-      customWidth: 60.toFigmaSize,
-      onPressed: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => const AvailableTimePage(),
-          ),
-        );
-      },
-    );
+      CustomButton(
+        text: null,
+        type: ButtonType.secondary,
+        color: ButtonColor.grey,
+        rightIcon: _PlusIcon(),
+        isMaxWidth: false,
+        padding: EdgeInsets.all(
+          18.toFigmaSize,
+        ),
+        customHeight: 60.toFigmaSize,
+        customWidth: 60.toFigmaSize,
+        onPressed: () => context
+            .findAncestorStateOfType<_MatcherPageState>()
+            ?.addAvailableTime(),
+      ),
+    ]);
   }
 }
 

@@ -3,8 +3,8 @@ import 'package:yandex_mapkit/yandex_mapkit.dart';
 class Geolocation {
   final double latitude;
   final double longitude;
-  final String city;
-  final String street;
+  final String? city;
+  final String? street;
   final String? building;
 
   Geolocation({

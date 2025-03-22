@@ -1,6 +1,6 @@
-import 'package:chats/src/data/mappers/geolocation.dart';
 import 'package:chats/src/data/models/messages/message.dart';
 import 'package:chats/src/domain/entity/message/message.dart';
+import 'package:core/core.dart';
 
 extension MessageMapper on MessageModel {
   MessageEntity toDomain(String currentUserId) {

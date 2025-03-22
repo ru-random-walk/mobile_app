@@ -18,8 +18,8 @@ class _ApplyLocationResultDialogState
     super.didChangeDependencies();
     pickedGeolocation =
         ModalRoute.of(context)!.settings.arguments as Geolocation;
-    cityController.text = pickedGeolocation.city;
-    streetController.text = pickedGeolocation.street;
+    cityController.text = pickedGeolocation.city ?? '';
+    streetController.text = pickedGeolocation.street ?? '';
     buildingController.text = pickedGeolocation.building ?? '';
     _initListeners();
   }

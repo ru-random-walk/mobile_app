@@ -6,8 +6,8 @@ part 'geolocation.g.dart';
 class GeolocationModel {
   final double latitude;
   final double longitude;
-  final String city;
-  final String street;
+  final String? city;
+  final String? street;
   final String? building;
 
   GeolocationModel({

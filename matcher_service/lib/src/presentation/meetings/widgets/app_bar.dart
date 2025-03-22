@@ -3,6 +3,8 @@ part of '../page.dart';
 final _appBarHeight = 56.toFigmaSize;
 
 class _MeetingsAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const _MeetingsAppBar();
+
   @override
   Widget build(BuildContext context) {
     return Row(

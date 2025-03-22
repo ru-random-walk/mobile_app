@@ -1,5 +1,6 @@
 import 'package:core/core.dart';
 import 'package:dio/dio.dart' hide Headers;
+import 'package:matcher_service/src/data/model/schedule/user_schedule.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../model/availabel_time.dart';
@@ -19,4 +20,7 @@ abstract class MatcherDataSource {
   Future<HttpResponse> addAvailableTime(
     @Body() AvailabelTimeModel availabelTimeModel,
   );
+
+  @GET('$_person/schedule')
+  Future<List<UserScheduleModel>> getUserSchedule();
 }
