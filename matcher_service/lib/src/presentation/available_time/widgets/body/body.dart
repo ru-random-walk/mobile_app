@@ -18,23 +18,41 @@ class _AvailableTimeBodyWidgetState extends State<_AvailableTimeBodyWidget> {
   @override
   Widget build(BuildContext context) {
     final spacer = SizedBox(height: 20.toFigmaSize);
-    return Column(
-      children: [
-        Expanded(
-          child: Column(
-            children: [
-              _AvailableTimeDatePicker(),
-              spacer,
-              const _AvailableTimePicker(),
-              spacer,
-              _AvailableTimeGeolocationPicker(),
-            ],
+    return BlocListener<AvailableTimeBloc, AvailableTimeState>(
+      listener: (context, state) {
+        switch (state) {
+          case AvailableTimeCreatingLoading():
+          case AvailableTimeCreatingSuccess():
+            Navigator.of(context).pop(true);
+          case AvailableTimeCreatingError():
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text(
+                  'Что-то пошло не так',
+                ),
+              ),
+            );
+          case Idle():
+        }
+      },
+      child: Column(
+        children: [
+          Expanded(
+            child: Column(
+              children: [
+                _AvailableTimeDatePicker(),
+                spacer,
+                const _AvailableTimePicker(),
+                spacer,
+                _AvailableTimeGeolocationPicker(),
+              ],
+            ),
           ),
-        ),
-        _AddAvailableTimeButton(
-          onTap: () => _addAvailableTime(context),
-        ),
-      ],
+          _AddAvailableTimeButton(
+            onTap: () => _addAvailableTime(context),
+          ),
+        ],
+      ),
     );
   }
 
