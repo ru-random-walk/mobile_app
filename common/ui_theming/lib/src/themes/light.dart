@@ -37,6 +37,7 @@ final lightTextTheme = TextThemeExtension(
   bodyMRegularBase90: TextStyles.bodyMRegular(BaseColors.base_90),
   bodyMRegularMain50: TextStyles.bodyMRegular(GreenColors.green_50),
   bodyMRegularMain70: TextStyles.bodyMRegular(GreenColors.green_70),
+  bodyXLRegular: TextStyles.bodyXLRegular(GreenColors.green_90),
   bodyXLMedium: TextStyles.bodyXLMedium(BaseColors.base_90),
   bodyLRegular: TextStyles.bodyLRegular(Colors.black),
   bodyMMedium: TextStyles.bodyMMedium(Colors.black),

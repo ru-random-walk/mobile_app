@@ -1,5 +1,6 @@
 import 'package:core/core.dart';
 import 'package:dio/dio.dart' hide Headers;
+import 'package:matcher_service/src/data/model/appointment.dart';
 import 'package:matcher_service/src/data/model/schedule/user_schedule.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -14,6 +15,7 @@ abstract class MatcherDataSource {
   static const _prefix = '/matcher';
   static const _avaialableTimePrefix = '$_prefix/available-time';
   static const _person = '$_prefix/person';
+  static const _appointment = '$_prefix/appointment';
 
   @POST('$_avaialableTimePrefix/add')
   @Headers({'Content-Type': 'application/json'})
@@ -23,4 +25,7 @@ abstract class MatcherDataSource {
 
   @GET('$_person/schedule')
   Future<List<UserScheduleModel>> getUserSchedule();
+
+  @GET('$_appointment/{id}')
+  Future<AppointmentDetailsModel> getAppointmentDetails(@Path('id') String id);
 }

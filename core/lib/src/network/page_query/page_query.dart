@@ -14,7 +14,7 @@ class PageQueryModel {
   PageQueryModel({
     required this.page,
     required this.size,
-    required this.sort,
+    this.sort,
   });
 
   static String? _sortToJson(List<String>? sort) {

@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:matcher_service/src/data/mapper/person/status.dart';
 import 'package:matcher_service/src/data/model/schedule/schedule_time_frame.dart';
@@ -14,12 +15,14 @@ extension ScheduleTimeFrameMapper on ScheduleTimeFrameModel {
       minute: timeUntil.minute,
     );
     return MeetingPreviewInfoEntity(
-      startTimeMeeting: startTimeMeeting,
-      endTimeMeeting: endTimeMeeting,
+      timeStart: startTimeMeeting,
+      timeEnd: endTimeMeeting,
       status: appointmentStatus.toAppointmentStatus(),
       appointmentId: appointmentId,
       availabelTimeId: availableTimeId,
       date: date,
+      location: location.toDomain(),
+      clubs: [],
     );
   }
 }

@@ -22,12 +22,30 @@ class MettingPreviewInfoWidget extends StatelessWidget {
         horizontal: 22.5.toFigmaSize,
       ),
       text: _formattedTime(context),
-      rightIcon: _rightIcon(),
+      rightIcon: _rightIcon(context),
       textStyle: context.textTheme.bodyLRegular,
+      onPressed: () {
+        final args = info.appointmentId != null
+            ? AppointmentIdArgs(info.appointmentId!)
+            : AvailableTimeInfoArgs(AvailableTimeEntity(
+                id: info.availabelTimeId,
+                status: info.status,
+                date: info.date,
+                timeStart: info.timeStart,
+                timeEnd: info.timeEnd,
+                location: info.location,
+                clubs: info.clubs,
+              ));
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => MeetingInfoPage(args: args),
+          ),
+        );
+      },
     );
   }
 
-  Widget _rightIcon() {
+  Widget _rightIcon(BuildContext context) {
     const pathPrefix = 'packages/matcher_service/assets/icons';
     final iconName = switch (info.status) {
       MeetingStatus.inProcess => 'logo.svg',
@@ -42,8 +60,8 @@ class MettingPreviewInfoWidget extends StatelessWidget {
       padding: EdgeInsets.only(left: 8.toFigmaSize),
       child: SvgPicture.asset(
         iconPath,
-        colorFilter: const ColorFilter.mode(
-          Colors.black,
+        colorFilter: ColorFilter.mode(
+          context.colors.base_80,
           BlendMode.srcIn,
         ),
         // fit: BoxFit.scaleDown,
@@ -52,6 +70,6 @@ class MettingPreviewInfoWidget extends StatelessWidget {
   }
 
   String _formattedTime(BuildContext context) {
-    return '${info.startTimeMeeting.format(context)}-${info.endTimeMeeting.format(context)}';
+    return '${info.timeStart.format(context)}-${info.timeEnd.format(context)}';
   }
 }

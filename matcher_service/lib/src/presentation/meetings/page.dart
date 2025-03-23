@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:matcher_service/src/domain/entity/meeting_info/base.dart';
 import 'package:matcher_service/src/domain/entity/meeting_info/list.dart';
 import 'package:matcher_service/src/domain/entity/meeting_info/preview.dart';
 import 'package:matcher_service/src/domain/entity/meeting_info/status.dart';
 import 'package:matcher_service/src/domain/usecase/person/get_schedule.dart';
 import 'package:matcher_service/src/presentation/available_time/page.dart';
+import 'package:matcher_service/src/presentation/meeting_info/args.dart';
+import 'package:matcher_service/src/presentation/meeting_info/page.dart';
 import 'package:matcher_service/src/presentation/meetings/bloc/mettings_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:ui_components/ui_components.dart';

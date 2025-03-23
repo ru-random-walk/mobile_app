@@ -43,6 +43,8 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  assets:
+    - packages/core/assets/place_fill.png
 
   # To add assets to your package, add an assets section, like this:
   # assets:

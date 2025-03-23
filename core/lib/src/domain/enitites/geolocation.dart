@@ -33,6 +33,8 @@ class Geolocation {
 
   Point get point => Point(latitude: latitude, longitude: longitude);
 
+  bool get hasDisplayName => city != null || street != null || building != null;
+
   @override
   String toString() {
     return '$street${building == null ? '' : ', $building'}';
