@@ -1,7 +1,8 @@
 import 'package:bloc/bloc.dart';
-import 'package:matcher_service/src/domain/entity/available_time.dart';
 import 'package:matcher_service/src/domain/usecase/available_time/add.dart';
 import 'package:meta/meta.dart';
+
+import '../../../domain/entity/available_time/modify.dart';
 
 part 'available_time_event.dart';
 part 'available_time_state.dart';

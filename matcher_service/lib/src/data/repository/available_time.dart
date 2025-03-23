@@ -2,7 +2,7 @@ import 'package:core/core.dart';
 import 'package:matcher_service/src/data/mapper/available_time.dart';
 import 'package:utils/utils.dart';
 
-import '../../domain/entity/available_time.dart';
+import '../../domain/entity/available_time/modify.dart';
 import '../../domain/repository/available_time.dart';
 import '../data_source/matcher.dart';
 
@@ -13,7 +13,7 @@ class AvailableTimeRepository implements AvailableTimeRepositoryI {
 
   @override
   Future<Either<BaseError, void>> addAvailableTime(
-    AvailableTimeEntity availabelTimeEntity,
+    AvailableTimeModifyEntity availabelTimeEntity,
   ) async {
     try {
       final availabelTimeModel = availabelTimeEntity.toModel();
@@ -29,13 +29,15 @@ class AvailableTimeRepository implements AvailableTimeRepositoryI {
   }
 
   @override
-  Future<Either<BaseError, void>> deleteAvailableTime(int id) {
+  Future<Either<BaseError, void>> deleteAvailableTime(
+      String id, AvailableTimeModifyEntity availabelTimeEntity) {
     // TODO: implement deleteAvailableTime
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<BaseError, void>> updateAvailableTime() {
+  Future<Either<BaseError, void>> updateAvailableTime(
+      String id, AvailableTimeModifyEntity availabelTimeEntity) {
     // TODO: implement updateAvailableTime
     throw UnimplementedError();
   }

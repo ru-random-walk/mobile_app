@@ -35,6 +35,7 @@ class MettingPreviewInfoWidget extends StatelessWidget {
       MeetingStatus.find => 'checked.svg',
       MeetingStatus.done => throw UnimplementedError(),
       MeetingStatus.canceled => throw UnimplementedError(),
+      MeetingStatus.requested => throw UnimplementedError(),
     };
     final iconPath = '$pathPrefix/$iconName';
     return Padding(

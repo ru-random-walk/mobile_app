@@ -1,6 +1,6 @@
 import 'package:core/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:matcher_service/src/domain/entity/meeting_info/entity.dart';
+import 'package:matcher_service/src/domain/entity/meeting_info/list.dart';
 import 'package:meta/meta.dart';
 
 import '../../../domain/usecase/person/get_schedule.dart';

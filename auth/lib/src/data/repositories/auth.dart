@@ -4,7 +4,6 @@ import 'package:auth/auth.dart';
 import 'package:auth/src/data/data_source/token.dart';
 import 'package:auth/src/data/models/token/request/base.dart';
 import 'package:auth/src/domain/entities/token/exchange/request.dart';
-import 'package:auth/src/domain/entities/token/response.dart';
 import 'package:auth/src/domain/repositories/auth.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';

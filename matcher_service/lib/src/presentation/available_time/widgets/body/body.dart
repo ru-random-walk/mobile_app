@@ -71,11 +71,11 @@ class _AvailableTimeBodyWidgetState extends State<_AvailableTimeBodyWidget> {
     }
     context.read<AvailableTimeBloc>().add(
           AvailableTimeAdd(
-            AvailableTimeEntity(
+            AvailableTimeModifyEntity(
               date: selectedDate!,
-              timeFrom: selectedTimeFrom!,
-              timeUntil: selectedTimeUntil!,
-              geolocation: selectedGeolocation!,
+              timeStart: selectedTimeFrom!,
+              timeEnd: selectedTimeUntil!,
+              location: selectedGeolocation!,
               clubs: [],
             ),
           ),

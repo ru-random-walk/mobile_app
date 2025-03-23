@@ -4,7 +4,7 @@ import 'package:matcher_service/src/data/model/schedule/schedule_time_frame.dart
 import 'package:matcher_service/src/domain/entity/meeting_info/preview.dart';
 
 extension ScheduleTimeFrameMapper on ScheduleTimeFrameModel {
-  MeetingPreviewInfoEntity toEntity() {
+  MeetingPreviewInfoEntity toEntity(DateTime date) {
     final startTimeMeeting = TimeOfDay(
       hour: timeFrom.hour,
       minute: timeFrom.minute,
@@ -19,6 +19,7 @@ extension ScheduleTimeFrameMapper on ScheduleTimeFrameModel {
       status: appointmentStatus.toAppointmentStatus(),
       appointmentId: appointmentId,
       availabelTimeId: availableTimeId,
+      date: date,
     );
   }
 }

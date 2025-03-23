@@ -1,12 +1,12 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:matcher_service/src/domain/entity/available_time.dart';
 import 'package:matcher_service/src/domain/usecase/available_time/add.dart';
 import 'package:provider/provider.dart';
 import 'package:ui_components/ui_components.dart';
 import 'package:ui_utils/ui_utils.dart';
 
+import '../../domain/entity/available_time/modify.dart';
 import 'bloc/available_time_bloc.dart';
 
 part 'widgets/body/body.dart';
