@@ -21,6 +21,7 @@ part 'widgets/place.dart';
 part 'widgets/map_preview.dart';
 part 'widgets/body_data.dart';
 part 'widgets/body.dart';
+part 'widgets/menu.dart';
 
 class MeetingInfoPage extends StatelessWidget {
   final MeetingInfoArgs args;

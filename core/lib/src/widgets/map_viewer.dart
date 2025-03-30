@@ -18,8 +18,8 @@ class MapViewer extends StatefulWidget {
 class _MapViewerState extends State<MapViewer> {
   late final YandexMapController _mapController;
   static const _mapAnimation = MapAnimation(
-    type: MapAnimationType.linear,
-    duration: 0.3,
+    type: MapAnimationType.smooth,
+    duration: 0.0,
   );
 
   Future<void> _moveCameraTo(CameraPosition cameraPosition) =>

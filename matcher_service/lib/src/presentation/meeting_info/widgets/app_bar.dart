@@ -16,13 +16,31 @@ class _MeetingInfoAppBar extends StatelessWidget
           ),
         ),
         const Spacer(),
-        IconButton(
-          iconSize: 28.toFigmaSize,
-          icon: const Icon(
-            Icons.more_vert_outlined,
-          ),
-          onPressed: () {},
-        )
+        Builder(builder: (context) {
+          return IconButton(
+            iconSize: 28.toFigmaSize,
+            icon: const Icon(
+              Icons.more_vert_outlined,
+            ),
+            onPressed: () {
+              final renderObject = context.findRenderObject()! as RenderBox;
+              final dy =
+                  renderObject.localToGlobal(Offset.zero).dy + 2.toFigmaSize;
+              final height = renderObject.size.height;
+              late final OverlayEntry overlay;
+              overlay = OverlayEntry(
+                builder: (_) => TapRegion(
+                  child: _MeetingInfoMenuWidget(dy + height),
+                  onTapOutside: (event) {
+                    overlay.remove();
+                    overlay.dispose();
+                  },
+                ),
+              );
+              Overlay.of(context).insert(overlay);
+            },
+          );
+        })
       ],
     );
   }
