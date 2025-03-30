@@ -7,6 +7,7 @@ import 'package:ui_components/ui_components.dart';
 import 'package:ui_utils/ui_utils.dart';
 
 import '../../domain/entity/available_time/modify.dart';
+import 'args.dart';
 import 'bloc/available_time_bloc.dart';
 
 part 'widgets/body/body.dart';
@@ -17,17 +18,25 @@ part 'widgets/button.dart';
 part 'widgets/app_bar.dart';
 
 class AvailableTimePage extends StatelessWidget {
-  const AvailableTimePage({super.key});
+  final AvailableTimePageMode pageMode;
+
+  const AvailableTimePage({super.key, required this.pageMode});
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider(create: (_) => AddAvailableTimeUseCase()),
+        Provider(
+          create: (_) => AddAvailableTimeUseCase(
+            context.read(),
+          ),
+        ),
       ],
       child: BlocProvider(
         create: (context) => AvailableTimeBloc(
           context.read(),
+          context.read(),
+          pageMode,
         ),
         child: ColoredBox(
           color: context.colors.base_0,

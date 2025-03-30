@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:clubs/clubs.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +6,7 @@ import 'package:matcher_service/src/domain/entity/meeting_info/status.dart';
 
 class MeetingPreviewInfoEntity implements BaseMeetingInfoEntity {
   final String? appointmentId;
-  final String availabelTimeId;
+  final String? availabelTimeId;
   final MeetingStatus status;
   @override
   final DateTime date;

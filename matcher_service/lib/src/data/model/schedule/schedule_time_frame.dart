@@ -10,7 +10,7 @@ part 'schedule_time_frame.g.dart';
 class ScheduleTimeFrameModel {
   final String? partnerId;
   final String? appointmentId;
-  final String availableTimeId;
+  final String? availableTimeId;
   final TimeOfDay timeFrom;
   final TimeOfDay timeUntil;
   final GeolocationModel location;

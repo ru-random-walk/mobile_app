@@ -30,15 +30,36 @@ class AvailableTimeRepository implements AvailableTimeRepositoryI {
 
   @override
   Future<Either<BaseError, void>> deleteAvailableTime(
-      String id, AvailableTimeModifyEntity availabelTimeEntity) {
-    // TODO: implement deleteAvailableTime
-    throw UnimplementedError();
+    String id,
+  ) async {
+    try {
+      final res = await _matcherDataSource.deleteAvailableTime(id);
+      if (res.response.statusCode == 200) {
+        return Right(null);
+      } else {
+        return Left(BaseError(res.response.data, null));
+      }
+    } catch (e, s) {
+      return Left(BaseError(e.toString(), s));
+    }
   }
 
   @override
   Future<Either<BaseError, void>> updateAvailableTime(
-      String id, AvailableTimeModifyEntity availabelTimeEntity) {
-    // TODO: implement updateAvailableTime
-    throw UnimplementedError();
+    String id,
+    AvailableTimeModifyEntity availabelTimeEntity,
+  ) async {
+    try {
+      final availabelTimeModel = availabelTimeEntity.toModel();
+      final res =
+          await _matcherDataSource.updateAvailableTime(id, availabelTimeModel);
+      if (res.response.statusCode == 200) {
+        return Right(null);
+      } else {
+        return Left(BaseError(res.response.data, null));
+      }
+    } catch (e, s) {
+      return Left(BaseError(e.toString(), s));
+    }
   }
 }

@@ -35,7 +35,7 @@ class _MeetingsBodyEmpty extends StatelessWidget {
             text: 'Создать встречу',
             onPressed: () => context
                 .findAncestorStateOfType<_MatcherPageState>()
-                ?.addAvailableTime(),
+                ?.addAvailableTime(context),
           ),
         ],
       ),

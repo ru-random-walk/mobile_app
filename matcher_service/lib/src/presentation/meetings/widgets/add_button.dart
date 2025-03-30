@@ -28,7 +28,7 @@ class _AddMeetingButton extends StatelessWidget {
         customWidth: 60.toFigmaSize,
         onPressed: () => context
             .findAncestorStateOfType<_MatcherPageState>()
-            ?.addAvailableTime(),
+            ?.addAvailableTime(context),
       ),
     ]);
   }

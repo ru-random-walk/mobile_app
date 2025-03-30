@@ -16,16 +16,41 @@ abstract class MatcherDataSource {
   static const _avaialableTimePrefix = '$_prefix/available-time';
   static const _person = '$_prefix/person';
   static const _appointment = '$_prefix/appointment';
+  static const _appointmentId = '$_appointment{id}';
 
+  /// Available time
   @POST('$_avaialableTimePrefix/add')
   @Headers({'Content-Type': 'application/json'})
   Future<HttpResponse> addAvailableTime(
     @Body() AvailabelTimeModel availabelTimeModel,
   );
 
+  @PUT('$_avaialableTimePrefix/{id}/change')
+  @Headers({'Content-Type': 'application/json'})
+  Future<HttpResponse> updateAvailableTime(
+    @Path('id') String id,
+    @Body() AvailabelTimeModel availabelTimeModel,
+  );
+
+  @DELETE('$_avaialableTimePrefix/{id}')
+  Future<HttpResponse> deleteAvailableTime(
+    @Path('id') String id,
+  );
+
+
+  /// Person
   @GET('$_person/schedule')
   Future<List<UserScheduleModel>> getUserSchedule();
 
-  @GET('$_appointment/{id}')
-  Future<AppointmentDetailsModel> getAppointmentDetails(@Path('id') String id);
+
+  /// Appointment
+  @GET(_appointmentId)
+  Future<AppointmentDetailsModel> getAppointmentDetails(
+    @Path('id') String id,
+  );
+
+  @DELETE(_appointmentId)
+  Future<HttpResponse> cancelAppointment(
+    @Path('id') String id,
+  );
 }

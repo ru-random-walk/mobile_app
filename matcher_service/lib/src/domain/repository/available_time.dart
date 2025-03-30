@@ -15,6 +15,5 @@ abstract interface class AvailableTimeRepositoryI {
 
   Future<Either<BaseError, void>> deleteAvailableTime(
     String id,
-    AvailableTimeModifyEntity availabelTimeEntity,
   );
 }

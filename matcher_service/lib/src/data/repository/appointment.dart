@@ -39,4 +39,18 @@ class AppointmentRepository implements AppointmentRepositoryI {
       return Left(BaseError(e.toString(), s));
     }
   }
+
+  @override
+  Future<Either<BaseError, void>> cancelAppointment(String id) async {
+    try {
+      final res = await _matcherDataSource.cancelAppointment(id);
+      if (res.response.statusCode == 200) {
+        return Right(null);
+      } else {
+        return Left(BaseError(res.response.data, null));
+      }
+    } catch (e, s) {
+      return Left(BaseError(e.toString(), s));
+    }
+  }
 }

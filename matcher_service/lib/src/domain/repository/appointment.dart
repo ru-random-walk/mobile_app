@@ -7,4 +7,6 @@ abstract interface class AppointmentRepositoryI {
     String id,
     String currentUserId,
   );
+
+  Future<Either<BaseError, void>> cancelAppointment(String id);
 }

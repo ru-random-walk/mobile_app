@@ -28,7 +28,7 @@ class MettingPreviewInfoWidget extends StatelessWidget {
         final args = info.appointmentId != null
             ? AppointmentIdArgs(info.appointmentId!)
             : AvailableTimeInfoArgs(AvailableTimeEntity(
-                id: info.availabelTimeId,
+                id: info.availabelTimeId ?? 'invalid',
                 status: info.status,
                 date: info.date,
                 timeStart: info.timeStart,
@@ -38,7 +38,10 @@ class MettingPreviewInfoWidget extends StatelessWidget {
               ));
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (_) => MeetingInfoPage(args: args),
+            builder: (_) => Provider.value(
+              value: context.read<PersonRepository>(),
+              child: MeetingInfoPage(args: args),
+            ),
           ),
         );
       },

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:matcher_service/src/data/data_source/matcher.dart';
+import 'package:matcher_service/src/data/repository/person.dart';
 import 'package:matcher_service/src/domain/entity/meeting_info/base.dart';
 import 'package:matcher_service/src/domain/entity/meeting_info/list.dart';
 import 'package:matcher_service/src/domain/entity/meeting_info/preview.dart';
 import 'package:matcher_service/src/domain/entity/meeting_info/status.dart';
 import 'package:matcher_service/src/domain/usecase/person/get_schedule.dart';
+import 'package:matcher_service/src/presentation/available_time/args.dart';
 import 'package:matcher_service/src/presentation/available_time/page.dart';
 import 'package:matcher_service/src/presentation/meeting_info/args.dart';
 import 'package:matcher_service/src/presentation/meeting_info/page.dart';
@@ -33,21 +36,34 @@ class MatcherPage extends StatefulWidget {
 }
 
 class _MatcherPageState extends State<MatcherPage> {
-  Future<void> addAvailableTime() async {
-    final res = await Navigator.of(context).push(
+  Future<void> addAvailableTime(BuildContext context) async {
+    Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => const AvailableTimePage(),
+        builder: (_) => Provider.value(
+          value: context.read<PersonRepository>(),
+          child: const AvailableTimePage(
+            pageMode: AvailableTimePageModeAdd(),
+          ),
+        ),
       ),
     );
-    if (res != null && mounted) {
-      context.read<MettingsBloc>().add(GetMettingsEvent());
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Provider(
-      create: (context) => GetScheduleUseCase(),
+    return MultiProvider(
+      providers: [
+        Provider(
+          create: (_) => PersonRepository(
+            MatcherDataSource(),
+          ),
+        ),
+        Provider(
+          create: (context) => GetScheduleUseCase(
+            context.read(),
+          ),
+        ),
+      ],
       child: BlocProvider(
         create: (context) => MettingsBloc(
           context.read(),
