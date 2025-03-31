@@ -29,12 +29,29 @@ class _MeetingInfoAppBar extends StatelessWidget
               final height = renderObject.size.height;
               late final OverlayEntry overlay;
               overlay = OverlayEntry(
-                builder: (_) => TapRegion(
-                  child: _MeetingInfoMenuWidget(dy + height),
-                  onTapOutside: (event) {
-                    overlay.remove();
-                    overlay.dispose();
-                  },
+                builder: (_) => Provider.value(
+                  value: context.read<PersonRepositoryI>(),
+                  child: BlocProvider.value(
+                    value: context.read<MeetingInfoBloc>(),
+                    child: TapRegion(
+                      child: _MeetingInfoMenuWidget(
+                        dY: dy + height,
+                        closeMenu: () {
+                          overlay.remove();
+                          overlay.dispose();
+                        },
+                        onModify: (modify) {
+                          context
+                              .read<MeetingInfoBloc>()
+                              .add(UpdateAvailableTime(modify));
+                        },
+                      ),
+                      onTapOutside: (event) {
+                        overlay.remove();
+                        overlay.dispose();
+                      },
+                    ),
+                  ),
                 ),
               );
               Overlay.of(context).insert(overlay);

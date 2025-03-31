@@ -50,7 +50,8 @@ flutter:
     - packages/matcher_service/assets/icons/logo.svg
     - packages/matcher_service/assets/icons/search.svg
     - packages/matcher_service/assets/images/no_appointments.svg
-
+    - packages/matcher_service/assets/icons/delete.svg
+    - packages/matcher_service/assets/icons/edit.svg
 
   #
   # For details regarding assets in packages, see

@@ -27,6 +27,7 @@ class _AvailableTimePicker extends StatelessWidget {
                 width: 160.toFigmaSize,
                 size: ButtonSize.M,
                 onTimeUpdated: (date) => parentState?.selectedTimeFrom = date,
+                initialTime: parentState?.selectedTimeFrom,
               ),
               Text(
                 '-',
@@ -36,6 +37,7 @@ class _AvailableTimePicker extends StatelessWidget {
                 width: 160.toFigmaSize,
                 size: ButtonSize.M,
                 onTimeUpdated: (date) => parentState?.selectedTimeUntil = date,
+                initialTime: parentState?.selectedTimeUntil,
               ),
             ],
           ),

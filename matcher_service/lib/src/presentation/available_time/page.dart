@@ -2,6 +2,7 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matcher_service/src/domain/usecase/available_time/add.dart';
+import 'package:matcher_service/src/domain/usecase/available_time/update.dart';
 import 'package:provider/provider.dart';
 import 'package:ui_components/ui_components.dart';
 import 'package:ui_utils/ui_utils.dart';
@@ -31,6 +32,11 @@ class AvailableTimePage extends StatelessWidget {
             context.read(),
           ),
         ),
+        Provider(
+          create: (_) => UpdateAvailableTimeUseCase(
+            context.read(),
+          ),
+        ),
       ],
       child: BlocProvider(
         create: (context) => AvailableTimeBloc(
@@ -48,7 +54,9 @@ class AvailableTimePage extends StatelessWidget {
                   horizontal: 28.toFigmaSize,
                   vertical: 12.toFigmaSize,
                 ),
-                child: _AvailableTimeBodyWidget(),
+                child: _AvailableTimeBodyWidget(
+                  pageMode: pageMode,
+                ),
               ),
             ),
           ),

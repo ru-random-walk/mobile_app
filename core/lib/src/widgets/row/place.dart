@@ -4,12 +4,14 @@ class PickMeetPlaceButton extends StatefulWidget {
   final ButtonSize size;
   final double? width;
   final void Function(Geolocation geolocation) onGeolocationUpdated;
+  final Geolocation? initialGeolocation;
 
   const PickMeetPlaceButton({
     super.key,
     required this.onGeolocationUpdated,
     required this.size,
     this.width,
+    this.initialGeolocation,
   });
 
   @override
@@ -18,6 +20,12 @@ class PickMeetPlaceButton extends StatefulWidget {
 
 class _PickMeetPlaceButtonState extends State<PickMeetPlaceButton> {
   Geolocation? selectedPlace;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedPlace = widget.initialGeolocation;
+  }
 
   @override
   Widget build(BuildContext context) {

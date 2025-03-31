@@ -4,12 +4,14 @@ class PickMeetDateButton extends StatefulWidget {
   final ButtonSize size;
   final double? width;
   final void Function(DateTime date) onDateUpdated;
+  final DateTime? initialValue;
 
   const PickMeetDateButton({
     super.key,
     required this.onDateUpdated,
     required this.size,
     this.width,
+    this.initialValue,
   });
 
   @override
@@ -18,6 +20,12 @@ class PickMeetDateButton extends StatefulWidget {
 
 class _PickMeetDateButtonState extends State<PickMeetDateButton> {
   DateTime? selectedDate;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedDate = widget.initialValue;
+  }
 
   @override
   Widget build(BuildContext context) {

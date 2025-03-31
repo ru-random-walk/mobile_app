@@ -39,7 +39,7 @@ class MettingPreviewInfoWidget extends StatelessWidget {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (_) => Provider.value(
-              value: context.read<PersonRepository>(),
+              value: context.read<PersonRepositoryI>(),
               child: MeetingInfoPage(args: args),
             ),
           ),

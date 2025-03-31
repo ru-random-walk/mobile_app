@@ -10,3 +10,10 @@ final class AvailableTimeCreatingSuccess extends AvailableTimeState {}
 final class AvailableTimeCreatingError extends AvailableTimeState {}
 
 final class Idle extends AvailableTimeState {}
+
+final class AvailableTimeUpdateSucces extends AvailableTimeState {
+  final AvailableTimeModifyEntity entity;
+  AvailableTimeUpdateSucces(this.entity);
+}
+
+final class AvailableTimeUpdateError extends AvailableTimeState {}

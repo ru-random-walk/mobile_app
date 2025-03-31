@@ -1,6 +1,10 @@
 part of '../../page.dart';
 
 class _AvailableTimeBodyWidget extends StatefulWidget {
+  final AvailableTimePageMode pageMode;
+
+  const _AvailableTimeBodyWidget({super.key, required this.pageMode});
+
   @override
   State<_AvailableTimeBodyWidget> createState() =>
       _AvailableTimeBodyWidgetState();
@@ -16,15 +20,30 @@ class _AvailableTimeBodyWidgetState extends State<_AvailableTimeBodyWidget> {
   Geolocation? selectedGeolocation;
 
   @override
+  void initState() {
+    super.initState();
+    final mode = widget.pageMode;
+    if (mode is AvailableTimePageModeUpdate) {
+      final entity = mode.entity;
+      selectedDate = entity.date;
+      selectedTimeFrom = entity.timeStart;
+      selectedTimeUntil = entity.timeEnd;
+      selectedGeolocation = entity.location;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final spacer = SizedBox(height: 20.toFigmaSize);
     return BlocListener<AvailableTimeBloc, AvailableTimeState>(
       listener: (context, state) {
         switch (state) {
-          case AvailableTimeCreatingLoading():
-          case AvailableTimeCreatingSuccess():
+          case AvailableTimeUpdateSucces e:
+            Navigator.of(context).pop(e.entity);
+          case AvailableTimeCreatingSuccess _:
             Navigator.of(context).pop(true);
-          case AvailableTimeCreatingError():
+          case AvailableTimeCreatingError _:
+          case AvailableTimeUpdateError _:
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text(
@@ -33,6 +52,7 @@ class _AvailableTimeBodyWidgetState extends State<_AvailableTimeBodyWidget> {
               ),
             );
           case Idle():
+          case AvailableTimeCreatingLoading _:
         }
       },
       child: Column(

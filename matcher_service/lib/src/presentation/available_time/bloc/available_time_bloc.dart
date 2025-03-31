@@ -26,19 +26,29 @@ class AvailableTimeBloc extends Bloc<AvailableTimeAdd, AvailableTimeState> {
     emit(AvailableTimeCreatingLoading());
     final useCase = switch (mode) {
       AvailableTimePageModeAdd _ => _addAvailableTimeUseCase.call,
-      AvailableTimePageModeUpdate updateMode => (AvailableTimeModifyEntity modify) =>
-          _updateAvailableTimeUseCase(
-            UpdateAvailableTimeArgs(
-              id: updateMode.entity.id,
-              modifyEntity: modify,
+      AvailableTimePageModeUpdate updateMode =>
+        (AvailableTimeModifyEntity modify) => _updateAvailableTimeUseCase(
+              UpdateAvailableTimeArgs(
+                id: updateMode.entity.id,
+                modifyEntity: modify,
+              ),
             ),
-          ),
     };
     final res = await useCase(event.availabelTime);
     res.fold((e) {
-      emit(AvailableTimeCreatingError());
+      switch (mode) {
+        case AvailableTimePageModeAdd():
+          emit(AvailableTimeCreatingError());
+        case AvailableTimePageModeUpdate():
+          emit(AvailableTimeUpdateError());
+      }
     }, (_) {
-      emit(AvailableTimeCreatingSuccess());
+      switch (mode) {
+        case AvailableTimePageModeAdd():
+          emit(AvailableTimeCreatingSuccess());
+        case AvailableTimePageModeUpdate():
+          emit(AvailableTimeUpdateSucces(event.availabelTime));
+      }
     });
   }
 }

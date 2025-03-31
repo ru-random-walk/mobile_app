@@ -3,6 +3,8 @@ part of '../../page.dart';
 class _AvailableTimeDatePicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final parentState =
+        context.findAncestorStateOfType<_AvailableTimeBodyWidgetState>();
     return Padding(
       padding: EdgeInsets.all(4.toFigmaSize),
       child: Row(
@@ -16,9 +18,8 @@ class _AvailableTimeDatePicker extends StatelessWidget {
           PickMeetDateButton(
             width: 220.toFigmaSize,
             size: ButtonSize.M,
-            onDateUpdated: (date) => context
-                .findAncestorStateOfType<_AvailableTimeBodyWidgetState>()
-                ?.selectedDate = date,
+            onDateUpdated: (date) => parentState?.selectedDate = date,
+            initialValue: parentState?.selectedDate,
           ),
         ],
       ),

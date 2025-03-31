@@ -4,8 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:matcher_service/src/domain/entity/available_time/modify.dart';
 import 'package:matcher_service/src/domain/entity/meeting_info/status.dart';
+import 'package:matcher_service/src/domain/repository/person.dart';
+import 'package:matcher_service/src/domain/usecase/appointment/cancel.dart';
 import 'package:matcher_service/src/domain/usecase/appointment/get_details.dart';
+import 'package:matcher_service/src/domain/usecase/available_time/delete.dart';
+import 'package:matcher_service/src/domain/usecase/available_time/update.dart';
+import 'package:matcher_service/src/presentation/available_time/args.dart';
+import 'package:matcher_service/src/presentation/available_time/page.dart';
 import 'package:matcher_service/src/presentation/meeting_info/args.dart';
 import 'package:matcher_service/src/presentation/meeting_info/bloc/meeting_info_bloc.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +29,7 @@ part 'widgets/map_preview.dart';
 part 'widgets/body_data.dart';
 part 'widgets/body.dart';
 part 'widgets/menu.dart';
+part 'widgets/menu_row.dart';
 
 class MeetingInfoPage extends StatelessWidget {
   final MeetingInfoArgs args;
@@ -37,11 +45,25 @@ class MeetingInfoPage extends StatelessWidget {
       builder: (context, state) {
         return switch (state) {
           ProfileLoading() => throw UnimplementedError(),
-          ProfileData() => Provider(
-              create: (_) => GetAppointmentDetailsUseCase(state.user.id),
+          ProfileData() => MultiProvider(
+              providers: [
+                Provider(
+                  create: (_) => GetAppointmentDetailsUseCase(state.user.id),
+                ),
+                Provider(
+                  create: (context) => DeleteAvailableTimeUseCase(
+                    context.read(),
+                  ),
+                ),
+                Provider(
+                  create: (context) => CancelAppointmentUseCase(context.read()),
+                ),
+              ],
               child: BlocProvider(
                 create: (context) => MeetingInfoBloc(
                   args,
+                  context.read(),
+                  context.read(),
                   context.read(),
                 ),
                 child: ColoredBox(

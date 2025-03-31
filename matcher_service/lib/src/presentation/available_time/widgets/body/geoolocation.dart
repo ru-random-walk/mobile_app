@@ -5,6 +5,8 @@ class _AvailableTimeGeolocationPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final parentState =
+        context.findAncestorStateOfType<_AvailableTimeBodyWidgetState>();
     return Padding(
       padding: EdgeInsets.all(4.toFigmaSize),
       child: Row(
@@ -18,9 +20,9 @@ class _AvailableTimeGeolocationPicker extends StatelessWidget {
           PickMeetPlaceButton(
             width: 220.toFigmaSize,
             size: ButtonSize.M,
-            onGeolocationUpdated: (geolocation) => context
-                .findAncestorStateOfType<_AvailableTimeBodyWidgetState>()
-                ?.selectedGeolocation = geolocation,
+            onGeolocationUpdated: (geolocation) =>
+                parentState?.selectedGeolocation = geolocation,
+            initialGeolocation: parentState?.selectedGeolocation,
           ),
         ],
       ),

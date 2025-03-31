@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 part of '../meeting_info/base.dart';
 
 class AvailableTimeEntity extends BaseMeetingEntity {
@@ -21,4 +22,18 @@ class AvailableTimeEntity extends BaseMeetingEntity {
     required this.location,
     required this.clubs,
   });
+
+  AvailableTimeEntity copyWith({
+    required AvailableTimeModifyEntity newEntity,
+  }) {
+    return AvailableTimeEntity(
+      id: id,
+      status: status,
+      date: newEntity.date,
+      timeStart: newEntity.timeStart,
+      timeEnd: newEntity.timeEnd,
+      location: newEntity.location,
+      clubs: newEntity.clubs,
+    );
+  }
 }

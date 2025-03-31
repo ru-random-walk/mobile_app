@@ -4,12 +4,14 @@ class PickMeetTimeButton extends StatefulWidget {
   final ButtonSize size;
   final double? width;
   final void Function(TimeOfDay time) onTimeUpdated;
+  final TimeOfDay? initialTime;
 
   const PickMeetTimeButton({
     super.key,
     required this.onTimeUpdated,
     required this.size,
     this.width,
+    this.initialTime,
   });
 
   @override
@@ -18,6 +20,12 @@ class PickMeetTimeButton extends StatefulWidget {
 
 class _PickMeetTimeButtonState extends State<PickMeetTimeButton> {
   TimeOfDay? selectedTime;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedTime = widget.initialTime;
+  }
 
   @override
   Widget build(BuildContext context) {

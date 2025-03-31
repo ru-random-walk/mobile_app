@@ -16,7 +16,7 @@ class MapViewer extends StatefulWidget {
 }
 
 class _MapViewerState extends State<MapViewer> {
-  late final YandexMapController _mapController;
+  late YandexMapController _mapController;
   static const _mapAnimation = MapAnimation(
     type: MapAnimationType.smooth,
     duration: 0.0,
@@ -57,12 +57,14 @@ class _MapViewerState extends State<MapViewer> {
   @override
   Widget build(BuildContext context) {
     return YandexMap(
+      key: ObjectKey(widget.geolocation),
       mapObjects: [
         PlacemarkMapObject(
           opacity: 1,
           mapId: const MapObjectId('geolocation'),
           icon: PlacemarkIcon.single(
             PlacemarkIconStyle(
+              anchor: const Offset(0.5, 1),
               image: BitmapDescriptor.fromAssetImage(
                 'packages/core/assets/place_fill.png',
               ),

@@ -7,6 +7,7 @@ import 'package:matcher_service/src/domain/entity/meeting_info/base.dart';
 import 'package:matcher_service/src/domain/entity/meeting_info/list.dart';
 import 'package:matcher_service/src/domain/entity/meeting_info/preview.dart';
 import 'package:matcher_service/src/domain/entity/meeting_info/status.dart';
+import 'package:matcher_service/src/domain/repository/person.dart';
 import 'package:matcher_service/src/domain/usecase/person/get_schedule.dart';
 import 'package:matcher_service/src/presentation/available_time/args.dart';
 import 'package:matcher_service/src/presentation/available_time/page.dart';
@@ -40,7 +41,7 @@ class _MatcherPageState extends State<MatcherPage> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => Provider.value(
-          value: context.read<PersonRepository>(),
+          value: context.read<PersonRepositoryI>(),
           child: const AvailableTimePage(
             pageMode: AvailableTimePageModeAdd(),
           ),
@@ -53,7 +54,7 @@ class _MatcherPageState extends State<MatcherPage> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider(
+        Provider<PersonRepositoryI>(
           create: (_) => PersonRepository(
             MatcherDataSource(),
           ),
