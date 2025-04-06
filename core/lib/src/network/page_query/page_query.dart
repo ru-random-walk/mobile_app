@@ -19,14 +19,7 @@ class PageQueryModel {
 
   static String? _sortToJson(List<String>? sort) {
     if (sort == null) return null;
-    var res = '';
-    for (var i = 0; i < sort.length; i++) {
-      res += sort[i];
-      if (i != sort.length - 1) {
-        res += '&sort=';
-      }
-    }
-    return res;
+    return sort.join(',');
   }
 
   Map<String, dynamic> toJson() => _$PageQueryModelToJson(this);

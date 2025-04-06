@@ -4,7 +4,6 @@ import 'package:retrofit/retrofit.dart';
 import '../models/geo_object.dart';
 import '../models/query.dart';
 
-
 part 'geocoder.g.dart';
 
 const _dadataGeoCoderUrl = 'http://suggestions.dadata.ru';

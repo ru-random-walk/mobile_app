@@ -1,6 +1,11 @@
 part of '../../page.dart';
 
-class _ChatBodyData extends StatelessWidget {
+class _ChatBodyData extends StatefulWidget {
+  @override
+  State<_ChatBodyData> createState() => _ChatBodyDataState();
+}
+
+class _ChatBodyDataState extends State<_ChatBodyData> {
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<ChatBloc>();
@@ -30,9 +35,17 @@ class _ChatBodyData extends StatelessWidget {
                       floatingHeader: true,
                       reverse: true,
                       order: StickyGroupedListOrder.DESC,
-                      itemBuilder: (_, message) => _ChatMessageWidget(
-                        message: message,
-                      ),
+                      indexedItemBuilder: (_, message, index) {
+                        if (index == messages.length - 5) {
+                          bloc.add(LoadData());
+                        }
+                        return _ChatMessageWidget(
+                          message: message,
+                        );
+                      },
+                      itemComparator: (msg1, msg2) =>
+                          msg1.timestamp.compareTo(msg2.timestamp),
+                      groupComparator: (date1, date2) => date1.compareTo(date2),
                       groupSeparatorBuilder: (message) =>
                           _ChatDateSeparatorWidget(
                         date: message.timestamp,

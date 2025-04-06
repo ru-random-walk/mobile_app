@@ -47,7 +47,10 @@ class GetMessagesUseCase
     final pageQuery = PageQuery(
       page: _page++,
       size: _querySize,
-      sort: null,
+      sort: [
+        'sent_at',
+        'desc',
+      ],
     );
     final res = await _chatRepository.getMessages(
       pageQuery,
@@ -56,7 +59,8 @@ class GetMessagesUseCase
     );
     return res.fold(Left.new, (data) {
       _maxPages = data.pageInfo.totalPages;
-      return Right(data.messages..sort((a, b) => a.timestamp.compareTo(b.timestamp)));
+      return Right(
+          data.messages..sort((a, b) => a.timestamp.compareTo(b.timestamp)));
     });
   }
 

@@ -23,28 +23,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     _initMessagesListener();
     on<LoadData>(_onLoadData);
     on<TextMessageSended>(_onTextMessageAdded);
-    on<InviteMessageSended>(
-      (event, emit) {
-        final curMessages = (state as ChatData).messages;
-        final invite = event.invite;
-        final newMessage = InvitationMessageEntity(
-          timestamp: DateTime.now(),
-          isMy: true,
-          isChecked: false,
-          planDateTimeOfMeeting: invite.date,
-          place: invite.place,
-          status: InvitationStatus.pending,
-        );
-        emit(
-          ChatData(
-            [
-              ...curMessages,
-              newMessage,
-            ],
-          ),
-        );
-      },
-    );
+    on<InviteMessageSended>(_onInviteMessageAdded);
     on<_MessageRecieved>(_onMessageReceived);
   }
 
@@ -74,6 +53,18 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           timestamp: DateTime.now(),
           isMy: true,
           isChecked: false,
+        ),
+      );
+
+  void _onInviteMessageAdded(InviteMessageSended event, Emitter emit) =>
+      _sendMessageUseCase(
+        InvitationMessageEntity(
+          timestamp: DateTime.now(),
+          isMy: true,
+          isChecked: false,
+          planDateTimeOfMeeting: event.invite.date,
+          place: event.invite.place,
+          status: InvitationStatus.pending,
         ),
       );
 
