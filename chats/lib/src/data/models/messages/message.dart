@@ -1,12 +1,16 @@
 import 'package:chats/src/data/models/date_converter.dart';
-import 'package:chats/src/data/models/messages/payload.dart';
-import 'package:chats/src/data/models/messages/text.dart';
+import 'package:chats/src/data/models/messages/payload/payload.dart';
+import 'package:chats/src/data/models/messages/payload/text.dart';
 import 'package:chats/src/data/models/messages/type.dart';
-import 'package:chats/src/data/models/messages/walk_request.dart';
+import 'package:chats/src/data/models/messages/payload/walk_request.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'text_message.dart';
-part 'request_message.dart';
+part 'history/text_message.dart';
+part 'history/request_message.dart';
+part 'history/base.dart';
+part 'socket/response/base.dart';
+part 'socket/response/text_message.dart';
+part 'socket/response/request_message.dart';
 part 'message.g.dart';
 
 sealed class MessageModel {
@@ -25,16 +29,6 @@ sealed class MessageModel {
     required this.createdAt,
     required this.sender,
   });
-
-  factory MessageModel.fromJson(Map<String, dynamic> json) {
-    final stringType = json['payload']['type'] as String;
-    final type = MessageType.fromString(stringType);
-    return switch (type) {
-      MessageType.text => TextMessageModel.fromJson(json),
-      MessageType.requestForWalk => RequestForWalkMessageModel.fromJson(json),
-      MessageType.unknown => throw UnimplementedError(),
-    };
-  }
 }
 
 class PayloadConverter implements JsonConverter<Payload, Map<String, dynamic>> {

@@ -1,9 +1,9 @@
-part of 'message.dart';
+part of '../message.dart';
 
 @JsonSerializable(converters: [
   DateJsonConverter(),
 ])
-class TextMessageModel extends MessageModel {
+class TextMessageModel extends BaseHistoryMessageModel {
   @override
   @PayloadConverter()
   TextPayloadModel get payload => super.payload as TextPayloadModel;

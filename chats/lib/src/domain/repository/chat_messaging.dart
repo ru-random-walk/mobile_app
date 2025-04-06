@@ -5,4 +5,6 @@ abstract interface class ChatMessagingRepositoryI {
   Stream<MessageEntity> get messagesStream;
 
   void sendMessage(SendMessageEntity sendMessage);
+
+  void dispose();
 }

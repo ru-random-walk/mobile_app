@@ -34,4 +34,7 @@ class ChatMessagingRepository implements ChatMessagingRepositoryI {
       sendMessage(_sendMessageQueue.removeFirst());
     }
   }
+
+  @override
+  void dispose() => _source.dispose();
 }

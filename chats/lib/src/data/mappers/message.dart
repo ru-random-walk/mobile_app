@@ -22,6 +22,21 @@ extension MessageMapper on MessageModel {
           place: message.payload.location.toDomain(),
           status: statusFromBool(message.payload.answer),
         ),
+      final TextSocketResponseMessageModel msg => TextMessageEntity(
+          isChecked: isChecked,
+          isMy: isMy,
+          timestamp: timestamp,
+          text: msg.payload.text,
+        ),
+      RequestForWalkSocketResponseMessageModel message =>
+        InvitationMessageEntity(
+          timestamp: timestamp,
+          isMy: isMy,
+          isChecked: isChecked,
+          planDateTimeOfMeeting: message.payload.startsAt,
+          place: message.payload.location.toDomain(),
+          status: statusFromBool(message.payload.answer),
+        ),
     };
   }
 

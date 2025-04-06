@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:chats/src/data/models/messages/message.dart';
-import 'package:chats/src/data/models/messages/message_request.dart';
+import 'package:chats/src/data/models/messages/socket/request/message_request.dart';
 import 'package:core/core.dart';
 import 'package:stomp_dart_client/stomp_dart_client.dart';
 
@@ -40,6 +40,12 @@ class ChatMessagingSocketSource {
         },
         onStompError: (frame) => log(frame.body ?? ''),
         onWebSocketError: (frame) => log(frame.body ?? ''),
+        onDisconnect: (frame) => log(frame.body ?? ''),
+        onDebugMessage: (msg) => log(msg),
+        onWebSocketDone: () => log('Done'),
+        onUnhandledFrame: (frame) => log(frame.body ?? ''),
+        onUnhandledMessage: (frame) => log(frame.body ?? ''),
+        onUnhandledReceipt: (rec) => log(rec.body ?? ''),
       );
 
   Future<void> init(void Function() onInitialized) async {
@@ -68,7 +74,7 @@ class ChatMessagingSocketSource {
     try {
       final data = frame.body;
       final json = jsonDecode(data ?? '');
-      final message = MessageModel.fromJson(json);
+      final message = BaseSocketResponseMessageModel.fromJson(json);
       _messageController.add(message);
     } catch (e) {
       log(e.toString());

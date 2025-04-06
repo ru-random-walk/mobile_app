@@ -22,8 +22,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       : super(ChatLoading()) {
     _initMessagesListener();
     on<LoadData>(_onLoadData);
-    on<TextMessageAdded>(_onTextMessageAdded);
-    on<InviteAdded>(
+    on<TextMessageSended>(_onTextMessageAdded);
+    on<InviteMessageSended>(
       (event, emit) {
         final curMessages = (state as ChatData).messages;
         final invite = event.invite;
@@ -45,21 +45,36 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         );
       },
     );
+    on<_MessageRecieved>(_onMessageReceived);
+  }
+
+  void _onMessageReceived(_MessageRecieved event, Emitter emit) {
+    final newMessage = event.message;
+    emit(
+      ChatData(
+        [
+          ..._currentMessages,
+          newMessage,
+        ],
+      ),
+    );
   }
 
   void _initMessagesListener() {
-    _chatMessagingRepository.messagesStream.listen((messages) {
-      log('Message received: ${messages.timestamp}');
+    _chatMessagingRepository.messagesStream.listen((message) {
+      log('Message received: ${message.timestamp}');
+      add(_MessageRecieved(message: message));
     });
   }
 
-  void _onTextMessageAdded(TextMessageAdded event, Emitter emit) =>
+  void _onTextMessageAdded(TextMessageSended event, Emitter emit) =>
       _sendMessageUseCase(
         TextMessageEntity(
-            text: event.message,
-            timestamp: DateTime.now(),
-            isMy: true,
-            isChecked: false),
+          text: event.message,
+          timestamp: DateTime.now(),
+          isMy: true,
+          isChecked: false,
+        ),
       );
 
   void _onLoadData(LoadData event, Emitter emit) async {
@@ -82,5 +97,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       return localState.messages;
     }
     return [];
+  }
+
+  @override
+  Future<void> close() {
+    _chatMessagingRepository.dispose();
+    return super.close();
   }
 }

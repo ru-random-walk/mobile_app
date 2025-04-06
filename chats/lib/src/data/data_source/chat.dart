@@ -1,5 +1,5 @@
-import 'package:chats/src/data/models/chat/paged_chat.dart';
-import 'package:chats/src/data/models/messages/pageable_messages.dart';
+import 'package:chats/src/data/models/chat/chat.dart';
+import 'package:chats/src/data/models/messages/history/pageable_messages.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
@@ -13,7 +13,7 @@ abstract class ChatDataSource {
   static const _prefix = '/chat';
 
   @GET('$_prefix/chat/list')
-  Future<PageableChatModel> getChatsList(
+  Future<List<ChatModel>> getChatsList(
     @Queries() PageQueryModel queryModel,
     @Query('memberUsername') String memberUuid,
   );

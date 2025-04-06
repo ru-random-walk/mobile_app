@@ -54,12 +54,12 @@ class _ChatBodyData extends StatelessWidget {
                       );
                       if (res is InviteEntity) {
                         bloc.add(
-                          InviteAdded(invite: res),
+                          InviteMessageSended(invite: res),
                         );
                       }
                     },
                     onSend: (text) => bloc.add(
-                      TextMessageAdded(message: text),
+                      TextMessageSended(message: text),
                     ),
                   ),
                 ],

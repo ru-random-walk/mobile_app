@@ -1,7 +1,6 @@
 import 'package:auth/auth.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:matcher_service/src/domain/entity/available_time/modify.dart';
@@ -10,7 +9,6 @@ import 'package:matcher_service/src/domain/repository/person.dart';
 import 'package:matcher_service/src/domain/usecase/appointment/cancel.dart';
 import 'package:matcher_service/src/domain/usecase/appointment/get_details.dart';
 import 'package:matcher_service/src/domain/usecase/available_time/delete.dart';
-import 'package:matcher_service/src/domain/usecase/available_time/update.dart';
 import 'package:matcher_service/src/presentation/available_time/args.dart';
 import 'package:matcher_service/src/presentation/available_time/page.dart';
 import 'package:matcher_service/src/presentation/meeting_info/args.dart';

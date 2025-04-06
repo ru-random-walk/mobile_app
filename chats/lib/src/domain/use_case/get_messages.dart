@@ -56,7 +56,7 @@ class GetMessagesUseCase
     );
     return res.fold(Left.new, (data) {
       _maxPages = data.pageInfo.totalPages;
-      return Right(data.messages);
+      return Right(data.messages..sort((a, b) => a.timestamp.compareTo(b.timestamp)));
     });
   }
 

@@ -1,6 +1,6 @@
 import 'package:auth/auth.dart';
 import 'package:chats/src/data/data_source/chat.dart';
-import 'package:chats/src/data/mappers/pageable_chats.dart';
+import 'package:chats/src/data/mappers/chat.dart';
 import 'package:chats/src/data/mappers/pageable_messages.dart';
 import 'package:chats/src/domain/entity/chat/pageable_chat.dart';
 import 'package:chats/src/domain/entity/message/pageable_messages.dart';
@@ -21,12 +21,27 @@ class ChatRepository implements ChatRepositoryI {
   ) async {
     try {
       final res = await _dataSource.getChatsList(query.toModel(), userId);
-      /// TODO: переделать когда, будет получен список пользователей
-      final companions = await _usersDataSource.getUsers(
+      final companionsIds =
+          res.first.memberIds.firstWhere((id) => id != userId);
+      final companion = (await _usersDataSource.getUsers(
         query.toModel(),
-        ['ab4c22b2-a577-4aef-91e1-c8a8be8851d9'],
+        [companionsIds],
+      ))
+          .content
+          .first
+          .toDomain();
+      final result = res.map((e) => e.toDomain(companion)).toList();
+      return Right(
+        PageableChats(
+          chats: result,
+          pageInfo: PageableResponse(
+            number: 0,
+            size: 1,
+            totalElements: 1,
+            totalPages: 1,
+          ),
+        ),
       );
-      return Right(res.toDomain(companions.content));
     } catch (e, s) {
       return Left(BaseError(e.toString(), s));
     }

@@ -1,4 +1,4 @@
-import 'package:chats/src/data/models/messages/payload.dart';
+import 'package:chats/src/data/models/messages/payload/payload.dart';
 import 'package:chats/src/data/models/messages/type.dart';
 import 'package:json_annotation/json_annotation.dart';
 

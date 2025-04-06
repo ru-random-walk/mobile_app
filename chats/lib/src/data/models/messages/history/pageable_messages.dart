@@ -6,7 +6,7 @@ part 'pageable_messages.g.dart';
 
 @JsonSerializable(createToJson: false)
 class PageableMessagesModel {
-  final List<MessageModel> content;
+  final List<BaseHistoryMessageModel> content;
   final PageableResponseModel page;
 
   PageableMessagesModel({
