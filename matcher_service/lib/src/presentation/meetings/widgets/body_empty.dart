@@ -32,6 +32,7 @@ class _MeetingsBodyEmpty extends StatelessWidget {
             height: 31.5.toFigmaSize,
           ),
           CustomButton(
+            isMaxWidth: false,
             text: 'Создать встречу',
             onPressed: () => context
                 .findAncestorStateOfType<_MatcherPageState>()
