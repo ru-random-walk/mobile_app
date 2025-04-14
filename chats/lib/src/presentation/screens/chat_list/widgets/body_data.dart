@@ -19,6 +19,7 @@ class _ChatListBodyData extends StatelessWidget {
       ),
       itemBuilder: (_, index) {
         final chat = chats[index];
+        final lastMessage = chat.lastMessage;
         return GestureDetector(
           onTap: () => Navigator.push(
             context,
@@ -33,10 +34,9 @@ class _ChatListBodyData extends StatelessWidget {
             ),
           ),
           child: DialogWidget(
-            isInvitation: true,
+            isInvitation: lastMessage is InvitationMessageEntity,
             type: Readed(),
-            text:
-                'Lorem Ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+            text: lastMessage is TextMessageEntity ? lastMessage.text : null,
             name: chat.companion.fullName,
             avatar: Image.network(
               chat.companion.avatar,

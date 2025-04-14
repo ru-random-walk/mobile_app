@@ -11,7 +11,7 @@ extension PageableMapper on PageableChatModel {
       final companion = companions.firstWhere(
         (element) => element.id == 'ab4c22b2-a577-4aef-91e1-c8a8be8851d9',
       );
-      return chat.toDomain(companion.toDomain());
+      return chat.toDomain(companion.toDomain(), null);
     }).toList();
     return PageableChats(
       chats: chatsEntity,

@@ -2,7 +2,10 @@ import 'package:auth/auth.dart';
 import 'package:chats/src/data/data_source/chat.dart';
 import 'package:chats/src/data/mappers/chat.dart';
 import 'package:chats/src/data/mappers/pageable_messages.dart';
+import 'package:chats/src/data/models/chat/chat.dart';
+import 'package:chats/src/domain/entity/chat/chat.dart';
 import 'package:chats/src/domain/entity/chat/pageable_chat.dart';
+import 'package:chats/src/domain/entity/message/message.dart';
 import 'package:chats/src/domain/entity/message/pageable_messages.dart';
 import 'package:chats/src/domain/repository/chat.dart';
 import 'package:core/core.dart';
@@ -20,20 +23,18 @@ class ChatRepository implements ChatRepositoryI {
     String userId,
   ) async {
     try {
+      final List<ChatEntity> chats;
       final res = await _dataSource.getChatsList(query.toModel(), userId);
-      final companionsIds =
-          res.first.memberIds.firstWhere((id) => id != userId);
-      final companion = (await _usersDataSource.getUsers(
-        query.toModel(),
-        [companionsIds],
-      ))
-          .content
-          .first
-          .toDomain();
-      final result = res.map((e) => e.toDomain(companion)).toList();
+      if (res.isEmpty) {
+        chats = [];
+      } else {
+        chats = await Future.wait(
+          res.map((e) => _loadExtraDataForChat(e, userId)),
+        );
+      }
       return Right(
         PageableChats(
-          chats: result,
+          chats: chats,
           pageInfo: PageableResponse(
             number: 0,
             size: 1,
@@ -45,6 +46,32 @@ class ChatRepository implements ChatRepositoryI {
     } catch (e, s) {
       return Left(BaseError(e.toString(), s));
     }
+  }
+
+  Future<ChatEntity> _loadExtraDataForChat(
+      ChatModel chat, String userId) async {
+    final companionId = chat.memberIds.firstWhere((id) => id != userId);
+    final companionModel = await _usersDataSource
+        .getUsers(PageQueryModel(page: 0, size: 1), [companionId]);
+    final companionEntity = companionModel.content.first.toDomain();
+    final lastMessage = await _getLastMessageInChat(chat.id, userId);
+    return chat.toDomain(companionEntity, lastMessage);
+  }
+
+  Future<MessageEntity?> _getLastMessageInChat(
+    String chatId,
+    String currentUserId,
+  ) async {
+    final pageQuery = PageQueryModel(
+      page: 0,
+      size: 1,
+      sort: [
+        'sent_at',
+        'desc',
+      ],
+    );
+    final res = await _dataSource.getMessagesList(pageQuery, chatId);
+    return res.toDomain(currentUserId).messages.firstOrNull;
   }
 
   @override

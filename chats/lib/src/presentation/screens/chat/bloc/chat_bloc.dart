@@ -32,8 +32,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     emit(
       ChatData(
         [
-          ..._currentMessages,
           newMessage,
+          ..._currentMessages,
         ],
       ),
     );

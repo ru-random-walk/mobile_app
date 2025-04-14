@@ -1,11 +1,14 @@
 import 'package:auth/auth.dart';
+import 'package:chats/src/domain/entity/message/message.dart';
 
 class ChatEntity {
   final String id;
   final UserEntity companion;
+  final MessageEntity? lastMessage;
 
   ChatEntity({
     required this.id,
     required this.companion,
+    required this.lastMessage,
   });
 }

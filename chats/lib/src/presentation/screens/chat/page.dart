@@ -9,6 +9,8 @@ import 'package:chats/src/domain/use_case/get_messages.dart';
 import 'package:chats/src/domain/use_case/send_message.dart';
 import 'package:chats/src/presentation/screens/chat/args.dart';
 import 'package:chats/src/presentation/screens/chat/bloc/chat_bloc.dart';
+import 'package:chats/src/presentation/screens/chat/widgets/sticky_grouped_list/order.dart';
+import 'package:chats/src/presentation/screens/chat/widgets/sticky_grouped_list/widget.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +18,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:sticky_grouped_list/sticky_grouped_list.dart';
 import 'package:ui_components/ui_components.dart';
 import 'package:ui_utils/ui_utils.dart';
 

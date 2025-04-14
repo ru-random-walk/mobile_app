@@ -50,6 +50,18 @@ class MettingPreviewInfoWidget extends StatelessWidget {
 
   Widget _rightIcon(BuildContext context) {
     const pathPrefix = 'packages/matcher_service/assets/icons';
+    ///
+    switch (info.status) {
+      case MeetingStatus.inProcess:
+      case MeetingStatus.searching:
+      case MeetingStatus.find:
+        break;
+      case MeetingStatus.done:
+      case MeetingStatus.canceled:
+      case MeetingStatus.requested:
+        return const Icon(Icons.ac_unit_sharp);
+    }
+    ///
     final iconName = switch (info.status) {
       MeetingStatus.inProcess => 'logo.svg',
       MeetingStatus.searching => 'search.svg',

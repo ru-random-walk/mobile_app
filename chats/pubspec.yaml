@@ -27,7 +27,7 @@ dependencies:
   flutter_bloc: ^8.1.6
   retrofit: ^4.4.0
   dio: ^5.7.0
-  sticky_grouped_list: ^3.1.0
+  scrollable_positioned_list: 0.3.8
   intl: ^0.20.1
   provider: ^6.1.2
   stomp_dart_client: ^2.1.3

@@ -14,7 +14,7 @@ class ScheduleTimeFrameModel {
   final TimeOfDay timeFrom;
   final TimeOfDay timeUntil;
   final GeolocationModel location;
-  final List<String> availableTimeClubsInFilter;
+  final List<String>? availableTimeClubsInFilter;
   final String? appointmentStatus;
 
   ScheduleTimeFrameModel({
