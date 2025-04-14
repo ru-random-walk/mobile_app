@@ -39,10 +39,8 @@ class _MapViewerState extends State<MapViewer> {
 
     if (locationPermissionIsGranted) {
       await _mapController.toggleUserLayer(visible: true);
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        final position = CameraPosition(target: widget.geolocation.point);
-        _moveCameraTo(position);
-      });
+      final position = CameraPosition(target: widget.geolocation.point);
+      _moveCameraTo(position);
     } else {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ScaffoldMessenger.of(context).showSnackBar(

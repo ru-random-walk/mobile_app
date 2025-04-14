@@ -13,9 +13,6 @@ class _MeetingInfoMenuWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final availableTime =
-        (context.read<MeetingInfoBloc>().state as AvailableTimeInfo)
-            .availableTime;
     return BlocBuilder<MeetingInfoBloc, MeetingInfoState>(
       builder: (context, state) {
         return Material(
@@ -54,7 +51,8 @@ class _MeetingInfoMenuWidget extends StatelessWidget {
                                             context.read<PersonRepositoryI>(),
                                         child: AvailableTimePage(
                                           pageMode: AvailableTimePageModeUpdate(
-                                            availableTime,
+                                            (state as AvailableTimeInfo)
+                                                .availableTime,
                                           ),
                                         ),
                                       ),

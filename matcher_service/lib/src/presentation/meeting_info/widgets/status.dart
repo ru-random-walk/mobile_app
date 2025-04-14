@@ -26,6 +26,18 @@ class _MeetingInfoStatusWidget extends StatelessWidget {
 
   Widget _icon(BuildContext context) {
     const pathPrefix = 'packages/matcher_service/assets/icons';
+    /// 
+    switch (status) {
+      case MeetingStatus.inProcess:
+      case MeetingStatus.searching:
+      case MeetingStatus.find:
+        break;
+      case MeetingStatus.done:
+      case MeetingStatus.canceled:
+      case MeetingStatus.requested:
+        return const Icon(Icons.ac_unit_sharp);
+    }
+    ///
     final iconName = switch (status) {
       MeetingStatus.inProcess => 'logo.svg',
       MeetingStatus.searching => 'search.svg',
@@ -52,10 +64,10 @@ class _MeetingInfoStatusWidget extends StatelessWidget {
 
   String get _text => switch (status) {
         MeetingStatus.searching => 'Поиск партнера',
-        MeetingStatus.requested => throw UnimplementedError(),
+        MeetingStatus.requested => 'Запрошена',
         MeetingStatus.find => 'Назначена',
         MeetingStatus.inProcess => 'На прогулке',
-        MeetingStatus.done => throw UnimplementedError(),
-        MeetingStatus.canceled => throw UnimplementedError(),
+        MeetingStatus.done => 'Завершена',
+        MeetingStatus.canceled => 'Отменена',
       };
 }

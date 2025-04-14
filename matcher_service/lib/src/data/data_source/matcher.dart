@@ -16,7 +16,7 @@ abstract class MatcherDataSource {
   static const _avaialableTimePrefix = '$_prefix/available-time';
   static const _person = '$_prefix/person';
   static const _appointment = '$_prefix/appointment';
-  static const _appointmentId = '$_appointment{id}';
+  static const _appointmentId = '$_appointment/{id}';
 
   /// Available time
   @POST('$_avaialableTimePrefix/add')

@@ -14,6 +14,7 @@ import 'package:matcher_service/src/presentation/available_time/page.dart';
 import 'package:matcher_service/src/presentation/meeting_info/args.dart';
 import 'package:matcher_service/src/presentation/meeting_info/bloc/meeting_info_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:ui_components/ui_components.dart';
 import 'package:ui_utils/ui_utils.dart';
 
 import '../../domain/entity/meeting_info/base.dart';
@@ -28,6 +29,7 @@ part 'widgets/body_data.dart';
 part 'widgets/body.dart';
 part 'widgets/menu.dart';
 part 'widgets/menu_row.dart';
+part 'widgets/user_row.dart';
 
 class MeetingInfoPage extends StatelessWidget {
   final MeetingInfoArgs args;

@@ -30,12 +30,12 @@ class MeetingInfoBloc extends Bloc<MeetingInfoEvent, MeetingInfoState> {
               arg.availableTime,
             ),
         }) {
-    if (appointmentId != null) {
-      add(LoadAppointmentInfo());
-    }
     on<LoadAppointmentInfo>(_onLoadAppointmentInfo);
     on<UpdateAvailableTime>(_onUpdateAvailableTime);
     on<DeleteMeeting>(_onDeleteMeeting);
+    if (appointmentId != null) {
+      add(LoadAppointmentInfo());
+    }
   }
 
   Future<void> _onLoadAppointmentInfo(

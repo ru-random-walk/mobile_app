@@ -77,13 +77,11 @@ class __MapWidgetState extends State<_MapWidget> {
 
     if (locationPermissionIsGranted) {
       await _mapController.toggleUserLayer(visible: true);
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (widget.initialGeolocation != null) {
-          final position =
-              CameraPosition(target: widget.initialGeolocation!.point);
-          _moveCameraTo(position);
-        }
-      });
+      if (widget.initialGeolocation != null) {
+        final position =
+            CameraPosition(target: widget.initialGeolocation!.point);
+        _moveCameraTo(position);
+      }
     } else {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ScaffoldMessenger.of(context).showSnackBar(
