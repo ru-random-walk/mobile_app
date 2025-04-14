@@ -27,7 +27,9 @@ dependencies:
   flutter_bloc: ^8.1.6
   retrofit: ^4.4.0
   dio: ^5.7.0
-  scrollable_positioned_list: 0.3.8
+  sticky_grouped_list: 
+    git: 
+      url: https://github.com/Max-Size/sticky_grouped_list
   intl: ^0.20.1
   provider: ^6.1.2
   stomp_dart_client: ^2.1.3
