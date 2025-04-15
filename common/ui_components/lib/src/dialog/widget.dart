@@ -10,6 +10,7 @@ class DialogWidget extends StatelessWidget {
   final bool isInvitation;
   final DialogType type;
   final String? text;
+  final DateTime? date;
   final String name;
   final Widget avatar;
 
@@ -19,7 +20,7 @@ class DialogWidget extends StatelessWidget {
     required this.type,
     this.text,
     Widget? avatar,
-    required this.name,
+    required this.name, this.date,
   }) : avatar = avatar ?? const SizedBox.shrink();
 
   @override
@@ -54,7 +55,7 @@ class DialogWidget extends StatelessWidget {
             SizedBox(width: 16.toFigmaSize),
             DialogStatusWidget(
               type: type,
-              date: DateTime.now(),
+              date: date,
             ),
             SizedBox(width: 4.toFigmaSize),
           ],

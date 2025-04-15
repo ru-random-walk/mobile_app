@@ -39,6 +39,7 @@ class _ChatListBodyData extends StatelessWidget {
               type: Readed(),
               text: lastMessage is TextMessageEntity ? lastMessage.text : null,
               name: chat.companion.fullName,
+              date: lastMessage?.timestamp,
               avatar: Image.network(
                 chat.companion.avatar,
                 fit: BoxFit.cover,
