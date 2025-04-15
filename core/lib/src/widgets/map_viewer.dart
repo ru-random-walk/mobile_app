@@ -66,7 +66,7 @@ class _MapViewerState extends State<MapViewer> {
               image: BitmapDescriptor.fromAssetImage(
                 'packages/core/assets/place_fill.png',
               ),
-              rotationType: RotationType.rotate,
+              rotationType: RotationType.noRotation,
             ),
           ),
           point: widget.geolocation.point,

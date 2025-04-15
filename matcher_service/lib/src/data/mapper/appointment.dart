@@ -6,7 +6,10 @@ import 'package:matcher_service/src/data/model/appointment.dart';
 import 'package:matcher_service/src/domain/entity/meeting_info/base.dart';
 
 extension AppointmentMapper on AppointmentDetailsModel {
-  AppointmentEntity toEntity(UserModel user) {
+  AppointmentEntity toEntity(
+    UserModel user,
+    Geolocation geolocation,
+  ) {
     final userEntity = user.toDomain();
     return AppointmentEntity(
       id: id,
@@ -14,12 +17,7 @@ extension AppointmentMapper on AppointmentDetailsModel {
       date: startsAt,
       timeStart: TimeOfDay.fromDateTime(startsAt),
       timeEnd: TimeOfDay.fromDateTime(endedAt),
-      location: Geolocation(
-        latitude: latitude,
-        longitude: longitude,
-        city: null,
-        street: null,
-      ),
+      location: geolocation,
       clubs: [],
       partner: userEntity,
     );

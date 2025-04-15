@@ -22,7 +22,11 @@ class MettingPreviewInfoWidget extends StatelessWidget {
         horizontal: 22.5.toFigmaSize,
       ),
       text: _formattedTime(context),
-      rightIcon: _rightIcon(context),
+      rightIcon: MeetingStatusIconWidget(
+        status: info.status,
+        size: 24.toFigmaSize,
+        color: context.colors.base_80,
+      ),
       textStyle: context.textTheme.bodyLRegular,
       onPressed: () {
         final args = info.appointmentId != null
@@ -45,42 +49,6 @@ class MettingPreviewInfoWidget extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-
-  Widget _rightIcon(BuildContext context) {
-    const pathPrefix = 'packages/matcher_service/assets/icons';
-    ///
-    switch (info.status) {
-      case MeetingStatus.inProcess:
-      case MeetingStatus.searching:
-      case MeetingStatus.find:
-        break;
-      case MeetingStatus.done:
-      case MeetingStatus.canceled:
-      case MeetingStatus.requested:
-        return const Icon(Icons.ac_unit_sharp);
-    }
-    ///
-    final iconName = switch (info.status) {
-      MeetingStatus.inProcess => 'logo.svg',
-      MeetingStatus.searching => 'search.svg',
-      MeetingStatus.find => 'checked.svg',
-      MeetingStatus.done => throw UnimplementedError(),
-      MeetingStatus.canceled => throw UnimplementedError(),
-      MeetingStatus.requested => throw UnimplementedError(),
-    };
-    final iconPath = '$pathPrefix/$iconName';
-    return Padding(
-      padding: EdgeInsets.only(left: 8.toFigmaSize),
-      child: SvgPicture.asset(
-        iconPath,
-        colorFilter: ColorFilter.mode(
-          context.colors.base_80,
-          BlendMode.srcIn,
-        ),
-        // fit: BoxFit.scaleDown,
-      ),
     );
   }
 

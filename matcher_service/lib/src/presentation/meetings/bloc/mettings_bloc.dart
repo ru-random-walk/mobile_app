@@ -21,7 +21,10 @@ class MettingsBloc extends Bloc<MettingsEvent, MettingsState> {
     _subscription = _getScheduleUseCase.userScheduleStream.listen((data) => add(
           _MeetingsDataArrivedEvent(data),
         ));
-    on<GetMettingsEvent>((_, __) => _getScheduleUseCase());
+    on<GetMettingsEvent>((_, emit) {
+      emit(MettingsLoading());
+      _getScheduleUseCase();
+    });
     on<_MeetingsDataArrivedEvent>(
       (event, emit) => emit(
         _handleFetchedData(event.data),
