@@ -1,5 +1,6 @@
 import 'package:auth/auth.dart';
 import 'package:chats/chats.dart';
+import 'package:clubs/clubs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -22,9 +23,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   final pages = [
     const MatcherPage(),
-    const Center(
-      child: Text('2'),
-    ),
+    GroupsScreen(),
     const ChatsListPage(),
     const Center(
       child: Text('4'),

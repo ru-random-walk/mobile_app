@@ -26,6 +26,8 @@ dependencies:
     path: ../auth
   matcher_service:
     path: ../matcher_service
+  clubs:
+    path: ../clubs
   flutter_bloc: ^8.1.6
 
 
