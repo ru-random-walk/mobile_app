@@ -46,6 +46,7 @@ flutter:
   uses-material-design: true
   assets:
     - packages/chats/assets/images/background.png
+    - packages/chats/assets/images/no_chats.png
     - packages/chats/assets/icons/calendar.svg
     - packages/chats/assets/icons/place.svg
     - packages/chats/assets/icons/time.svg

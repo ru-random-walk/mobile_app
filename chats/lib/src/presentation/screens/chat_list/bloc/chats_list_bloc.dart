@@ -15,12 +15,17 @@ class ChatsListBloc extends Bloc<ChatsListEvent, ChatsListState> {
   }
 
   void _onGetChats(GetChatsEvent event, Emitter emit) async {
+    if (event.resetPagination) _getChatsUseCase.reset();
     emit(ChatsListLoading());
     final res = await _getChatsUseCase();
     res.fold((e) {
       emit(ChatsListError(error: e));
     }, (data) {
-      emit(ChatsListData(chats: data));
+      if (data.isEmpty) {
+        emit(ChatsListEmpty());
+      } else {
+        emit(ChatsListData(chats: data));
+      }
     });
   }
 }

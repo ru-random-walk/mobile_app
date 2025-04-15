@@ -15,7 +15,8 @@ part 'widgets/screen.dart';
 part 'widgets/app_bar/app_bar.dart';
 part 'widgets/app_bar/search_paint.dart';
 part 'widgets/app_bar/search_button.dart';
-part 'widgets/body_data.dart';
+part 'widgets/body/data.dart';
+part 'widgets/body/empty.dart';
 
 class ChatsListPage extends StatelessWidget {
   const ChatsListPage({super.key});
@@ -34,7 +35,7 @@ class ChatsListPage extends StatelessWidget {
                 lazy: false,
                 create: (context) => ChatsListBloc(
                   context.read(),
-                )..add(GetChatsEvent()),
+                )..add(GetChatsEvent(resetPagination: false)),
                 child: _ChatsListScreen(
                   currentUserId: state.user.id,
                 ),
