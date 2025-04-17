@@ -60,16 +60,16 @@ class AuthScreen extends StatelessWidget {
               backgroundColor: Colors.transparent,
               body: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 32.toFigmaSize),
-                child: Column(
-                  children: [
-                    dividerBig,
-                    const AppLogoWithTitle(),
-                    dividerBig,
-                    const Expanded(
-                      child: LoginButtonGroup(),
-                    ),
-                    dividerBig,
-                  ],
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      dividerBig,
+                      const AppLogoWithTitle(),
+                      dividerBig,
+                      LoginButtonGroup(),
+                      dividerBig,
+                    ],
+                  ),
                 ),
               ),
             ),
