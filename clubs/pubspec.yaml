@@ -10,6 +10,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  ui_theming:
+    path: ../common/ui_theming
+  ui_utils:
+    path: ../common/ui_utils 
+  ui_components:
+    path: ../common/ui_components
+  utils:
+    path: ../common/utils
 
 dev_dependencies:
   flutter_test:
