@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "402464264412",
     "project_id": "random-walk-app",
-    "storage_bucket": "random-walk-app.appspot.com"
+    "storage_bucket": "random-walk-app.firebasestorage.app"
   },
   "client": [
     {
@@ -13,6 +13,30 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "402464264412-2prm0d0kt01nbjoteko2askgepufdq10.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ru.hse.random.walk",
+            "certificate_hash": "732aa7e4baf63dc63140a271558780b6b8195526"
+          }
+        },
+        {
+          "client_id": "402464264412-m6i8617dbrfa4pr3kae83v8ccffjdcgj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ru.hse.random.walk",
+            "certificate_hash": "668e0e08ceb028576b0799aa13b61eac6b278dd9"
+          }
+        },
+        {
+          "client_id": "402464264412-uh90pkkv13did44j1mmrt5j6a27n08r8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ru.hse.random.walk",
+            "certificate_hash": "b52279438483bc13b205708eeb101780aa2d34d9"
+          }
+        },
         {
           "client_id": "402464264412-cke3jfncm7m4817mc2duatf0pmsstp3e.apps.googleusercontent.com",
           "client_type": 3

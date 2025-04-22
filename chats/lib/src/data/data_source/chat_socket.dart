@@ -42,7 +42,10 @@ class ChatMessagingSocketSource {
         onWebSocketError: (frame) => log(frame.body ?? ''),
         onDisconnect: (frame) => log(frame.body ?? ''),
         onDebugMessage: (msg) => log(msg),
-        onWebSocketDone: () => log('Done'),
+        onWebSocketDone: () {
+          log(StackTrace.current.toString());
+          log('Socket is done');
+        },
         onUnhandledFrame: (frame) => log(frame.body ?? ''),
         onUnhandledMessage: (frame) => log(frame.body ?? ''),
         onUnhandledReceipt: (rec) => log(rec.body ?? ''),

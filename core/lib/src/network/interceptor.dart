@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auth/auth.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
@@ -42,7 +44,9 @@ class RefreshTokenInterceptor extends QueuedInterceptor {
         },
         (_) async {
           try {
+            log(err.requestOptions.headers['Authorization']);
             await _addAuthHeaders(err.requestOptions.headers);
+            log(err.requestOptions.headers['Authorization']);
             final newResponse = await _innerDio.fetch(err.requestOptions);
             handler.resolve(newResponse);
           } catch (e) {

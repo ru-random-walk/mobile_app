@@ -7,7 +7,7 @@
 	<key>REVERSED_CLIENT_ID</key>
 	<string>com.googleusercontent.apps.402464264412-lubf7quiitg4pnph132a9dpo7a9kf1k3</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>402464264412-m6i8617dbrfa4pr3kae83v8ccffjdcgj.apps.googleusercontent.com</string>
+	<string>402464264412-2prm0d0kt01nbjoteko2askgepufdq10.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyC5kLDfDTEoldNKg9LNpzy5dCI2EsWWLVk</string>
 	<key>GCM_SENDER_ID</key>
@@ -19,7 +19,7 @@
 	<key>PROJECT_ID</key>
 	<string>random-walk-app</string>
 	<key>STORAGE_BUCKET</key>
-	<string>random-walk-app.appspot.com</string>
+	<string>random-walk-app.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
