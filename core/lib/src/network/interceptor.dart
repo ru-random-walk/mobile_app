@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auth/auth.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
@@ -65,5 +67,6 @@ class RefreshTokenInterceptor extends QueuedInterceptor {
     final tokenType = await _tokenStorage.getTokenType();
     if (accessToken == null || tokenType == null) return;
     headers['Authorization'] = '$tokenType $accessToken';
+    log('Token: $tokenType $accessToken');
   }
 }

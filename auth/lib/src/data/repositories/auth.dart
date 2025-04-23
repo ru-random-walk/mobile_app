@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:auth/auth.dart';
 import 'package:auth/src/data/data_source/token.dart';
@@ -36,6 +37,7 @@ class AuthRepositoryI implements AuthRepository {
       final resultEntity = result.toEntity();
       return Right(resultEntity);
     } catch (e, s) {
+      log(e.toString());
       return Left(BaseError(e.toString(), s));
     }
   }
