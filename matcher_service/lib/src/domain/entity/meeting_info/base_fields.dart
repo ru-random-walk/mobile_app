@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 abstract interface class BaseMeetingInfoEntity {
   DateTime get date;
   TimeOfDay get timeStart;
-  TimeOfDay get timeEnd;
+  TimeOfDay? get timeEnd;
   Geolocation get location;
   List<ShortClubEntity> get clubs;
 }

@@ -16,7 +16,7 @@ extension AppointmentMapper on AppointmentDetailsModel {
       status: status.toAppointmentStatus(),
       date: startsAt,
       timeStart: TimeOfDay.fromDateTime(startsAt),
-      timeEnd: TimeOfDay.fromDateTime(endedAt),
+      timeEnd: endedAt == null ? null : TimeOfDay.fromDateTime(endedAt!),
       location: geolocation,
       clubs: [],
       partner: userEntity,
