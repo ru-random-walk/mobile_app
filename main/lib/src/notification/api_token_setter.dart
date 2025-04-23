@@ -1,21 +1,32 @@
 part of 'manager.dart';
 
+const _path = '/twitter/device';
+const _addTokenPath = '$_path/add';
+const _updateTokenPath = '$_path/refresh';
+
 class _ApiTokenSetter {
   final dio = NetworkConfig.instance.dio;
 
-  Future<bool> setNewToken(String token) =>
-      _setNewToken('/twitter/device/add', token, false);
-
-  Future<bool> updateToken(String token) =>
-      _setNewToken('/twitter/device/refresh', token, true);
-
-  Future<bool> _setNewToken(String path, String token, bool isUpdating) async {
+  Future<bool> setNewToken(String token) async {
     try {
       final data = {
         'token': token,
       };
-      final req =
-          isUpdating ? dio.put(path, data: data) : dio.post(path, data: data);
+      final req = dio.post(_addTokenPath, data: data);
+      final res = await req;
+      return res.statusCode == 200;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> updateToken(String oldToken, String token) async {
+    try {
+      final data = {
+        'previousToken': oldToken,
+        'newToken': token,
+      };
+      final req = dio.put(_updateTokenPath, data: data);
       final res = await req;
       return res.statusCode == 200;
     } catch (e) {

@@ -68,6 +68,7 @@ class RefreshTokenInterceptor extends QueuedInterceptor {
     final accessToken = await _tokenStorage.getToken();
     final tokenType = await _tokenStorage.getTokenType();
     if (accessToken == null || tokenType == null) return;
+    log('Authorization: $tokenType $accessToken');
     headers['Authorization'] = '$tokenType $accessToken';
   }
 }

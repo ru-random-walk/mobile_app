@@ -48,18 +48,16 @@ class _FirebaseTokenManager {
     return lastToken == newToken;
   }
 
-  /// Возвращает `true`, если токен был отправлен на сервер
-  ///
-  /// Возвращает `false`, если токен не был отправлен
-  ///
-  Future<bool> _sendTokenToServer(String token, bool isUpdating) => isUpdating
-      ? tokenSender.updateToken(token)
-      : tokenSender.setNewToken(token);
+  Future<bool> updateToken(String oldToken, String newToken) =>
+      tokenSender.updateToken(oldToken, newToken);
+
+  Future<bool> setNewToken(String token) => tokenSender.setNewToken(token);
 
   /// Иницализация токена при самом первом запуске приложения
   Future<void> _initTokenOnVeryFirstLaunch() async {
     final token = await _newToken;
-    await _updateToken(token, isFirstLaunch: true);
+    if (token == null) return;
+    await setNewToken(token);
   }
 
   /// Метод для обновления токена
@@ -69,13 +67,12 @@ class _FirebaseTokenManager {
   /// значение токена
   ///
   Future<void> _updateToken(
-    String? token, {
-    required bool isFirstLaunch,
-  }) async {
-    if (token == null) return;
-    final sended = await _sendTokenToServer(token, !isFirstLaunch);
+    String oldToken,
+    String newToken,
+  ) async {
+    final sended = await updateToken(oldToken, newToken);
     if (sended) {
-      await _setNewToken(token);
+      await _setNewToken(newToken);
     }
   }
 
@@ -85,7 +82,9 @@ class _FirebaseTokenManager {
     if (newToken == null) return;
     final isRelevant = await _checkTokenRelevance(newToken);
     if (isRelevant) return;
-    await _updateToken(newToken, isFirstLaunch: false);
+    final oldToken = _cachedToken;
+    if (oldToken == null) return;
+    await _updateToken(oldToken, newToken);
   }
 
   /// Метод для иницаилизации токена
@@ -103,7 +102,10 @@ class _FirebaseTokenManager {
 
   /// Метод для прослушивания получения нового токена
   void _initListeningToNewToken() {
-    _messaging.onTokenRefresh
-        .listen((newToken) => _updateToken(newToken, isFirstLaunch: false));
+    _messaging.onTokenRefresh.listen((newToken) {
+      final oldToken = _cachedToken;
+      if (oldToken == null) return;
+      _updateToken(oldToken, newToken);
+    });
   }
 }
