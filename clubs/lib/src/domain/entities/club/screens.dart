@@ -1,3 +1,4 @@
+import 'package:clubs/src/domain/entities/club/create_and_edit/create_club_page.dart';
 import 'package:clubs/src/domain/entities/club/group_list/widgets/widget_group.dart';
 import 'package:flutter/material.dart';
 import 'package:ui_utils/ui_utils.dart';
@@ -10,6 +11,7 @@ part 'group_list/widgets/app_bar/search_paint.dart';
 part 'group_list/widgets/app_bar/search_button.dart';
 part 'group_list/widgets/filters_group/group_filters.dart';
 part 'group_list/widgets/body_data.dart';
+
 
 class GroupsScreen extends StatefulWidget {
   const GroupsScreen({super.key});
@@ -58,7 +60,10 @@ class _GroupsScreenState extends State<GroupsScreen> {
       ),
       floatingActionButton: AddGroupButton(
         onPressed: () {
-          // Логика для добавления новой группы
+           Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const GroupFormScreen()),
+           );
         },
       ),
     );
