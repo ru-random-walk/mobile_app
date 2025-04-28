@@ -3,7 +3,7 @@ import 'package:ui_components/ui_components.dart';
 import 'package:ui_utils/ui_utils.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:clubs/src/domain/entities/club/create_and_edit/club/input_field.dart';
+import 'package:clubs/src/domain/entities/club/create_and_edit/club/input_field_group.dart';
 import 'package:clubs/src/domain/entities/club/create_and_edit/club/button_create_group.dart';
 import 'package:clubs/src/domain/entities/club/create_and_edit/tests/create_test_page.dart';
 import 'package:clubs/src/domain/entities/club/create_and_edit/app_bar.dart'; 
@@ -23,13 +23,15 @@ class _GroupFormScreenState extends State<GroupFormScreen> {
   final TextEditingController descriptionController = TextEditingController();
   String? attempts;
   bool isConditionAdded = false;
-  int inspectorCount = 1; 
+  int infoCount = 1; 
+  String conditionName = "";
 
-  void onConditionAdded(String condition, int inspectors) {
+  void onConditionAdded(String condition, int count, String name) {
   setState(() {
     attempts = condition;
-    inspectorCount = inspectors;
+    infoCount = count;
     isConditionAdded = true;
+    conditionName = name;
   });
   }
 
@@ -99,18 +101,31 @@ class _GroupFormScreenState extends State<GroupFormScreen> {
                         context: context,
                         builder: (BuildContext context) {
                           return _AddTestDialog(
-                            onConditionAdded: onConditionAdded, 
-                            inspectorCount: inspectorCount,
+                            onConditionAdded: onConditionAdded,
+                            infoCount: infoCount,
+                            conditionName: conditionName,
                           );
                         },
-                      );
+                      ).then((result) {
+                        if (result != null) {
+                          String testName = result['testName'];
+                          int questionCount = result['questionCount'];
+
+                          setState(() {
+                            conditionName = testName; 
+                            isConditionAdded = true; 
+                            infoCount = questionCount; 
+                          });
+                        }
+                      });
                     },
                   ),
                 if (isConditionAdded)
                   ConditionString(
-                    inspectorCount: inspectorCount,
+                    infoCount: infoCount,
                     isConditionAdded: isConditionAdded,
                     onTap: removeCondition,
+                    conditionTitle: conditionName,
                   ),
               ],
             ),

@@ -116,6 +116,7 @@ void _deleteOption(int questionIndex, int optionIndex) {
                   textStyle: context.textTheme.bodyMRegularBase90,
                 ),
                 SizedBox(height: 16.toFigmaSize),
+
                 Text('Количество попыток', style: context.textTheme.bodyXLMedium),
                 SizedBox(height: 8.toFigmaSize),
                 CustomTextField(
@@ -126,6 +127,7 @@ void _deleteOption(int questionIndex, int optionIndex) {
                   textStyle: context.textTheme.bodyMRegularBase90,
                 ),
                 SizedBox(height: 16.toFigmaSize),
+
                 Text('Вопросы', style: context.textTheme.bodyXLMedium),
                 SizedBox(height: 12.toFigmaSize),
 
@@ -200,7 +202,22 @@ void _deleteOption(int questionIndex, int optionIndex) {
                 color: ButtonColor.green,
                 text: 'Готово',
                 onPressed: () {
-                  //нажатие кнопки
+                  if (nameController.text.trim().isEmpty) {
+                    // Показать предупреждение
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Введите название теста'),
+                      ),
+                    );
+                    return; 
+                  }
+                  
+                  Map<String, dynamic> result = {
+                    'attempts': attemptController.text,
+                    'testName': nameController.text,
+                    'questionCount': questions.length,
+                  };
+                  Navigator.pop(context, result);
                 },
               ),
             ),

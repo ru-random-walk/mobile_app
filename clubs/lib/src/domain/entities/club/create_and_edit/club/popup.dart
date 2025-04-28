@@ -1,12 +1,14 @@
 part of '../create_club_page.dart';
 
 class _AddTestDialog extends StatelessWidget {
-  final void Function(String, int) onConditionAdded;
-  final int inspectorCount;
+  final void Function(String, int, String) onConditionAdded;
+  final int infoCount;
+  final String conditionName;
 
   const _AddTestDialog({
     required this.onConditionAdded,
-    required this.inspectorCount,
+    required this.infoCount,
+    required this.conditionName,
   });
 
   @override
@@ -55,10 +57,20 @@ class _AddTestDialog extends StatelessWidget {
                     color: ButtonColor.green,
                     text: 'Тест',
                     onPressed: () {
+                      Navigator.pop(context);
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => const TestForm()),
-                      );
+                      ).then((result) {
+                        if (result != null) {
+                          String attempts = result['attempts'];
+                          String testName = result['testName'];
+                          int questionCount = result['questionCount'];
+
+                          // Обновление состояния на GroupFormScreen
+                          onConditionAdded(attempts, questionCount, testName,);
+                        }
+                      });
                     },
                   ),
                   SizedBox(height: 16.toFigmaSize),
@@ -79,7 +91,7 @@ class _AddTestDialog extends StatelessWidget {
                               builder: (BuildContext context) {
                                 return _NumberInputDialog(
                                   onConditionAdded: (String attempts, int inspectorCountFromDialog) {
-                                    onConditionAdded(attempts, inspectorCountFromDialog);
+                                    onConditionAdded(attempts, inspectorCountFromDialog, "Запрос на вступление");
                                   },
                                   inspectorCount: inspectorCount,
                                 );
