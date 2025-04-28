@@ -21,28 +21,28 @@ class TestForm extends StatefulWidget {
 class TestFormState extends State<TestForm> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController attemptController = TextEditingController(text: '1');
-  //final TextEditingController questionController = TextEditingController();
   bool multipleAnswers = false;  
   String? selectedOption;  
   List<String> selectedOptions = [];
 
-  List<QuestionModel> questions = [
+    List<QuestionModel> questions = [
     QuestionModel(
       questionController: TextEditingController(),
       optionControllers: [
-        TextEditingController(text: 'Супер-быстрый темп'),
-        TextEditingController(text: 'Красивые места'),
-        TextEditingController(text: 'Солнечная погода'),
+        TextEditingController(),
+        TextEditingController(),
       ],
     ),
   ];
+
   void _addQuestion() {
     setState(() {
       questions.add(
         QuestionModel(
           questionController: TextEditingController(),
           optionControllers: [
-            TextEditingController(text: 'Новый вариант 1'),
+            TextEditingController(),
+            TextEditingController(),
           ],
         ),
       );
@@ -52,23 +52,30 @@ class TestFormState extends State<TestForm> {
     void _addOption(int questionIndex) {
     setState(() {
       questions[questionIndex].optionControllers
-          .add(TextEditingController(text: 'Новый вариант ${questions[questionIndex].optionControllers.length + 1}'));
-    });
-  }
-  void _deleteOption(int questionIndex, int optionIndex) {
-    setState(() {
-      final question = questions[questionIndex];
-      final removedOption = question.optionControllers[optionIndex].text;
-      question.optionControllers[optionIndex].dispose();
-      question.optionControllers.removeAt(optionIndex);
-
-      question.selectedOptions.remove(removedOption);
-      if (question.selectedOption == removedOption) {
-        question.selectedOption = null;
-      }
+          .add(TextEditingController());
     });
   }
 
+void _deleteOption(int questionIndex, int optionIndex) {
+  setState(() {
+    final question = questions[questionIndex];
+
+    final removedController = question.optionControllers[optionIndex];
+    removedController.dispose();
+    question.optionControllers.removeAt(optionIndex);
+
+    question.selectedOptionIndexes = question.selectedOptionIndexes
+      .where((i) => i != optionIndex) 
+      .map((i) => i > optionIndex ? i - 1 : i) 
+      .toList();
+
+    if (question.selectedOptionIndex == optionIndex) {
+      question.selectedOptionIndex = null;
+    } else if (question.selectedOptionIndex != null && question.selectedOptionIndex! > optionIndex) {
+      question.selectedOptionIndex = question.selectedOptionIndex! - 1;
+    }
+  });
+}
   
   @override
   void dispose() {
@@ -82,46 +89,6 @@ class TestFormState extends State<TestForm> {
     }
     super.dispose();
   }
-
-  // List<TextEditingController> optionControllers = [
-  //   TextEditingController(text: 'Супер-быстрый темп'),
-  //   TextEditingController(text: 'Красивые места'),
-  //   TextEditingController(text: 'Солнечная погода'),
-  // ];
-
-
-//   void _addOption() {
-//   setState(() {
-//     optionControllers.add(TextEditingController(text: 'Новый вариант ${optionControllers.length + 1}'));
-//   });
-// }
-
-// void _deleteOption(int index) {
-//     setState(() {
-//       final removedOption = optionControllers[index].text;
-//       optionControllers[index].dispose(); // обязательно очищаем контроллер
-//       optionControllers.removeAt(index);
-
-//       // ещё надо убрать выбранный ответ, если он был удалён
-//       selectedOptions.remove(removedOption);
-//       if (selectedOption == removedOption) {
-//         selectedOption = null;
-//       }
-//     });
-//   }
-
-  // @override
-  // void dispose() {
-  //   // очищаем все контроллеры при закрытии экрана
-  //   nameController.dispose();
-  //   attemptController.dispose();
-  //   questionController.dispose();
-  //   for (final controller in optionControllers) {
-  //     controller.dispose();
-  //   }
-  //   super.dispose();
-  // }
-
 
   @override
   Widget build(BuildContext context) {
@@ -162,44 +129,49 @@ class TestFormState extends State<TestForm> {
                 Text('Вопросы', style: context.textTheme.bodyXLMedium),
                 SizedBox(height: 12.toFigmaSize),
 
-                // Список всех вопросов
                 ...questions.asMap().entries.map((entry) {
                   final index = entry.key;
                   final question = entry.value;
-
 
                   return Padding(
                     padding: EdgeInsets.only(bottom: 12.toFigmaSize),
                     child: QuestionForm(
                       questionController: question.questionController,
                       optionControllers: question.optionControllers,
-                      multipleAnswers: multipleAnswers,
-                      selectedOption: selectedOption,
-                      selectedOptions: selectedOptions,
+                      multipleAnswers: question.multipleAnswers,
+                      selectedOptionIndex: question.selectedOptionIndex,
+                      selectedOptionIndexes: question.selectedOptionIndexes,
                       onAddOption: () => _addOption(index),
-                      onDeleteQ: () => {},
+                      onDeleteQ: () {
+                        setState(() {
+                          final q = questions.removeAt(index);
+                          q.questionController.dispose();
+                          for (var oc in q.optionControllers) {
+                            oc.dispose();
+                          }
+                        });
+                      },
                       onDeleteOption: (optionIndex) => _deleteOption(index, optionIndex),
                       onMultipleAnswersChanged: (value) {
                         setState(() {
                           question.multipleAnswers = value;
-                          question.selectedOptions.clear();
-                          question.selectedOption = null;
+                          question.selectedOptionIndexes = [];
+                          question.selectedOptionIndex = null;
                         });
                       },
-                      onOptionSelected: (value) {
+                      onOptionSelected: (index) {
                         setState(() {
-                          question.selectedOption = value;
+                          question.selectedOptionIndex = index;
                         });
                       },
                       onOptionsSelectedChanged: (newSelected) {
                         setState(() {
-                          question.selectedOptions = newSelected;
+                          question.selectedOptionIndexes = newSelected;
                         });
                       },
                     ),
                   );
                 }).toList(),
-
 
                 CustomButton(
                   type: ButtonType.tertiary,
@@ -214,38 +186,7 @@ class TestFormState extends State<TestForm> {
                   ),
                 ),
 
-                // QuestionForm(
-                //   questionController: questionController,
-                //   optionControllers: optionControllers,
-                //   multipleAnswers: multipleAnswers,
-                //   selectedOption: selectedOption,
-                //   selectedOptions: selectedOptions,
-                //   onAddOption: _addOption,
-                //   onDeleteOption: _deleteOption,
-                //   onMultipleAnswersChanged: (value) {
-                //     setState(() {
-                //       multipleAnswers = value;
-                //       selectedOptions.clear();
-                //       selectedOption = null;
-                //     });
-                //   },
-                //   onOptionSelected: (value) {
-                //     setState(() {
-                //       selectedOption = value;
-                //     });
-                //   },
-                //   onOptionsSelectedChanged: (newSelected) {
-                //     setState(() {
-                //       selectedOptions = newSelected;
-                //     });
-                //   },
-                // ),
-
-
-
-
                 SizedBox(height: 12.toFigmaSize),
-               
               ],
             ),
           ),
@@ -266,7 +207,6 @@ class TestFormState extends State<TestForm> {
           ),
         ),
       ),
-    
     );
   }
 }

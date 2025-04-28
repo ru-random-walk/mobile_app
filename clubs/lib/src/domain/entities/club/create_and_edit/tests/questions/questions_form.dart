@@ -4,15 +4,15 @@ class QuestionModel {
   final TextEditingController questionController;
   final List<TextEditingController> optionControllers;
   bool multipleAnswers;
-  String? selectedOption;
-  List<String> selectedOptions;
+  int? selectedOptionIndex;
+  List<int> selectedOptionIndexes;
 
   QuestionModel({
     required this.questionController,
     required this.optionControllers,
     this.multipleAnswers = false,
-    this.selectedOption,
-    this.selectedOptions = const [],
+    this.selectedOptionIndex,
+    this.selectedOptionIndexes = const [],
   });
 }
 
@@ -20,12 +20,12 @@ class QuestionForm extends StatefulWidget {
   final TextEditingController questionController;
   final List<TextEditingController> optionControllers;
   final bool multipleAnswers;
-  final String? selectedOption;
-  final List<String> selectedOptions;
+  final int? selectedOptionIndex;
+  final List<int> selectedOptionIndexes;
   final VoidCallback onAddOption;
   final ValueChanged<bool> onMultipleAnswersChanged;
-  final ValueChanged<String?> onOptionSelected;
-  final ValueChanged<List<String>> onOptionsSelectedChanged;
+  final ValueChanged<int?> onOptionSelected;
+  final ValueChanged<List<int>> onOptionsSelectedChanged;
   final ValueChanged<int> onDeleteOption; 
   final VoidCallback onDeleteQ; 
 
@@ -34,8 +34,8 @@ class QuestionForm extends StatefulWidget {
     required this.questionController,
     required this.optionControllers,
     required this.multipleAnswers,
-    required this.selectedOption,
-    required this.selectedOptions,
+    required this.selectedOptionIndex,
+    required this.selectedOptionIndexes,
     required this.onAddOption,
     required this.onMultipleAnswersChanged,
     required this.onOptionSelected,
@@ -81,10 +81,7 @@ class _QuestionFormState extends State<QuestionForm> {
               IconButton(
                 icon: Icon(Icons.close, size: 24.toFigmaSize, color: context.colors.base_40),
                 onPressed: widget.onDeleteQ,
-
               ),],),
-
-
           SizedBox(height: 8.toFigmaSize),
           CustomCheckbox(
             label: "Несколько вариантов ответа",
@@ -112,31 +109,31 @@ class _QuestionFormState extends State<QuestionForm> {
                   final index = entry.key;
                   final controller = entry.value;
                   final optionText = controller.text;
-
                   return Padding(
                     padding: EdgeInsets.symmetric(vertical: 4.toFigmaSize),
                     child: AnswerOption(
+                      optionIndex: index,
                       option: optionText,
                       multipleAnswers: widget.multipleAnswers,
-                      isSelected: widget.selectedOptions.contains(optionText),
-                      selectedOption: widget.selectedOption,
+                      isSelected: widget.selectedOptionIndexes.contains(index),
+                      selectedOption: widget.selectedOptionIndex?.toString(),
                       textController: controller,
                       onCheckboxChanged: (value) {
-                        final newOptions = [...widget.selectedOptions];
+                        final newSelectedIndexes = [...widget.selectedOptionIndexes];
                         if (value == true) {
-                          newOptions.add(optionText);
+                          newSelectedIndexes.add(index);
                         } else {
-                          newOptions.remove(optionText);
+                          newSelectedIndexes.remove(index);
                         }
-                        widget.onOptionsSelectedChanged(newOptions);
+                        widget.onOptionsSelectedChanged(newSelectedIndexes);
                       },
                       onRadioChanged: (value) {
-                        widget.onOptionSelected(value);
+                        widget.onOptionSelected(index);
                       },
                       onDelete: () {
                         widget.onDeleteOption(index);
                       },
-                    ),
+                    )
                   );
                 }).toList(),
               ),

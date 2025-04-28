@@ -5,15 +5,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:clubs/src/domain/entities/club/create_and_edit/club/input_field.dart';
 import 'package:clubs/src/domain/entities/club/create_and_edit/club/button_create_group.dart';
-import 'package:clubs/src/domain/entities/club/create_and_edit/tests/components/checkbox.dart';
-import 'package:clubs/src/domain/entities/club/create_and_edit/tests/components/radiobutton.dart';
 import 'package:clubs/src/domain/entities/club/create_and_edit/tests/create_test_page.dart';
 import 'package:clubs/src/domain/entities/club/create_and_edit/app_bar.dart'; 
 
 part 'club/popup.dart';
 part 'club/condition_string.dart';
-part 'tests/variants.dart';
-
 
 class GroupFormScreen extends StatefulWidget {
   const GroupFormScreen({super.key});

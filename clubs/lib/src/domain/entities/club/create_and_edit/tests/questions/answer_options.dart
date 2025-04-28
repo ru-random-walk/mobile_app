@@ -9,6 +9,7 @@ class AnswerOption extends StatelessWidget {
   final ValueChanged<String?> onRadioChanged;
   final VoidCallback onDelete; 
   final TextEditingController textController;
+  final int optionIndex;
 
   const AnswerOption({
     super.key,
@@ -20,6 +21,7 @@ class AnswerOption extends StatelessWidget {
     required this.onDelete,
     required this.textController,
     this.selectedOption,
+    required this.optionIndex,
   });
 
   @override
@@ -33,14 +35,14 @@ Widget build(BuildContext context) {
                 value: isSelected,
                 onChanged: onCheckboxChanged,
                 textController: textController,
-                hintText: "Вариант",
+                hintText: "Вариант ответа",
               )
             : CustomRadioButtonTextField(
-                value: option,
-                groupValue: selectedOption,
+                value: optionIndex.toString(),
+                groupValue: selectedOption?.toString(),
                 onChanged: onRadioChanged,
                 textController: textController,
-                hintText: "Вариант",
+                hintText: "Вариант ответа",
               ),
       ),
       IconButton(
