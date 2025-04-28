@@ -3,7 +3,7 @@ import 'package:ui_utils/ui_utils.dart';
 
 
 class CreateAndEditPageAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const CreateAndEditPageAppBar();
+  const CreateAndEditPageAppBar({super.key});
   @override
   Widget build(BuildContext context) {
     return Row(

@@ -1,5 +1,3 @@
-//part of '../../screens.dart';
-
 import 'package:flutter/material.dart';
 import 'package:ui_components/ui_components.dart';
 import 'package:ui_utils/ui_utils.dart';
