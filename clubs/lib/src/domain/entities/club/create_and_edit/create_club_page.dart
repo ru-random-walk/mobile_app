@@ -7,6 +7,7 @@ import 'package:clubs/src/domain/entities/club/create_and_edit/club/input_field_
 import 'package:clubs/src/domain/entities/club/create_and_edit/club/button_create_group.dart';
 import 'package:clubs/src/domain/entities/club/create_and_edit/tests/create_test_page.dart';
 import 'package:clubs/src/domain/entities/club/create_and_edit/app_bar.dart'; 
+import 'package:clubs/src/data/create_club_service.dart';
 
 part 'club/popup.dart';
 part 'club/condition_string.dart';
@@ -25,6 +26,8 @@ class _GroupFormScreenState extends State<GroupFormScreen> {
   bool isConditionAdded = false;
   int infoCount = 1; 
   String conditionName = "";
+  final ClubApiService clubApiService = ClubApiService();
+
 
   void onConditionAdded(String condition, int count, String name) {
   setState(() {
@@ -139,9 +142,22 @@ class _GroupFormScreenState extends State<GroupFormScreen> {
                 type: ButtonType.primary,
                 color: ButtonColor.green,
                 text: 'Готово',
-                onPressed: () {
-                  //нажатие кнопки
-                },
+                onPressed: () async {
+                  final name = nameController.text.trim();
+                  if (name.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Введите название группы')));
+                    return;
+                  }
+
+                  final result = await clubApiService.createClub(name);
+
+                  if (result != null) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Группа создана: ${result['name']}')));
+                    Navigator.pop(context); 
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось создать группу')));
+                  }
+                }
               ),
             ),
           ),
