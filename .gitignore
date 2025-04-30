@@ -51,3 +51,5 @@ lib/firebase_options.dart
 /.vscode
 *.g.dart
 web/index.html
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist

@@ -31,6 +31,12 @@ class _ChatListBodyData extends StatelessWidget {
                     companion: chat.companion,
                     currentUserId: currentUserId,
                   ),
+                  onLastMessageChanged: (message) {
+                    context.read<ChatsListBloc>().add(
+                          LastMessageChatUpdated(
+                              chatId: chat.id, message: message),
+                        );
+                  },
                 ),
               ),
             ),

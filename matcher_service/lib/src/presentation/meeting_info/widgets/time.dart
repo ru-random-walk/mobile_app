@@ -58,6 +58,6 @@ class _MeetingInfoTimeWidget extends StatelessWidget {
   String _time(BuildContext context) => switch (meetingInfo) {
         AppointmentEntity _ => meetingInfo.timeStart.format(context),
         AvailableTimeEntity _ =>
-          '${meetingInfo.timeStart.format(context)} - ${meetingInfo.timeEnd.format(context)}',
+          '${meetingInfo.timeStart.format(context)} - ${meetingInfo.timeEnd!.format(context)}',
       };
 }

@@ -8,3 +8,13 @@ class GetChatsEvent extends ChatsListEvent {
 
   GetChatsEvent({required this.resetPagination});
 }
+
+class LastMessageChatUpdated extends ChatsListEvent {
+  final String chatId;
+  final MessageEntity? message;
+
+  LastMessageChatUpdated({
+    required this.chatId,
+    required this.message,
+  });
+}
