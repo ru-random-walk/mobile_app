@@ -95,6 +95,17 @@ class __MapWidgetState extends State<_MapWidget> {
 
   @override
   Widget build(BuildContext context) {
+    return FlutterMap(
+      children: [
+        TileLayer(
+          // Bring your own tiles
+          urlTemplate:
+              'https://tile.openstreetmap.org/{z}/{x}/{y}.png', // For demonstration only
+          userAgentPackageName: 'com.example.app', // Add your app identifier
+          // And many more recommended properties!
+        ),
+      ],
+    );
     return YandexMap(
       onMapCreated: (controller) async {
         _mapController = controller;
