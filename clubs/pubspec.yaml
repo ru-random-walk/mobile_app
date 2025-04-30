@@ -19,7 +19,7 @@ dependencies:
   utils:
     path: ../common/utils
   core:
-    path: core
+    path: ../core
   flutter_svg: ^2.0.10+1
   dio: ^5.8.0+1
   logger: ^2.5.0
