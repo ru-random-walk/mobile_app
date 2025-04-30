@@ -11,4 +11,13 @@ class ChatEntity {
     required this.companion,
     required this.lastMessage,
   });
+
+  ChatEntity copyWith({
+    MessageEntity? lastMessage,
+  }) =>
+      ChatEntity(
+        id: id,
+        companion: companion,
+        lastMessage: lastMessage ?? this.lastMessage,
+      );
 }

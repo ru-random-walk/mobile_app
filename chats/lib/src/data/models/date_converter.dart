@@ -9,7 +9,7 @@ class DateJsonConverter extends JsonConverter<DateTime, String> {
     final timeAndDate = json.split(' ');
     final time = timeAndDate[0];
     final date = timeAndDate[1].split('-').reversed.join('-');
-    final dateTime = DateTime.parse('$date $time:00');
+    final dateTime = DateTime.parse('$date $time:00').toLocal();
     return dateTime;
   }
 

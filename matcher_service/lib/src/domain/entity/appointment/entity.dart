@@ -6,7 +6,7 @@ class AppointmentEntity extends BaseMeetingEntity {
   @override
   final TimeOfDay timeStart;
   @override
-  final TimeOfDay timeEnd;
+  final TimeOfDay? timeEnd;
   @override
   final Geolocation location;
   @override
