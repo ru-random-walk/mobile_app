@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 part 'splash_state.dart';
 
 class SplashCubit extends Cubit<SplashState> {
-  final _tokenStorage = TokenStorage(); 
+  final _tokenStorage = TokenStorage();
 
   SplashCubit() : super(SplashInitial());
 

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auth/auth.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
@@ -42,7 +44,9 @@ class RefreshTokenInterceptor extends QueuedInterceptor {
         },
         (_) async {
           try {
+            log(err.requestOptions.headers['Authorization']);
             await _addAuthHeaders(err.requestOptions.headers);
+            log(err.requestOptions.headers['Authorization']);
             final newResponse = await _innerDio.fetch(err.requestOptions);
             handler.resolve(newResponse);
           } catch (e) {
@@ -64,6 +68,7 @@ class RefreshTokenInterceptor extends QueuedInterceptor {
     final accessToken = await _tokenStorage.getToken();
     final tokenType = await _tokenStorage.getTokenType();
     if (accessToken == null || tokenType == null) return;
+    log('Authorization: $tokenType $accessToken');
     headers['Authorization'] = '$tokenType $accessToken';
   }
 }
