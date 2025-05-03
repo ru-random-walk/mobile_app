@@ -37,7 +37,7 @@ class _FirebaseTokenManager {
   /// Получение нового токена
   Future<String?> get _newToken async {
     final newToken = await _messaging.getToken();
-    log(newToken ?? 'No token');
+    log('FCM token: $newToken');
     return newToken;
   }
 
@@ -48,16 +48,19 @@ class _FirebaseTokenManager {
     return lastToken == newToken;
   }
 
-  Future<bool> updateToken(String oldToken, String newToken) =>
+  Future<bool> updateTokenOnServer(String oldToken, String newToken) =>
       tokenSender.updateToken(oldToken, newToken);
 
-  Future<bool> setNewToken(String token) => tokenSender.setNewToken(token);
+  Future<bool> setNewTokenOnServer(String token) => tokenSender.setNewToken(token);
 
   /// Иницализация токена при самом первом запуске приложения
   Future<void> _initTokenOnVeryFirstLaunch() async {
     final token = await _newToken;
     if (token == null) return;
-    await setNewToken(token);
+    final sended = await setNewTokenOnServer(token);
+    if (sended) {
+      _setNewToken(token);
+    }
   }
 
   /// Метод для обновления токена
@@ -70,7 +73,7 @@ class _FirebaseTokenManager {
     String oldToken,
     String newToken,
   ) async {
-    final sended = await updateToken(oldToken, newToken);
+    final sended = await updateTokenOnServer(oldToken, newToken);
     if (sended) {
       await _setNewToken(newToken);
     }
