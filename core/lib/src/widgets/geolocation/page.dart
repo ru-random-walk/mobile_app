@@ -13,6 +13,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:ui_components/ui_components.dart';
 import 'package:ui_utils/ui_utils.dart';
+import 'package:vector_map_tiles/vector_map_tiles.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 import '../../data/data_source/geocoder.dart';

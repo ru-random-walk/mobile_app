@@ -95,17 +95,41 @@ class __MapWidgetState extends State<_MapWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return FlutterMap(
-      children: [
-        TileLayer(
-          // Bring your own tiles
-          urlTemplate:
-              'https://tile.openstreetmap.org/{z}/{x}/{y}.png', // For demonstration only
-          userAgentPackageName: 'com.example.app', // Add your app identifier
-          // And many more recommended properties!
-        ),
-      ],
-    );
+    return FutureBuilder(
+        future: StyleReader(
+                uri:
+                    'https://api.maptiler.com/maps/basic-v2/style.json?key=hqqs4Li8YVQUqFR9TtZF')
+            .read(),
+        builder: (context, data) {
+          if (!data.hasData) {
+            return const Center(
+              child: CircularProgressIndicator.adaptive(),
+            );
+          }
+          return FlutterMap(
+            mapController: MapController(),
+            options: MapOptions(minZoom: 2),
+            children: [
+              TileLayer( // Bring your own tiles
+        urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', // For demonstration only
+        userAgentPackageName: 'com.example.app', // Add your app identifier
+        // And many more recommended properties!
+      ),
+              // VectorTileLayer(
+              //   tileProviders: data.data!.providers,
+              //   theme: data.data!.theme,
+              //   sprites: data.data!.sprites,
+              // ),
+              // TileLayer(
+
+              //   // Bring your own tiles
+              //   // urlTemplate:
+              //   //     'https://api.maptiler.com/maps/basic-v2/{z}/{x}/{y}.png?key=hqqs4Li8YVQUqFR9TtZF', // For demonstration only
+              //   // And many more recommended properties!
+              // ),
+            ],
+          );
+        });
     return YandexMap(
       onMapCreated: (controller) async {
         _mapController = controller;
