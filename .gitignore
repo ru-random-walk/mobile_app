@@ -50,7 +50,9 @@ ios/Runner/Info.plist
 lib/firebase_options.dart
 /.vscode
 *.g.dart
-web/index.html
 ios/Runner/GoogleService-Info.plist
 android/app/google-services.json
 firebase.json
+android/app/.cxx
+Makefile
+auth/lib/src/data/repositories/google_client_id.dart
