@@ -25,13 +25,13 @@ dependencies:
   json_annotation: ^4.9.0
   flutter_bloc: ^8.1.6
   retrofit: ^4.4.0
-  yandex_mapkit: ^4.1.0
-  permission_handler: ^11.3.1
   bloc_concurrency: ^0.2.5
   flutter_svg: ^2.0.10+1
   rxdart: ^0.28.0
   flutter_map: ^7.0.2
   vector_map_tiles: ^8.0.0
+  maplibre_gl: ^0.21.0
+  geolocator: ^14.0.0
 
 dev_dependencies:
   flutter_test:

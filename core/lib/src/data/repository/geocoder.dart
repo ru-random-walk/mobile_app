@@ -1,12 +1,7 @@
-import 'package:core/src/data/data_source/geocoder.dart';
-import 'package:core/src/data/models/query.dart';
 import 'package:core/src/domain/repository/geocoder.dart';
 import 'package:core/core.dart';
-import 'package:core/src/error/base.dart';
+import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:utils/utils.dart';
-import 'package:yandex_mapkit/yandex_mapkit.dart';
-
-import '../../domain/enitites/geolocation.dart';
 
 class GeocoderRepositoryI implements GeocoderRepository {
   final GeocoderDataSource _dataSource;
@@ -15,7 +10,7 @@ class GeocoderRepositoryI implements GeocoderRepository {
 
   @override
   Future<Either<BaseError, Geolocation>> getGeolocationByPoint(
-    Point point,
+    LatLng point,
   ) async {
     try {
       final latitude = point.latitude;

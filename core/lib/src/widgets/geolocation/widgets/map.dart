@@ -1,5 +1,7 @@
 part of '../page.dart';
 
+const _apiKey = String.fromEnvironment('MAP_TILER_API_KEY');
+
 class _MapWidget extends StatefulWidget {
   final Stream<MapUIEvent> mapUIEventStream;
   final Geolocation? initialGeolocation;
@@ -15,16 +17,15 @@ class _MapWidget extends StatefulWidget {
 }
 
 class __MapWidgetState extends State<_MapWidget> {
-  late final YandexMapController _mapController;
-  CameraPosition? _userLocation;
+  MapLibreMapController? _mapController;
   late final StreamSubscription<MapUIEvent> _mapUIEventsSubscription;
-  static const _mapAnimation = MapAnimation(
-    type: MapAnimationType.linear,
-    duration: 0.3,
-  );
+  final String _styleUrl =
+      'https://api.maptiler.com/maps/basic-v2/style.json?key=$_apiKey';
+
+  bool _locationPermissionGranted = false;
 
   @override
-  initState() {
+  void initState() {
     super.initState();
     _mapUIEventsSubscription = widget.mapUIEventStream.listen((event) {
       switch (event) {
@@ -38,50 +39,50 @@ class __MapWidgetState extends State<_MapWidget> {
     });
   }
 
-  Future<void> _zoomToUserCurrentPosition() async {
-    _userLocation = await _mapController.getUserCameraPosition();
-    // если местоположение найдено, центрируем карту относительно этой точки
-    if (_userLocation != null) {
-      await _moveCameraTo(_userLocation!);
+  Future<Position?> _getCurrentPosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return null;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return null;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return null;
+    }
+    setState(() {
+      _locationPermissionGranted = true;
+    });
+    return await Geolocator.getCurrentPosition();
+  }
+
+  Future<void> _initLocationLayer() async {
+    _getCurrentPosition();
+    if (widget.initialGeolocation != null) {
+      await _moveCameraTo(widget.initialGeolocation!.point);
+    } else {
+      await _zoomToUserCurrentPosition();
     }
   }
 
-  Future<void> _moveCameraTo(CameraPosition cameraPosition) =>
-      _mapController.moveCamera(
-        CameraUpdate.newCameraPosition(
-          cameraPosition.copyWith(zoom: 20),
+  Future<void> _zoomToUserCurrentPosition() async {
+    final userPosition = await _getCurrentPosition();
+    if (userPosition != null) {
+      await _moveCameraTo(
+        LatLng(
+          userPosition.latitude,
+          userPosition.longitude,
         ),
-        animation: _mapAnimation,
       );
-
-  Future<void> zoomIn() async {
-    await _mapController.moveCamera(
-      CameraUpdate.zoomIn(),
-      animation: _mapAnimation,
-    );
-  }
-
-  Future<void> zoomOut() async {
-    await _mapController.moveCamera(
-      CameraUpdate.zoomOut(),
-      animation: _mapAnimation,
-    );
-  }
-
-  /// Метод, который включает слой местоположения пользователя на карте
-  /// Выполняется проверка на доступ к местоположению, в случае отсутствия
-  /// разрешения - выводит сообщение
-  Future<void> _initLocationLayer() async {
-    final locationPermissionIsGranted =
-        await Permission.location.request().isGranted;
-
-    if (locationPermissionIsGranted) {
-      await _mapController.toggleUserLayer(visible: true);
-      if (widget.initialGeolocation != null) {
-        final position =
-            CameraPosition(target: widget.initialGeolocation!.point);
-        _moveCameraTo(position);
-      }
     } else {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -93,68 +94,53 @@ class __MapWidgetState extends State<_MapWidget> {
     }
   }
 
+  Future<void> _moveCameraTo(LatLng target, {double zoom = 17}) async {
+    await _mapController?.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(target: target, zoom: zoom),
+      ),
+    );
+  }
+
+  Future<void> zoomIn() async {
+    await _mapController?.animateCamera(CameraUpdate.zoomIn());
+  }
+
+  Future<void> zoomOut() async {
+    await _mapController?.animateCamera(CameraUpdate.zoomOut());
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: StyleReader(
-                uri:
-                    'https://api.maptiler.com/maps/basic-v2/style.json?key=hqqs4Li8YVQUqFR9TtZF')
-            .read(),
-        builder: (context, data) {
-          if (!data.hasData) {
-            return const Center(
-              child: CircularProgressIndicator.adaptive(),
-            );
-          }
-          return FlutterMap(
-            mapController: MapController(),
-            options: MapOptions(minZoom: 2),
-            children: [
-              TileLayer( // Bring your own tiles
-        urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', // For demonstration only
-        userAgentPackageName: 'com.example.app', // Add your app identifier
-        // And many more recommended properties!
-      ),
-              // VectorTileLayer(
-              //   tileProviders: data.data!.providers,
-              //   theme: data.data!.theme,
-              //   sprites: data.data!.sprites,
-              // ),
-              // TileLayer(
+    final initialTarget = widget.initialGeolocation?.point ??
+        const LatLng(55.751244, 37.618423); // fallback to Moscow
 
-              //   // Bring your own tiles
-              //   // urlTemplate:
-              //   //     'https://api.maptiler.com/maps/basic-v2/{z}/{x}/{y}.png?key=hqqs4Li8YVQUqFR9TtZF', // For demonstration only
-              //   // And many more recommended properties!
-              // ),
-            ],
-          );
-        });
-    return YandexMap(
+    return MapLibreMap(
+      styleString: _styleUrl,
+      initialCameraPosition: CameraPosition(
+        target: initialTarget,
+        zoom: 14,
+      ),
       onMapCreated: (controller) async {
         _mapController = controller;
         _initLocationLayer();
       },
-      onCameraPositionChanged: (cameraPosition, reason, finished) {
-        final point = cameraPosition.target;
-        final zoom = cameraPosition.zoom;
-        BlocProvider.of<GeolocationBloc>(context).add(GetLocationNameByPoint(
-          point: point,
-          zoom: zoom.toInt(),
-        ));
-      },
-      onUserLocationAdded: (view) async {
-        if (widget.initialGeolocation == null) {
-          // получаем местоположение пользователя
-          _zoomToUserCurrentPosition();
+      onCameraIdle: () async {
+        final cameraPosition = _mapController?.cameraPosition;
+        final center = cameraPosition?.target;
+        final zoom = cameraPosition?.zoom;
+        if (center != null && zoom != null && context.mounted) {
+          BlocProvider.of<GeolocationBloc>(context).add(
+            GetLocationNameByPoint(
+              point: center,
+              zoom: zoom.toInt(),
+            ),
+          );
         }
-        // меняем внешний вид маркера - делаем его непрозрачным
-        return view.copyWith(
-          pin: view.pin.copyWith(
-            opacity: 1,
-          ),
-        );
       },
+      trackCameraPosition: true,
+      compassEnabled: false,
+      myLocationEnabled: _locationPermissionGranted,
     );
   }
 
