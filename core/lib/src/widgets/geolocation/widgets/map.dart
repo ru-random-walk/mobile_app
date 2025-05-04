@@ -91,7 +91,7 @@ class __MapWidgetState extends State<_MapWidget> {
     }
   }
 
-  Future<void> _moveCameraTo(LatLng target, {double zoom = 17}) async {
+  Future<void> _moveCameraTo(LatLng target, {double zoom = 15}) async {
     await _mapController?.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(target: target, zoom: zoom),
@@ -112,37 +112,34 @@ class __MapWidgetState extends State<_MapWidget> {
     final initialTarget = widget.initialGeolocation?.point ??
         const LatLng(55.751244, 37.618423); // fallback to Moscow
 
-    return SafeArea(
-      top: false,
-      child: MapLibreMap(
-        styleString: mapUrl,
-        initialCameraPosition: CameraPosition(
-          target: initialTarget,
-          zoom: 14,
-        ),
-        onMapCreated: (controller) async {
-          _mapController = controller;
-        },
-        onCameraIdle: () async {
-          final cameraPosition = _mapController?.cameraPosition;
-          final center = cameraPosition?.target;
-          final zoom = cameraPosition?.zoom;
-          if (center != null && zoom != null && context.mounted) {
-            BlocProvider.of<GeolocationBloc>(context).add(
-              GetLocationNameByPoint(
-                point: center,
-                zoom: zoom.toInt(),
-              ),
-            );
-          }
-        },
-        onMapIdle: () {
-          _initLocationLayer();
-        },
-        trackCameraPosition: true,
-        compassEnabled: false,
-        myLocationEnabled: _locationPermissionGranted,
+    return MapLibreMap(
+      styleString: mapUrl,
+      initialCameraPosition: CameraPosition(
+        target: initialTarget,
+        zoom: 14,
       ),
+      onMapCreated: (controller) async {
+        _mapController = controller;
+      },
+      onCameraIdle: () async {
+        final cameraPosition = _mapController?.cameraPosition;
+        final center = cameraPosition?.target;
+        final zoom = cameraPosition?.zoom;
+        if (center != null && zoom != null && context.mounted) {
+          BlocProvider.of<GeolocationBloc>(context).add(
+            GetLocationNameByPoint(
+              point: center,
+              zoom: zoom.toInt(),
+            ),
+          );
+        }
+      },
+      onMapIdle: () {
+        _initLocationLayer();
+      },
+      trackCameraPosition: true,
+      compassEnabled: false,
+      myLocationEnabled: _locationPermissionGranted,
     );
   }
 

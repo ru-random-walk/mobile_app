@@ -72,14 +72,17 @@ class _MapViewerState extends State<MapViewer> {
           rotateGesturesEnabled: true,
           compassEnabled: false,
         ),
-        Align(
-          alignment: Alignment.bottomLeft,
-          child: SizedBox(
-            height: 40.toFigmaSize,
-            width: 100.toFigmaSize,
-            child: Image.asset(
-              'packages/core/assets/map_tiler_logo.png',
-              fit: BoxFit.contain,
+        SafeArea(
+          top: false,
+          child: Align(
+            alignment: Alignment.bottomLeft,
+            child: SizedBox(
+              height: 40.toFigmaSize,
+              width: 100.toFigmaSize,
+              child: Image.asset(
+                'packages/core/assets/map_tiler_logo.png',
+                fit: BoxFit.contain,
+              ),
             ),
           ),
         ),
