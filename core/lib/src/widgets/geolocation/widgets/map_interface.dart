@@ -4,7 +4,6 @@ class _MapInterfaceWidget extends StatefulWidget {
   final StreamSink<MapUIEvent> mapUIEventSink;
 
   const _MapInterfaceWidget({
-    super.key,
     required this.mapUIEventSink,
   });
 
@@ -24,8 +23,11 @@ class _MapInterfaceWidgetState extends State<_MapInterfaceWidget> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: EdgeInsets.all(
+        padding: EdgeInsets.fromLTRB(
           16.toFigmaSize,
+          16.toFigmaSize,
+          16.toFigmaSize,
+          0,
         ),
         child: Column(
           children: [
@@ -61,6 +63,20 @@ class _MapInterfaceWidgetState extends State<_MapInterfaceWidget> {
                   }
                 }
               },
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 2.toFigmaSize),
+                child: SizedBox(
+                  height: 40.toFigmaSize,
+                  width: 100.toFigmaSize,
+                  child: Image.asset(
+                    'packages/core/assets/map_tiler_logo.png',
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
             ),
           ],
         ),
