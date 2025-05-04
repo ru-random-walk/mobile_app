@@ -25,6 +25,15 @@ class GeolocationBloc extends Bloc<GeolocationEvent, GeolocationState> {
     GetLocationNameByPoint event,
     Emitter<GeolocationState> emit,
   ) async {
+    final curState = state;
+    if (curState is GeolocationData) {
+      final curGeolocationData = curState.geolocation;
+      final requestedGeolocationData = event.point;
+      if (curGeolocationData.latitude == requestedGeolocationData.latitude &&
+          curGeolocationData.longitude == requestedGeolocationData.longitude) {
+        return;
+      }
+    }
     emit(GeolocationLoading());
     final res = await _geocodingUseCase(event.point);
     res.fold(

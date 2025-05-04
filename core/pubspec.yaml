@@ -48,6 +48,7 @@ dev_dependencies:
 flutter:
   assets:
     - packages/core/assets/place_fill.png
+    - packages/core/assets/map_tiler_logo.png
 
   # To add assets to your package, add an assets section, like this:
   # assets:

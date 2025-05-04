@@ -1,10 +1,9 @@
 import 'package:core/src/domain/enitites/geolocation.dart';
+import 'package:core/src/map_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:geolocator/geolocator.dart';
-
-const _apiKey = String.fromEnvironment('MAP_TILER_API_KEY');
 
 class MapViewer extends StatefulWidget {
   final Geolocation geolocation;
@@ -20,19 +19,7 @@ class MapViewer extends StatefulWidget {
 
 class _MapViewerState extends State<MapViewer> {
   MapLibreMapController? _mapController;
-
-  final String _styleUrl =
-      'https://api.maptiler.com/maps/basic-v2/style.json?key=$_apiKey';
-
   bool _locationPermissionGranted = false;
-
-  Future<void> _moveCameraTo(LatLng point, {double zoom = 15}) async {
-    await _mapController?.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(target: point, zoom: zoom),
-      ),
-    );
-  }
 
   Future<Position?> _getCurrentPosition() async {
     bool serviceEnabled;
@@ -66,7 +53,7 @@ class _MapViewerState extends State<MapViewer> {
   Widget build(BuildContext context) {
     return MapLibreMap(
       key: ObjectKey(widget.geolocation),
-      styleString: _styleUrl,
+      styleString: mapUrl,
       initialCameraPosition: CameraPosition(
         target: widget.geolocation.point,
         zoom: 14,
@@ -75,7 +62,7 @@ class _MapViewerState extends State<MapViewer> {
         _mapController = controller;
       },
       onStyleLoadedCallback: () async {
-        await _initLocationLayer();
+        _initLocationLayer();
         await _addMarker(widget.geolocation.point);
       },
       myLocationEnabled: _locationPermissionGranted,
@@ -91,7 +78,7 @@ class _MapViewerState extends State<MapViewer> {
     _mapController?.addSymbol(
       SymbolOptions(
         geometry: point,
-        iconImage: 'pointer', // Default Mapbox-style icon
+        iconImage: 'pointer',
       ),
     );
   }

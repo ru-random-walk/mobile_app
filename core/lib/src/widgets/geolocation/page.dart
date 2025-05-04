@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:math';
 
+import 'package:core/src/map_config.dart';
 import 'package:core/src/widgets/geolocation/bloc/geolocation_bloc.dart';
 import 'package:core/src/widgets/geolocation/widgets/ui_events.dart';
 import 'package:core/src/widgets/shared/confirm_button.dart';
@@ -69,6 +71,16 @@ class _PickGeolocationPageState extends State<PickGeolocationPage> {
             _MapInterfaceWidget(
               mapUIEventSink: _mapUIEventsController.sink,
             ),
+            Positioned(
+              left: 20.toFigmaSize,
+              bottom: 20.toFigmaSize,
+              width: 100.toFigmaSize,
+              height: 30.toFigmaSize,
+              child: Image.asset(
+                'packages/core/assets/map_tiler_logo.png',
+                fit: BoxFit.contain,
+              ),
+            )
           ],
         ),
       ),

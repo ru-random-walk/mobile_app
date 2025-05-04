@@ -1,13 +1,10 @@
 part of '../page.dart';
 
-const _apiKey = String.fromEnvironment('MAP_TILER_API_KEY');
-
 class _MapWidget extends StatefulWidget {
   final Stream<MapUIEvent> mapUIEventStream;
   final Geolocation? initialGeolocation;
 
   const _MapWidget({
-    super.key,
     required this.mapUIEventStream,
     this.initialGeolocation,
   });
@@ -19,10 +16,8 @@ class _MapWidget extends StatefulWidget {
 class __MapWidgetState extends State<_MapWidget> {
   MapLibreMapController? _mapController;
   late final StreamSubscription<MapUIEvent> _mapUIEventsSubscription;
-  final String _styleUrl =
-      'https://api.maptiler.com/maps/basic-v2/style.json?key=$_apiKey';
-
   bool _locationPermissionGranted = false;
+  bool _isLocationLayerInitialized = false;
 
   @override
   void initState() {
@@ -66,6 +61,8 @@ class __MapWidgetState extends State<_MapWidget> {
   }
 
   Future<void> _initLocationLayer() async {
+    if (_isLocationLayerInitialized) return;
+    _isLocationLayerInitialized = true;
     _getCurrentPosition();
     if (widget.initialGeolocation != null) {
       await _moveCameraTo(widget.initialGeolocation!.point);
@@ -116,14 +113,13 @@ class __MapWidgetState extends State<_MapWidget> {
         const LatLng(55.751244, 37.618423); // fallback to Moscow
 
     return MapLibreMap(
-      styleString: _styleUrl,
+      styleString: mapUrl,
       initialCameraPosition: CameraPosition(
         target: initialTarget,
         zoom: 14,
       ),
       onMapCreated: (controller) async {
         _mapController = controller;
-        _initLocationLayer();
       },
       onCameraIdle: () async {
         final cameraPosition = _mapController?.cameraPosition;
@@ -138,9 +134,13 @@ class __MapWidgetState extends State<_MapWidget> {
           );
         }
       },
+      onMapIdle: () {
+        _initLocationLayer();
+      },
       trackCameraPosition: true,
       compassEnabled: false,
       myLocationEnabled: _locationPermissionGranted,
+      attributionButtonMargins: const Point(10, -10),
     );
   }
 
