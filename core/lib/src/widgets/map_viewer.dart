@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:ui_utils/ui_utils.dart';
 
 class MapViewer extends StatefulWidget {
   final Geolocation geolocation;
@@ -51,23 +52,38 @@ class _MapViewerState extends State<MapViewer> {
 
   @override
   Widget build(BuildContext context) {
-    return MapLibreMap(
-      key: ObjectKey(widget.geolocation),
-      styleString: mapUrl,
-      initialCameraPosition: CameraPosition(
-        target: widget.geolocation.point,
-        zoom: 14,
-      ),
-      onMapCreated: (controller) async {
-        _mapController = controller;
-      },
-      onStyleLoadedCallback: () async {
-        _initLocationLayer();
-        await _addMarker(widget.geolocation.point);
-      },
-      myLocationEnabled: _locationPermissionGranted,
-      rotateGesturesEnabled: true,
-      compassEnabled: false,
+    return Stack(
+      children: [
+        MapLibreMap(
+          key: ObjectKey(widget.geolocation),
+          styleString: mapUrl,
+          initialCameraPosition: CameraPosition(
+            target: widget.geolocation.point,
+            zoom: 14,
+          ),
+          onMapCreated: (controller) async {
+            _mapController = controller;
+          },
+          onStyleLoadedCallback: () async {
+            _initLocationLayer();
+            await _addMarker(widget.geolocation.point);
+          },
+          myLocationEnabled: _locationPermissionGranted,
+          rotateGesturesEnabled: true,
+          compassEnabled: false,
+        ),
+        Align(
+          alignment: Alignment.bottomLeft,
+          child: SizedBox(
+            height: 40.toFigmaSize,
+            width: 100.toFigmaSize,
+            child: Image.asset(
+              'packages/core/assets/map_tiler_logo.png',
+              fit: BoxFit.contain,
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -77,9 +93,7 @@ class _MapViewerState extends State<MapViewer> {
     await _mapController?.addImage('pointer', list);
     _mapController?.addSymbol(
       SymbolOptions(
-        geometry: point,
-        iconImage: 'pointer',
-      ),
+          geometry: point, iconImage: 'pointer', iconAnchor: 'bottom'),
     );
   }
 }

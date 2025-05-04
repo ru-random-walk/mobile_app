@@ -14,7 +14,7 @@ class _MapPreview extends StatelessWidget {
           Positioned(
             left: 16.toFigmaSize,
             right: 16.toFigmaSize,
-            bottom: 16.toFigmaSize,
+            bottom: 40.toFigmaSize,
             child: SafeArea(
               child: CustomButton(
                 text: 'Проложить маршрут',
