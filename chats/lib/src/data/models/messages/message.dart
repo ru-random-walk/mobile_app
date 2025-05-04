@@ -1,8 +1,8 @@
 import 'package:chats/src/data/models/date_converter.dart';
 import 'package:chats/src/data/models/messages/payload/payload.dart';
 import 'package:chats/src/data/models/messages/payload/text.dart';
+import 'package:chats/src/data/models/messages/payload/walk_request/base.dart';
 import 'package:chats/src/data/models/messages/type.dart';
-import 'package:chats/src/data/models/messages/payload/walk_request.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'history/text_message.dart';
@@ -40,7 +40,7 @@ class PayloadConverter implements JsonConverter<Payload, Map<String, dynamic>> {
     final enumType = MessageType.fromString(type);
     return switch (enumType) {
       MessageType.text => TextPayloadModel.fromJson(json),
-      MessageType.requestForWalk => RequestForWalkPayloadModel.fromJson(json),
+      MessageType.requestForWalk => RequestForWalkPayloadModelResponse.fromJson(json),
       MessageType.unknown => throw UnimplementedError(),
     };
   }

@@ -56,17 +56,33 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         ),
       );
 
-  void _onInviteMessageAdded(InviteMessageSended event, Emitter emit) =>
-      _sendMessageUseCase(
-        InvitationMessageEntity(
-          timestamp: DateTime.now(),
-          isMy: true,
-          isChecked: false,
-          planDateTimeOfMeeting: event.invite.date,
-          place: event.invite.place,
-          status: InvitationStatus.pending,
-        ),
-      );
+  void _onInviteMessageAdded(InviteMessageSended event, Emitter emit) {
+    final date = event.invite.date;
+    final timeInDate = Duration(
+        hours: date.hour,
+        minutes: date.minute,
+        seconds: date.second,
+        milliseconds: date.millisecond,
+        microseconds: date.microsecond);
+    final onlyDate = date.subtract(timeInDate);
+    final selectedTime = event.invite.time;
+    final inviteDateTime = onlyDate.add(
+      Duration(
+        hours: selectedTime.hour,
+        minutes: selectedTime.minute,
+      ),
+    );
+    _sendMessageUseCase(
+      InvitationMessageEntity(
+        timestamp: DateTime.now(),
+        isMy: true,
+        isChecked: false,
+        planDateTimeOfMeeting: inviteDateTime,
+        place: event.invite.place,
+        status: InvitationStatus.pending,
+      ),
+    );
+  }
 
   void _onLoadData(LoadData event, Emitter emit) async {
     if (_getMessagesUseCase.allPagesLoaded) return;

@@ -6,8 +6,8 @@ part of '../message.dart';
 class RequestForWalkMessageModel extends BaseHistoryMessageModel {
   @override
   @PayloadConverter()
-  RequestForWalkPayloadModel get payload =>
-      super.payload as RequestForWalkPayloadModel;
+  RequestForWalkPayloadModelResponse get payload =>
+      super.payload as RequestForWalkPayloadModelResponse;
 
   RequestForWalkMessageModel({
     required super.id,

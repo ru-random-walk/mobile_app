@@ -8,7 +8,7 @@ part 'message_request.g.dart';
   createFactory: false,
 )
 class SendMessageModel {
-  Payload payload;
+  SendablePayload payload;
   String chatId;
   String sender;
   String recipient;
