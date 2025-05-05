@@ -11,7 +11,7 @@ part 'get_clubs/get_id_clubs.dart';
 
 class ClubApiService {
   final dioClient = NetworkConfig.instance.dio;
-  final String url = 'https://random-walk.ru:44424/club/graphql';
+  final String url = '/club/graphql';
   final Logger logger = Logger();
 
   Future<Map<String, dynamic>?> performPostRequest(String query, Map<String, dynamic> variables) async {
