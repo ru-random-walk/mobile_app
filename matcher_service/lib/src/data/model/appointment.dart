@@ -7,8 +7,8 @@ class AppointmentDetailsModel {
   final String id;
   final List<String> participants;
   final DateTime startsAt;
-  final DateTime updatedAt;
-  final DateTime endedAt;
+  final DateTime? updatedAt;
+  final DateTime? endedAt;
   final String status;
   final double longitude;
   final double latitude;

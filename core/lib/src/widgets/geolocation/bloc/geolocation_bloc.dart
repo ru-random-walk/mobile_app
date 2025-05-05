@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:core/src/widgets/geolocation/bloc/debouncer.dart';
+import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:meta/meta.dart';
-import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 import '../../../domain/enitites/geolocation.dart';
 import '../../../domain/usecase/reverse_geocoding.dart';
@@ -25,6 +25,15 @@ class GeolocationBloc extends Bloc<GeolocationEvent, GeolocationState> {
     GetLocationNameByPoint event,
     Emitter<GeolocationState> emit,
   ) async {
+    final curState = state;
+    if (curState is GeolocationData) {
+      final curGeolocationData = curState.geolocation;
+      final requestedGeolocationData = event.point;
+      if (curGeolocationData.latitude == requestedGeolocationData.latitude &&
+          curGeolocationData.longitude == requestedGeolocationData.longitude) {
+        return;
+      }
+    }
     emit(GeolocationLoading());
     final res = await _geocodingUseCase(event.point);
     res.fold(

@@ -29,7 +29,7 @@ class AuthUseCase implements BaseUseCase<BaseError, void, AuthProvider> {
     final response =
         await _authRepository.authVia(TokenExchangeRequestEntity(authType));
     if (response.isRight) {
-      _tokenStorage.updateData(response.rightValue);
+      await _tokenStorage.updateData(response.rightValue);
     }
     return response;
   }

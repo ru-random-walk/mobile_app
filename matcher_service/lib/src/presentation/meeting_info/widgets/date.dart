@@ -17,6 +17,7 @@ class _MeetingInfoDateWidget extends StatelessWidget {
         child: Center(
           child: Text(
             _formattedDate,
+            textAlign: TextAlign.center,
             style: context.textTheme.h4.copyWith(
               color: context.colors.base_80,
             ),

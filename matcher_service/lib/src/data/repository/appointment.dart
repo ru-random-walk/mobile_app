@@ -9,12 +9,15 @@ import 'package:utils/utils.dart';
 class AppointmentRepository implements AppointmentRepositoryI {
   final MatcherDataSource _matcherDataSource;
   final UsersDataSource _usersDataSource;
+  final GeocoderDataSource _geocoderDataSource;
 
   AppointmentRepository({
     required MatcherDataSource matcherDataSource,
     required UsersDataSource usersDataSource,
+    required GeocoderDataSource geocoderDataSource,
   })  : _matcherDataSource = matcherDataSource,
-        _usersDataSource = usersDataSource;
+        _usersDataSource = usersDataSource,
+        _geocoderDataSource = geocoderDataSource;
 
   @override
   Future<Either<BaseError, AppointmentEntity>> getAppointmentDetails(
@@ -30,9 +33,24 @@ class AppointmentRepository implements AppointmentRepositoryI {
         PageQueryModel(page: 0, size: 1),
         [partnerId],
       );
+      final geolocationWithName =
+          await _geocoderDataSource.getGeolocationByPoint(
+        GeocoderQueryModel(
+          latitude: appointmentModel.latitude,
+          longitude: appointmentModel.longitude,
+        ),
+      );
+      final geolocation = Geolocation(
+        latitude: appointmentModel.latitude,
+        longitude: appointmentModel.longitude,
+        city: geolocationWithName.city,
+        street: geolocationWithName.street,
+        building: geolocationWithName.building,
+      );
       return Right(
         appointmentModel.toEntity(
           partnerModel.content.first,
+          geolocation,
         ),
       );
     } catch (e, s) {

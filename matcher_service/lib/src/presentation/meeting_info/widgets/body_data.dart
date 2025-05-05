@@ -7,6 +7,7 @@ class _MeetingInfoBodyData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final meetingInfo = meetingEntity;
     final divider = SizedBox(height: 24.toFigmaSize);
     return SingleChildScrollView(
       child: Padding(
@@ -23,6 +24,11 @@ class _MeetingInfoBodyData extends StatelessWidget {
             _MeetingInfoTimeWidget(meetingEntity),
             divider,
             _MeetingInfoPlaceWidget(meetingEntity),
+            divider,
+            if (meetingInfo is AppointmentEntity)
+              _MeetingInfoUserWidget(
+                partner: meetingInfo.partner,
+              )
           ],
         ),
       ),

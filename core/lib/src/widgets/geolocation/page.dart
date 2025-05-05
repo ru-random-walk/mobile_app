@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:core/src/map_config.dart';
 import 'package:core/src/widgets/geolocation/bloc/geolocation_bloc.dart';
 import 'package:core/src/widgets/geolocation/widgets/ui_events.dart';
 import 'package:core/src/widgets/shared/confirm_button.dart';
@@ -9,10 +10,10 @@ import 'package:core/src/widgets/shared/header/header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:ui_components/ui_components.dart';
 import 'package:ui_utils/ui_utils.dart';
-import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 import '../../data/data_source/geocoder.dart';
 import '../../data/repository/geocoder.dart';

@@ -23,6 +23,7 @@ class GetAppointmentDetailsUseCase
       appointmentRepository: AppointmentRepository(
         matcherDataSource: MatcherDataSource(),
         usersDataSource: UsersDataSource(),
+        geocoderDataSource: GeocoderDataSource(),
       ),
       currentUserId: userId,
     );

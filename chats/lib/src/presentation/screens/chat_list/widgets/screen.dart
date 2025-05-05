@@ -10,22 +10,41 @@ class _ChatsListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = context.read<ChatsListBloc>();
     return Scaffold(
-        appBar: _ChatListAppBar(),
-        body: BlocBuilder<ChatsListBloc, ChatsListState>(
-          builder: (context, state) {
-            return switch (state) {
-              ChatsListLoading() => const Center(
-                  child: CircularProgressIndicator.adaptive(),
-                ),
-              ChatsListData() => _ChatListBodyData(
-                  chats: state.chats,
-                  currentUserId: currentUserId,
-                ),
-              // TODO: Handle this case.
-              ChatsListError() => throw UnimplementedError(),
-            };
-          },
-        ));
+      appBar: _ChatListAppBar(),
+      body: RefreshIndicator.adaptive(
+        onRefresh: () async => bloc.add(GetChatsEvent(resetPagination: true)),
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            BlocBuilder<ChatsListBloc, ChatsListState>(
+              builder: (context, state) {
+                return switch (state) {
+                  ChatsListLoading() => const SliverFillRemaining(
+                      child: Center(
+                        child: CircularProgressIndicator.adaptive(),
+                      ),
+                    ),
+                  ChatsListData() => _ChatListBodyData(
+                      chats: state.chats,
+                      currentUserId: currentUserId,
+                    ),
+                  ChatsListError() => SliverFillRemaining(
+                      child: Center(
+                        child: Text(
+                          'Что-то пошло не так',
+                          style: context.textTheme.bodyMMedium,
+                        ),
+                      ),
+                    ),
+                  ChatsListEmpty() => const _ChatListBodyEmptyDataWidget(),
+                };
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

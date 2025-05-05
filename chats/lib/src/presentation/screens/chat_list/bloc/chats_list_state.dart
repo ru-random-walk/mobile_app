@@ -16,3 +16,5 @@ final class ChatsListError extends ChatsListState {
 
   ChatsListError({required this.error});
 }
+
+final class ChatsListEmpty extends ChatsListState {}

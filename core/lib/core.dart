@@ -16,4 +16,6 @@ export 'src/widgets/row/widgets.dart';
 export 'src/data/models/geolocation.dart';
 export 'src/data/mappers/geolocation.dart';
 export 'src/widgets/map_viewer.dart';
+export 'src/data/data_source/geocoder.dart';
+export 'src/data/models/query.dart';
 

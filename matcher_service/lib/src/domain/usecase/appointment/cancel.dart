@@ -22,6 +22,7 @@ class CancelAppointmentUseCase implements BaseUseCase<BaseError, void, String> {
         AppointmentRepository(
           matcherDataSource: MatcherDataSource(),
           usersDataSource: UsersDataSource(),
+          geocoderDataSource: GeocoderDataSource(),
         ),
         personRepository,
       );

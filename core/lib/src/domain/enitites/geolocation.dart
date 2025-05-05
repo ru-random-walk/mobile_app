@@ -1,4 +1,4 @@
-import 'package:yandex_mapkit/yandex_mapkit.dart';
+import 'package:maplibre_gl/maplibre_gl.dart';
 
 class Geolocation {
   final double latitude;
@@ -31,7 +31,7 @@ class Geolocation {
     );
   }
 
-  Point get point => Point(latitude: latitude, longitude: longitude);
+  LatLng get point => LatLng(latitude, longitude);
 
   bool get hasDisplayName => city != null || street != null || building != null;
 

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -14,7 +16,7 @@ class ScheduleTimeFrameModel {
   final TimeOfDay timeFrom;
   final TimeOfDay timeUntil;
   final GeolocationModel location;
-  final List<String> availableTimeClubsInFilter;
+  final List<String>? availableTimeClubsInFilter;
   final String? appointmentStatus;
 
   ScheduleTimeFrameModel({
@@ -37,12 +39,19 @@ class _TimeJsonConverter extends JsonConverter<TimeOfDay, String> {
 
   @override
   TimeOfDay fromJson(String json) {
-    final hours = json.split(':')[0];
-    final minutes = json.split(':')[1].substring(0, 2);
-    return TimeOfDay(
-      hour: int.parse(hours),
-      minute: int.parse(minutes),
-    );
+    try {
+      final now = DateTime.now();
+      final dateStr =
+          "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}T$json";
+      final dateTime = DateTime.parse(dateStr);
+      // Convert to local time
+      final localTime = dateTime.toLocal();
+      final res = TimeOfDay.fromDateTime(localTime);
+      return res;
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
   }
 
   @override

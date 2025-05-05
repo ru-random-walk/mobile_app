@@ -72,9 +72,20 @@ class _MeetingInfoPlaceWidget extends StatelessWidget {
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16.toFigmaSize),
-                child: IgnorePointer(
-                  child: MapViewer(
-                    geolocation: meetingInfo.location,
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            _MapPreview(geolocation: meetingInfo.location),
+                      ),
+                    );
+                  },
+                  child: IgnorePointer(
+                    child: MapViewer(
+                      geolocation: meetingInfo.location,
+                    ),
                   ),
                 ),
               ),
