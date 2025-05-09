@@ -90,6 +90,78 @@ void _deleteOption(int questionIndex, int optionIndex) {
     super.dispose();
   }
 
+  List<Map<String, dynamic>> buildQuestionInputs() {
+    return questions.map((question) {
+      final text = question.questionController.text.trim();
+      final options = question.optionControllers.map((c) => c.text.trim()).toList();
+      final answerType = question.multipleAnswers ? 'MULTIPLE' : 'SINGLE';
+      final correctOptionNumbers = question.multipleAnswers
+          ? question.selectedOptionIndexes
+          : question.selectedOptionIndex != null ? [question.selectedOptionIndex!] : [];
+      return {
+        'text': text,
+        'answerOptions': options,
+        'answerType': answerType,
+        'correctOptionNumbers': correctOptionNumbers,
+      };
+    }).toList();
+  }
+
+  bool validateTestForm(BuildContext context, String testName, List<QuestionModel> questions) {
+  if (testName.trim().isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Введите название теста')),
+    );
+    return false;
+  }
+
+  for (var i = 0; i < questions.length; i++) {
+    final question = questions[i];
+    final questionText = question.questionController.text.trim();
+
+    if (questionText.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Вопрос ${i + 1} не заполнен')),
+      );
+      return false;
+    }
+
+    if (question.optionControllers.length < 2) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('В вопросе ${i + 1} должно быть минимум 2 варианта ответа')),
+      );
+      return false;
+    }
+
+    for (var j = 0; j < question.optionControllers.length; j++) {
+      if (question.optionControllers[j].text.trim().isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Вариант ${j + 1} в вопросе ${i + 1} пустой')),
+        );
+        return false;
+      }
+    }
+
+    if (question.multipleAnswers) {
+      if (question.selectedOptionIndexes.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Выберите хотя бы один правильный ответ в вопросе ${i + 1}')),
+        );
+        return false;
+      }
+    } else {
+      if (question.selectedOptionIndex == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Выберите правильный ответ в вопросе ${i + 1}')),
+        );
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
@@ -202,20 +274,16 @@ void _deleteOption(int questionIndex, int optionIndex) {
                 color: ButtonColor.green,
                 text: 'Готово',
                 onPressed: () {
-                  if (nameController.text.trim().isEmpty) {
-                    // Показать предупреждение
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Введите название теста'),
-                      ),
-                    );
-                    return; 
-                  }
+                  final isValid = validateTestForm(context, nameController.text, questions);
+                  if (!isValid) return;
+
+                  final questionInputs = buildQuestionInputs();
                   
                   Map<String, dynamic> result = {
                     'attempts': attemptController.text,
                     'testName': nameController.text,
                     'questionCount': questions.length,
+                    'questions': questionInputs,
                   };
                   Navigator.pop(context, result);
                 },

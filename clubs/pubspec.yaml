@@ -18,7 +18,14 @@ dependencies:
     path: ../common/ui_components
   utils:
     path: ../common/utils
+  core:
+    path: ../core
+  auth:
+    path: ../auth
   flutter_svg: ^2.0.10+1
+  dio: ^5.8.0+1
+  logger: ^2.5.0
+  flutter_bloc: ^8.1.6
 
 dev_dependencies:
   flutter_test:
