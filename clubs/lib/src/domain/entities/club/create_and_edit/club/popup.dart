@@ -1,7 +1,7 @@
 part of '../create_club_page.dart';
 
 class _AddTestDialog extends StatelessWidget {
-  final void Function(String, int, String) onConditionAdded;
+  final void Function(String, int, String, List<Map<String, dynamic>>? questions) onConditionAdded;
   final int infoCount;
   final String conditionName;
 
@@ -66,9 +66,10 @@ class _AddTestDialog extends StatelessWidget {
                           String attempts = result['attempts'];
                           String testName = result['testName'];
                           int questionCount = result['questionCount'];
+                          List<Map<String, dynamic>> questionInputs = result['questions'];
 
                           // Обновление состояния на GroupFormScreen
-                          onConditionAdded(attempts, questionCount, testName,);
+                          onConditionAdded(attempts, questionCount, testName, questionInputs);
                         }
                       });
                     },
@@ -91,7 +92,7 @@ class _AddTestDialog extends StatelessWidget {
                               builder: (BuildContext context) {
                                 return _NumberInputDialog(
                                   onConditionAdded: (String attempts, int inspectorCountFromDialog) {
-                                    onConditionAdded(attempts, inspectorCountFromDialog, "Запрос на вступление");
+                                    onConditionAdded(attempts, inspectorCountFromDialog, "Запрос на вступление", null);
                                   },
                                   inspectorCount: inspectorCount,
                                 );
