@@ -22,3 +22,17 @@ final class _MessageRecieved extends ChatEvent {
 }
 
 final class LoadData extends ChatEvent {}
+
+sealed class AppointmentRequestDecision extends ChatEvent {
+  final String appointmentId;
+
+  AppointmentRequestDecision({required this.appointmentId});
+}
+
+final class RejectAppointmentRequest extends AppointmentRequestDecision {
+  RejectAppointmentRequest({required super.appointmentId});
+}
+
+final class ApproveAppointmentRequest extends AppointmentRequestDecision {
+  ApproveAppointmentRequest({required super.appointmentId});
+}

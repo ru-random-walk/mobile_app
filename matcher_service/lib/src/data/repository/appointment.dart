@@ -4,6 +4,7 @@ import 'package:matcher_service/src/data/data_source/matcher.dart';
 import 'package:matcher_service/src/data/mapper/appointment.dart';
 import 'package:matcher_service/src/domain/entity/meeting_info/base.dart';
 import 'package:matcher_service/src/domain/repository/appointment.dart';
+import 'package:retrofit/retrofit.dart';
 import 'package:utils/utils.dart';
 
 class AppointmentRepository implements AppointmentRepositoryI {
@@ -59,9 +60,23 @@ class AppointmentRepository implements AppointmentRepositoryI {
   }
 
   @override
-  Future<Either<BaseError, void>> cancelAppointment(String id) async {
+  Future<Either<BaseError, void>> cancelAppointment(String id) =>
+      _performSimpleRequest(() => _matcherDataSource.cancelAppointment(id));
+
+  @override
+  Future<Either<BaseError, void>> approveAppointmentRequest(String id) =>
+      _performSimpleRequest(
+          () => _matcherDataSource.approveAppointmentRequest(id));
+
+  @override
+  Future<Either<BaseError, void>> rejectAppointmentRequest(String id) =>
+      _performSimpleRequest(
+          () => _matcherDataSource.rejectAppointmentRequest(id));
+
+  Future<Either<BaseError, void>> _performSimpleRequest(
+      Future<HttpResponse> Function() fetch) async {
     try {
-      final res = await _matcherDataSource.cancelAppointment(id);
+      final res = await fetch();
       if (res.response.statusCode == 200) {
         return Right(null);
       } else {

@@ -7,6 +7,7 @@ import 'package:chats/src/domain/repository/chat_messaging.dart';
 import 'package:chats/src/domain/use_case/get_messages.dart';
 import 'package:chats/src/domain/use_case/send_message.dart';
 import 'package:flutter/material.dart';
+import 'package:matcher_service/matcher_service.dart';
 import 'package:meta/meta.dart';
 
 part 'chat_event.dart';
@@ -16,15 +17,31 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final GetMessagesUseCase _getMessagesUseCase;
   final ChatMessagingRepositoryI _chatMessagingRepository;
   final SendMessageUseCase _sendMessageUseCase;
+  final ApproveAppointmentRequestUseCase _approveAppointmentRequest;
+  final RejectAppointmentRequestUseCase _rejectAppointmentRequest;
 
-  ChatBloc(this._getMessagesUseCase, this._chatMessagingRepository,
-      this._sendMessageUseCase)
+  ChatBloc(
+      this._getMessagesUseCase,
+      this._chatMessagingRepository,
+      this._sendMessageUseCase,
+      this._approveAppointmentRequest,
+      this._rejectAppointmentRequest)
       : super(ChatLoading()) {
     _initMessagesListener();
     on<LoadData>(_onLoadData);
     on<TextMessageSended>(_onTextMessageAdded);
     on<InviteMessageSended>(_onInviteMessageAdded);
     on<_MessageRecieved>(_onMessageReceived);
+    on<AppointmentRequestDecision>(_onAppointmentDecision);
+  }
+
+  void _onAppointmentDecision(
+      AppointmentRequestDecision event, Emitter emit) async {
+    final func = switch (event) {
+      RejectAppointmentRequest _ => _rejectAppointmentRequest,
+      ApproveAppointmentRequest _ => _approveAppointmentRequest,
+    };
+    func(event.appointmentId);
   }
 
   void _onMessageReceived(_MessageRecieved event, Emitter emit) {
