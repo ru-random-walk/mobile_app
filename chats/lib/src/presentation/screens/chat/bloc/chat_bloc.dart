@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:chats/src/domain/entity/meet_data/invite.dart';
-import 'package:chats/src/domain/entity/message/message.dart';
+import 'package:chats/src/domain/entity/message/base.dart';
 import 'package:chats/src/domain/repository/chat_messaging.dart';
 import 'package:chats/src/domain/use_case/get_messages.dart';
 import 'package:chats/src/domain/use_case/send_message.dart';
@@ -33,6 +33,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<InviteMessageSended>(_onInviteMessageAdded);
     on<_MessageRecieved>(_onMessageReceived);
     on<AppointmentRequestDecision>(_onAppointmentDecision);
+    on<_WalkRequestStatusChangedEvent>(_onUpdateWalkRequestStatus);
   }
 
   void _onAppointmentDecision(
@@ -58,14 +59,51 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   void _initMessagesListener() {
     _chatMessagingRepository.messagesStream.listen((message) {
-      log('Message received: ${message.timestamp}');
-      add(_MessageRecieved(message: message));
+      log('Message received: ${DateTime.now().toIso8601String()}');
+      switch (message) {
+        case WalkRequestStatusChanged event:
+          add(_WalkRequestStatusChangedEvent(event: event));
+        case MessageEntity msg:
+          add(_MessageRecieved(message: msg));
+      }
     });
+  }
+
+  void _onUpdateWalkRequestStatus(
+    _WalkRequestStatusChangedEvent event,
+    Emitter emit,
+  ) {
+    final updateStatusEvent = event.event;
+    final currentState = state;
+    if (currentState is ChatData) {
+      final messages = currentState.messages;
+      final indexOfInvitation = messages.indexWhere(
+        (msg) => msg.id == updateStatusEvent.messageId,
+      );
+      if (indexOfInvitation == -1) return;
+      final requestMessage = messages[indexOfInvitation];
+      if (requestMessage is! InvitationMessageEntity) return;
+      final newRequestMessage = requestMessage.copyWith(
+        status: updateStatusEvent.isAcccepted
+            ? InvitationStatus.accepted
+            : InvitationStatus.rejected,
+      );
+      emit(
+        currentState.copyWith(
+          messages: [
+            ...messages.sublist(0, indexOfInvitation),
+            newRequestMessage,
+            ...messages.sublist(indexOfInvitation + 1),
+          ],
+        ),
+      );
+    }
   }
 
   void _onTextMessageAdded(TextMessageSended event, Emitter emit) =>
       _sendMessageUseCase(
         TextMessageEntity(
+          id: null,
           text: event.message,
           timestamp: DateTime.now(),
           isMy: true,
@@ -91,6 +129,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     );
     _sendMessageUseCase(
       InvitationMessageEntity(
+        id: null,
         timestamp: DateTime.now(),
         isMy: true,
         isChecked: false,

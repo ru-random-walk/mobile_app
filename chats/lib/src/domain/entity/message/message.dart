@@ -1,20 +1,15 @@
-import 'package:core/core.dart';
-import 'package:flutter/material.dart';
+part of 'base.dart';
 
-part 'text.dart';
-part 'invitation.dart';
-part 'invitation_status.dart';
-
-sealed class MessageEntity {
+sealed class MessageEntity extends ChatSocketEvent {
+  final String? id;
   final DateTime timestamp;
   final bool isMy;
   final bool isChecked;
 
   MessageEntity({
+    required this.id,
     required this.isChecked,
     required this.timestamp,
     required this.isMy,
   });
 }
-
-

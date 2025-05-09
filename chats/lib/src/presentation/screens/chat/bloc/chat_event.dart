@@ -36,3 +36,9 @@ final class RejectAppointmentRequest extends AppointmentRequestDecision {
 final class ApproveAppointmentRequest extends AppointmentRequestDecision {
   ApproveAppointmentRequest({required super.appointmentId});
 }
+
+final class _WalkRequestStatusChangedEvent extends ChatEvent {
+  final WalkRequestStatusChanged event;
+
+  _WalkRequestStatusChangedEvent({required this.event});
+}

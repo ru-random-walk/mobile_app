@@ -4,7 +4,7 @@ import 'package:auth/auth.dart';
 import 'package:chats/src/data/data_source/chat_socket.dart';
 import 'package:chats/src/data/repository/chat_messaging.dart';
 import 'package:chats/src/domain/entity/meet_data/invite.dart';
-import 'package:chats/src/domain/entity/message/message.dart';
+import 'package:chats/src/domain/entity/message/base.dart';
 import 'package:chats/src/domain/use_case/get_messages.dart';
 import 'package:chats/src/domain/use_case/send_message.dart';
 import 'package:chats/src/presentation/screens/chat/args.dart';
@@ -15,6 +15,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:matcher_service/matcher_service.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_grouped_list/sticky_grouped_list.dart';
 import 'package:ui_components/ui_components.dart';
@@ -90,11 +91,19 @@ class _ChatPageState extends State<ChatPage> {
               args.companion.id,
             ),
           ),
+          Provider(
+            create: (_) => ApproveAppointmentRequestUseCase(),
+          ),
+          Provider(
+            create: (_) => RejectAppointmentRequestUseCase(),
+          ),
         ],
         child: BlocProvider(
           create: (context) => ChatBloc(
             context.read(),
             context.read<ChatMessagingRepository>(),
+            context.read(),
+            context.read(),
             context.read(),
           )..add(LoadData()),
           child: Builder(

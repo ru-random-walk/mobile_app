@@ -1,22 +1,25 @@
 part of '../../message.dart';
 
-sealed class BaseSocketResponseMessageModel extends MessageModel {
-  BaseSocketResponseMessageModel({
-    required super.id,
-    required super.chatId,
-    required super.markedAsRead,
-    required super.payload,
-    required super.createdAt,
-    required super.sender,
-  });
+sealed class SocketEventModel {
+  const SocketEventModel();
 
-  factory BaseSocketResponseMessageModel.fromJson(Map<String, dynamic> json) {
-    final stringType = json['payload']['type'] as String;
-    final type = MessageType.fromString(stringType);
-    return switch (type) {
-      MessageType.text => TextSocketResponseMessageModel.fromJson(json),
-      MessageType.requestForWalk => RequestForWalkSocketResponseMessageModel.fromJson(json),
-      MessageType.unknown => throw UnimplementedError(),
-    };
+  factory SocketEventModel.fromJson(Map<String, dynamic> json) {
+    BaseSocketResponseMessageModel parseMessage(String stringType) {
+      final type = MessageType.fromString(stringType);
+      return switch (type) {
+        MessageType.text => TextSocketResponseMessageModel.fromJson(json),
+        MessageType.requestForWalk =>
+          RequestForWalkSocketResponseMessageModel.fromJson(json),
+        MessageType.unknown => throw UnimplementedError(),
+      };
+    }
+
+    final stringType = json['payload']['type'] as String?;
+    switch (stringType) {
+      case null:
+        return WalkRequestStatusChangedModel.fromJson(json);
+      case String value:
+        return parseMessage(value);
+    }
   }
 }

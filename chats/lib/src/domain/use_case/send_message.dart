@@ -1,12 +1,13 @@
 import 'dart:async';
 
-import 'package:chats/src/domain/entity/message/message.dart';
+import 'package:chats/src/domain/entity/message/base.dart';
 import 'package:chats/src/domain/entity/message/send_message.dart';
 import 'package:chats/src/domain/repository/chat_messaging.dart';
 import 'package:core/core.dart';
 import 'package:utils/utils.dart';
 
-class SendMessageUseCase implements BaseUseCase<BaseError, void, MessageEntity> {
+class SendMessageUseCase
+    implements BaseUseCase<BaseError, void, MessageEntity> {
   final ChatMessagingRepositoryI _chatMessagingRepository;
   final String chatId;
   final String senderId;

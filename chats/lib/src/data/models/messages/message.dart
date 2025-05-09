@@ -9,6 +9,8 @@ part 'history/text_message.dart';
 part 'history/request_message.dart';
 part 'history/base.dart';
 part 'socket/response/base.dart';
+part 'socket/response/base_message.dart';
+part 'socket/response/request_status.dart';
 part 'socket/response/text_message.dart';
 part 'socket/response/request_message.dart';
 part 'message.g.dart';

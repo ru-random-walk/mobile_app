@@ -1,8 +1,11 @@
 part of '../message.dart';
 
-@JsonSerializable(converters: [
-  DateJsonConverter(),
-])
+@JsonSerializable(
+  converters: [
+    DateJsonConverter(),
+  ],
+  createToJson: false
+)
 class RequestForWalkMessageModel extends BaseHistoryMessageModel {
   @override
   @PayloadConverter()
