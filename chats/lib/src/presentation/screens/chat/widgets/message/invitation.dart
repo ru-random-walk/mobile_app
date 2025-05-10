@@ -248,8 +248,7 @@ class _InvitationDataRowWidget extends StatelessWidget {
 }
 
 class _InvitationMessageHeaderWidget extends StatelessWidget {
-  const _InvitationMessageHeaderWidget({
-  });
+  const _InvitationMessageHeaderWidget();
 
   @override
   Widget build(BuildContext context) {
