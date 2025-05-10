@@ -1,5 +1,5 @@
 import 'package:auth/auth.dart';
-import 'package:chats/src/domain/entity/message/message.dart';
+import 'package:chats/src/domain/entity/message/base.dart';
 
 class ChatEntity {
   final String id;

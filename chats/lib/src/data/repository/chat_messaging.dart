@@ -1,9 +1,9 @@
 import 'dart:collection';
 
 import 'package:chats/src/data/data_source/chat_socket.dart';
-import 'package:chats/src/data/mappers/message.dart';
+import 'package:chats/src/data/mappers/chat_event.dart';
 import 'package:chats/src/data/mappers/send_message.dart';
-import 'package:chats/src/domain/entity/message/message.dart';
+import 'package:chats/src/domain/entity/message/base.dart';
 import 'package:chats/src/domain/entity/message/send_message.dart';
 import 'package:chats/src/domain/repository/chat_messaging.dart';
 
@@ -17,7 +17,7 @@ class ChatMessagingRepository implements ChatMessagingRepositoryI {
   }
 
   @override
-  Stream<MessageEntity> get messagesStream =>
+  Stream<ChatSocketEvent> get messagesStream =>
       _source.messagesStream.map((e) => e.toDomain(_currentUserId));
 
   @override

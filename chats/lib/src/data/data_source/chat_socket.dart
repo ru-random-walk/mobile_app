@@ -10,10 +10,10 @@ import 'package:stomp_dart_client/stomp_dart_client.dart';
 class ChatMessagingSocketSource {
   final TokenStorage _tokenStorage;
   final String chatId;
-  final _messageController = StreamController<MessageModel>.broadcast();
+  final _messageController = StreamController<SocketEventModel>.broadcast();
   late final StompClient _client;
 
-  Stream<MessageModel> get messagesStream => _messageController.stream;
+  Stream<SocketEventModel> get messagesStream => _messageController.stream;
 
   ChatMessagingSocketSource({
     required TokenStorage tokenStorage,
@@ -77,7 +77,7 @@ class ChatMessagingSocketSource {
     try {
       final data = frame.body;
       final json = jsonDecode(data ?? '');
-      final message = BaseSocketResponseMessageModel.fromJson(json);
+      final message = SocketEventModel.fromJson(json);
       _messageController.add(message);
     } catch (e) {
       log(e.toString());

@@ -1,4 +1,4 @@
-import 'package:chats/src/domain/entity/message/message.dart';
+import 'package:chats/src/domain/entity/message/base.dart';
 import 'package:core/core.dart';
 
 class PageableMessagesEntity {

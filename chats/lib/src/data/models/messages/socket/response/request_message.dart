@@ -5,8 +5,8 @@ class RequestForWalkSocketResponseMessageModel
     extends BaseSocketResponseMessageModel {
   @override
   @PayloadConverter()
-  RequestForWalkPayloadModel get payload =>
-      super.payload as RequestForWalkPayloadModel;
+  RequestForWalkPayloadModelResponse get payload =>
+      super.payload as RequestForWalkPayloadModelResponse;
 
   @override
   @JsonKey(name: 'sentAt')

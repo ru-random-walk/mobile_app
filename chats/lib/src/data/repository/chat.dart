@@ -5,7 +5,7 @@ import 'package:chats/src/data/mappers/pageable_messages.dart';
 import 'package:chats/src/data/models/chat/chat.dart';
 import 'package:chats/src/domain/entity/chat/chat.dart';
 import 'package:chats/src/domain/entity/chat/pageable_chat.dart';
-import 'package:chats/src/domain/entity/message/message.dart';
+import 'package:chats/src/domain/entity/message/base.dart';
 import 'package:chats/src/domain/entity/message/pageable_messages.dart';
 import 'package:chats/src/domain/repository/chat.dart';
 import 'package:core/core.dart';

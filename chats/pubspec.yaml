@@ -22,6 +22,8 @@ dependencies:
     path: ../auth
   core:
     path: ../core
+  matcher_service:
+    path: ../matcher_service
   flutter_svg: ^2.0.10+1
   json_annotation: ^4.9.0
   flutter_bloc: ^8.1.6
