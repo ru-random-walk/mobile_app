@@ -44,9 +44,10 @@ class _ChatDateSeparatorWidget extends StatelessWidget {
 
 String _getDate(DateTime date) {
   final now = DateTime.now();
+  final differenceInDays = now.difference(date).inDays;
   final difference = now.day - date.day;
-  if (difference == 0) return 'Сегодня';
-  if (difference == 1) return 'Вчера';
+  if (difference == 0 && differenceInDays < 2) return 'Сегодня';
+  if (difference == 1 && differenceInDays < 2) return 'Вчера';
   final isThisYear = date.year == now.year;
   final year = isThisYear ? '' : ' ,${date.year} г.';
   return DateFormat('dd MMMM', 'ru').format(date) + year;
