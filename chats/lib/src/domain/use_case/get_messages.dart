@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:auth/auth.dart';
 import 'package:chats/src/data/data_source/chat.dart';
 import 'package:chats/src/data/repository/chat.dart';
-import 'package:chats/src/domain/entity/message/message.dart';
+import 'package:chats/src/domain/entity/message/base.dart';
 import 'package:chats/src/domain/repository/chat.dart';
 import 'package:core/core.dart';
 import 'package:utils/utils.dart';

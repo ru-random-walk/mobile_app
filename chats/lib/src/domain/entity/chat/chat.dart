@@ -1,5 +1,5 @@
 import 'package:auth/auth.dart';
-import 'package:chats/src/domain/entity/message/message.dart';
+import 'package:chats/src/domain/entity/message/base.dart';
 
 class ChatEntity {
   final String id;
@@ -11,4 +11,13 @@ class ChatEntity {
     required this.companion,
     required this.lastMessage,
   });
+
+  ChatEntity copyWith({
+    MessageEntity? lastMessage,
+  }) =>
+      ChatEntity(
+        id: id,
+        companion: companion,
+        lastMessage: lastMessage ?? this.lastMessage,
+      );
 }

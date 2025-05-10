@@ -4,7 +4,7 @@ part of 'geolocation_bloc.dart';
 sealed class GeolocationEvent {}
 
 final class GetLocationNameByPoint extends GeolocationEvent {
-  final Point point;
+  final LatLng point;
   final int? zoom;
 
   GetLocationNameByPoint({

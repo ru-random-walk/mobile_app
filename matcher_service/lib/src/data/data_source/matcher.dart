@@ -37,11 +37,9 @@ abstract class MatcherDataSource {
     @Path('id') String id,
   );
 
-
   /// Person
   @GET('$_person/schedule')
   Future<List<UserScheduleModel>> getUserSchedule();
-
 
   /// Appointment
   @GET(_appointmentId)
@@ -49,8 +47,18 @@ abstract class MatcherDataSource {
     @Path('id') String id,
   );
 
-  @DELETE(_appointmentId)
+  @DELETE('$_appointmentId/cancel')
   Future<HttpResponse> cancelAppointment(
+    @Path('id') String id,
+  );
+
+  @PUT('$_appointmentId/reject')
+  Future<HttpResponse> rejectAppointmentRequest(
+    @Path('id') String id,
+  );
+
+  @PUT('$_appointmentId/approve')
+  Future<HttpResponse> approveAppointmentRequest(
     @Path('id') String id,
   );
 }

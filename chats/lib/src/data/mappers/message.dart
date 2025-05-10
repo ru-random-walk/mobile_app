@@ -1,5 +1,5 @@
 import 'package:chats/src/data/models/messages/message.dart';
-import 'package:chats/src/domain/entity/message/message.dart';
+import 'package:chats/src/domain/entity/message/base.dart';
 import 'package:core/core.dart';
 
 extension MessageMapper on MessageModel {
@@ -13,16 +13,20 @@ extension MessageMapper on MessageModel {
           isMy: isMy,
           isChecked: isChecked,
           text: message.payload.text,
+          id: message.id,
         ),
       final RequestForWalkMessageModel message => InvitationMessageEntity(
+          id: message.id,
           timestamp: timestamp,
           isMy: isMy,
           isChecked: isChecked,
           planDateTimeOfMeeting: message.payload.startsAt,
           place: message.payload.location.toDomain(),
           status: statusFromBool(message.payload.answer),
+          appointmentId: message.payload.appointmentId,
         ),
       final TextSocketResponseMessageModel msg => TextMessageEntity(
+          id: msg.id,
           isChecked: isChecked,
           isMy: isMy,
           timestamp: timestamp,
@@ -35,7 +39,9 @@ extension MessageMapper on MessageModel {
           isChecked: isChecked,
           planDateTimeOfMeeting: message.payload.startsAt,
           place: message.payload.location.toDomain(),
-          status: statusFromBool(message.payload.answer),
+          status: InvitationStatus.loading,
+          id: message.id,
+          appointmentId: message.payload.appointmentId,
         ),
     };
   }

@@ -1,6 +1,6 @@
 import 'package:auth/auth.dart';
 import 'package:chats/src/domain/entity/chat/chat.dart';
-import 'package:chats/src/domain/entity/message/message.dart';
+import 'package:chats/src/domain/entity/message/base.dart';
 import 'package:chats/src/domain/use_case/get_chats.dart';
 import 'package:chats/src/presentation/screens/chat/args.dart';
 import 'package:chats/src/presentation/screens/chat/page.dart';

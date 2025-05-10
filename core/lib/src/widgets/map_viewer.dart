@@ -1,7 +1,10 @@
 import 'package:core/src/domain/enitites/geolocation.dart';
+import 'package:core/src/map_config.dart';
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:yandex_mapkit/yandex_mapkit.dart';
+import 'package:flutter/services.dart';
+import 'package:maplibre_gl/maplibre_gl.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:ui_utils/ui_utils.dart';
 
 class MapViewer extends StatefulWidget {
   final Geolocation geolocation;
@@ -16,66 +19,84 @@ class MapViewer extends StatefulWidget {
 }
 
 class _MapViewerState extends State<MapViewer> {
-  late YandexMapController _mapController;
-  static const _mapAnimation = MapAnimation(
-    type: MapAnimationType.smooth,
-    duration: 0.0,
-  );
+  MapLibreMapController? _mapController;
+  bool _locationPermissionGranted = false;
 
-  Future<void> _moveCameraTo(CameraPosition cameraPosition) =>
-      _mapController.moveCamera(
-        CameraUpdate.newCameraPosition(
-          cameraPosition.copyWith(zoom: 15),
-        ),
-        animation: _mapAnimation,
-      );
+  Future<Position?> _getCurrentPosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
 
-  /// Метод, который включает слой местоположения пользователя на карте
-  /// Выполняется проверка на доступ к местоположению, в случае отсутствия
-  /// разрешения - выводит сообщение
-  Future<void> _initLocationLayer() async {
-    final locationPermissionIsGranted =
-        await Permission.location.request().isGranted;
-
-    if (locationPermissionIsGranted) {
-      await _mapController.toggleUserLayer(visible: true);
-      final position = CameraPosition(target: widget.geolocation.point);
-      _moveCameraTo(position);
-    } else {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Нет доступа к местоположению пользователя'),
-          ),
-        );
-      });
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return null;
     }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return null;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return null;
+    }
+    setState(() {
+      _locationPermissionGranted = true;
+    });
+    return await Geolocator.getCurrentPosition();
   }
+
+  Future<void> _initLocationLayer() => _getCurrentPosition();
 
   @override
   Widget build(BuildContext context) {
-    return YandexMap(
-      key: ObjectKey(widget.geolocation),
-      mapObjects: [
-        PlacemarkMapObject(
-          opacity: 1,
-          mapId: const MapObjectId('geolocation'),
-          icon: PlacemarkIcon.single(
-            PlacemarkIconStyle(
-              anchor: const Offset(0.5, 1),
-              image: BitmapDescriptor.fromAssetImage(
-                'packages/core/assets/place_fill.png',
+    return Stack(
+      children: [
+        MapLibreMap(
+          key: ObjectKey(widget.geolocation),
+          styleString: mapUrl,
+          initialCameraPosition: CameraPosition(
+            target: widget.geolocation.point,
+            zoom: 14,
+          ),
+          onMapCreated: (controller) async {
+            _mapController = controller;
+          },
+          onStyleLoadedCallback: () async {
+            _initLocationLayer();
+            await _addMarker(widget.geolocation.point);
+          },
+          myLocationEnabled: _locationPermissionGranted,
+          rotateGesturesEnabled: true,
+          compassEnabled: false,
+        ),
+        SafeArea(
+          top: false,
+          child: Align(
+            alignment: Alignment.bottomLeft,
+            child: SizedBox(
+              height: 40.toFigmaSize,
+              width: 100.toFigmaSize,
+              child: Image.asset(
+                'packages/core/assets/map_tiler_logo.png',
+                fit: BoxFit.contain,
               ),
-              rotationType: RotationType.noRotation,
             ),
           ),
-          point: widget.geolocation.point,
         ),
       ],
-      onMapCreated: (controller) async {
-        _mapController = controller;
-        _initLocationLayer();
-      },
+    );
+  }
+
+  Future<void> _addMarker(LatLng point) async {
+    final bytes = await rootBundle.load('packages/core/assets/place_fill.png');
+    final list = bytes.buffer.asUint8List();
+    await _mapController?.addImage('pointer', list);
+    _mapController?.addSymbol(
+      SymbolOptions(
+          geometry: point, iconImage: 'pointer', iconAnchor: 'bottom'),
     );
   }
 }

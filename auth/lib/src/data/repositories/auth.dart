@@ -37,7 +37,7 @@ class AuthRepositoryI implements AuthRepository {
       final resultEntity = result.toEntity();
       return Right(resultEntity);
     } catch (e, s) {
-      log(e.toString());
+      log("Auth error: ${e.toString()}\nStackTrace: $s");
       return Left(BaseError(e.toString(), s));
     }
   }

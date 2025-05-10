@@ -10,10 +10,10 @@ import 'package:stomp_dart_client/stomp_dart_client.dart';
 class ChatMessagingSocketSource {
   final TokenStorage _tokenStorage;
   final String chatId;
-  final _messageController = StreamController<MessageModel>.broadcast();
+  final _messageController = StreamController<SocketEventModel>.broadcast();
   late final StompClient _client;
 
-  Stream<MessageModel> get messagesStream => _messageController.stream;
+  Stream<SocketEventModel> get messagesStream => _messageController.stream;
 
   ChatMessagingSocketSource({
     required TokenStorage tokenStorage,
@@ -42,7 +42,10 @@ class ChatMessagingSocketSource {
         onWebSocketError: (frame) => log(frame.body ?? ''),
         onDisconnect: (frame) => log(frame.body ?? ''),
         onDebugMessage: (msg) => log(msg),
-        onWebSocketDone: () => log('Done'),
+        onWebSocketDone: () {
+          log(StackTrace.current.toString());
+          log('Socket is done');
+        },
         onUnhandledFrame: (frame) => log(frame.body ?? ''),
         onUnhandledMessage: (frame) => log(frame.body ?? ''),
         onUnhandledReceipt: (rec) => log(rec.body ?? ''),
@@ -74,7 +77,7 @@ class ChatMessagingSocketSource {
     try {
       final data = frame.body;
       final json = jsonDecode(data ?? '');
-      final message = BaseSocketResponseMessageModel.fromJson(json);
+      final message = SocketEventModel.fromJson(json);
       _messageController.add(message);
     } catch (e) {
       log(e.toString());

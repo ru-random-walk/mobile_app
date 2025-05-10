@@ -5,7 +5,7 @@ homepage:
 publish_to: none
 
 environment:
-  sdk: '>=3.4.4 <4.0.0'
+  sdk: '>=3.6.0 <4.0.0'
   flutter: ">=1.17.0"
 
 dependencies:
@@ -25,11 +25,13 @@ dependencies:
   json_annotation: ^4.9.0
   flutter_bloc: ^8.1.6
   retrofit: ^4.4.0
-  yandex_mapkit: ^4.1.0
-  permission_handler: ^11.3.1
   bloc_concurrency: ^0.2.5
   flutter_svg: ^2.0.10+1
   rxdart: ^0.28.0
+  flutter_map: ^7.0.2
+  vector_map_tiles: ^8.0.0
+  maplibre_gl: ^0.21.0
+  geolocator: ^14.0.0
 
 dev_dependencies:
   flutter_test:
@@ -46,6 +48,7 @@ dev_dependencies:
 flutter:
   assets:
     - packages/core/assets/place_fill.png
+    - packages/core/assets/map_tiler_logo.png
 
   # To add assets to your package, add an assets section, like this:
   # assets:

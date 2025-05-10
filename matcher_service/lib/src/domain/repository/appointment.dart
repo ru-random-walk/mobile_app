@@ -9,4 +9,8 @@ abstract interface class AppointmentRepositoryI {
   );
 
   Future<Either<BaseError, void>> cancelAppointment(String id);
+
+  Future<Either<BaseError, void>> rejectAppointmentRequest(String id);
+
+  Future<Either<BaseError, void>> approveAppointmentRequest(String id);
 }

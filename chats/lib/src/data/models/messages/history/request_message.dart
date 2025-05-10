@@ -1,13 +1,16 @@
 part of '../message.dart';
 
-@JsonSerializable(converters: [
-  DateJsonConverter(),
-])
+@JsonSerializable(
+  converters: [
+    DateJsonConverter(),
+  ],
+  createToJson: false
+)
 class RequestForWalkMessageModel extends BaseHistoryMessageModel {
   @override
   @PayloadConverter()
-  RequestForWalkPayloadModel get payload =>
-      super.payload as RequestForWalkPayloadModel;
+  RequestForWalkPayloadModelResponse get payload =>
+      super.payload as RequestForWalkPayloadModelResponse;
 
   RequestForWalkMessageModel({
     required super.id,

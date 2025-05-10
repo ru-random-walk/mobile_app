@@ -5,7 +5,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'text.g.dart';
 
 @JsonSerializable()
-class TextPayloadModel extends Payload {
+class TextPayloadModel extends Payload implements SendablePayload {
   final String text;
 
   TextPayloadModel({required this.text}) : super(type: MessageType.text);

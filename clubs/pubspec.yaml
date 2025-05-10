@@ -18,6 +18,14 @@ dependencies:
     path: ../common/ui_components
   utils:
     path: ../common/utils
+  core:
+    path: ../core
+  auth:
+    path: ../auth
+  flutter_svg: ^2.0.10+1
+  dio: ^5.8.0+1
+  logger: ^2.5.0
+  flutter_bloc: ^8.1.6
 
 dev_dependencies:
   flutter_test:
@@ -29,7 +37,12 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
+  uses-material-design: true
+  assets:
+    - packages/clubs/assets/images/avatar.png
+    - packages/clubs/assets/icons/minus.svg
+    - packages/clubs/assets/icons/plus.svg
+    
   # To add assets to your package, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

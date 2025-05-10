@@ -5,7 +5,6 @@ class _ChatListBodyData extends StatelessWidget {
   final List<ChatEntity> chats;
 
   const _ChatListBodyData({
-    super.key,
     required this.chats,
     required this.currentUserId,
   });
@@ -31,6 +30,14 @@ class _ChatListBodyData extends StatelessWidget {
                     companion: chat.companion,
                     currentUserId: currentUserId,
                   ),
+                  onLastMessageChanged: (message) {
+                    context.read<ChatsListBloc>().add(
+                          LastMessageChatUpdated(
+                            chatId: chat.id,
+                            message: message,
+                          ),
+                        );
+                  },
                 ),
               ),
             ),
