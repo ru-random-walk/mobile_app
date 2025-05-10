@@ -13,6 +13,7 @@ part 'socket/response/base_message.dart';
 part 'socket/response/request_status.dart';
 part 'socket/response/text_message.dart';
 part 'socket/response/request_message.dart';
+part 'socket/response/appointment_created.dart';
 part 'message.g.dart';
 
 sealed class MessageModel {
@@ -42,7 +43,8 @@ class PayloadConverter implements JsonConverter<Payload, Map<String, dynamic>> {
     final enumType = MessageType.fromString(type);
     return switch (enumType) {
       MessageType.text => TextPayloadModel.fromJson(json),
-      MessageType.requestForWalk => RequestForWalkPayloadModelResponse.fromJson(json),
+      MessageType.requestForWalk =>
+        RequestForWalkPayloadModelResponse.fromJson(json),
       MessageType.unknown => throw UnimplementedError(),
     };
   }

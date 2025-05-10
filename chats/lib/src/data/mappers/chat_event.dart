@@ -6,10 +6,15 @@ extension SocketEventMapper on SocketEventModel {
   ChatSocketEvent toDomain(String currentUserId) {
     return switch (this) {
       final WalkRequestStatusChangedModel event => WalkRequestStatusChanged(
-          isAcccepted: event.isAcccepted,
+          isAcccepted: event.isAccepted,
           messageId: event.messageId,
         ),
       final MessageModel msg => msg.toDomain(currentUserId),
+      final AppointmentCreatedSocketEventModel event =>
+        AppointmentCreatedSocketEvent(
+          messageId: event.messageId,
+          appointmentId: event.appointmentId,
+        ),
     };
   }
 }

@@ -4,7 +4,6 @@ class _ChatInvitationMessageWidget extends StatelessWidget {
   final InvitationMessageEntity invitation;
 
   const _ChatInvitationMessageWidget({
-    super.key,
     required this.invitation,
   });
 
@@ -24,8 +23,8 @@ class _ChatInvitationMessageWidget extends StatelessWidget {
           _InvitationDataRowWidget(
             iconPath: 'packages/chats/assets/icons/calendar.svg',
             title: 'Дата',
-            value:
-                DateFormat('dd.MM.yyyy').format(invitation.planDateTimeOfMeeting),
+            value: DateFormat('dd.MM.yyyy')
+                .format(invitation.planDateTimeOfMeeting),
           ),
           spacer,
           _InvitationDataRowWidget(
@@ -53,14 +52,16 @@ class _InvitationMessageBottomWidget extends StatelessWidget {
   final InvitationMessageEntity invitation;
 
   const _InvitationMessageBottomWidget({
-    super.key,
     required this.invitation,
   });
 
   @override
   Widget build(BuildContext context) {
     return invitation.showControlButtons
-        ? const _InvitationActionButtonsWidget()
+        ? _InvitationActionButtonsWidget(
+            appointmentId: invitation.appointmentId,
+            messageId: invitation.id ?? '',
+          )
         : _InvitationChatInfoWidget(
             status: invitation.status,
           );
@@ -68,23 +69,48 @@ class _InvitationMessageBottomWidget extends StatelessWidget {
 }
 
 class _InvitationActionButtonsWidget extends StatelessWidget {
+  final String messageId;
+  final String? appointmentId;
+
   const _InvitationActionButtonsWidget({
-    super.key,
+    required this.messageId,
+    required this.appointmentId,
   });
 
   @override
   Widget build(BuildContext context) {
+    final bloc = context.read<ChatBloc>();
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const _InvitationMessageActionButton(
+        _InvitationMessageActionButton(
           text: 'Принять',
           color: ButtonColor.green,
+          onPressed: () {
+            final localId = appointmentId;
+            if (localId == null) return;
+            bloc.add(
+              ApproveAppointmentRequest(
+                appointmentId: localId,
+                messageId: messageId,
+              ),
+            );
+          },
         ),
         SizedBox(width: 8.toFigmaSize),
-        const _InvitationMessageActionButton(
+        _InvitationMessageActionButton(
           text: 'Отказаться',
           color: ButtonColor.grey,
+          onPressed: () {
+            final localId = appointmentId;
+            if (localId == null) return;
+            bloc.add(
+              RejectAppointmentRequest(
+                appointmentId: localId,
+                messageId: messageId,
+              ),
+            );
+          },
         )
       ],
     );
@@ -95,7 +121,6 @@ class _InvitationChatInfoWidget extends StatelessWidget {
   final InvitationStatus status;
 
   const _InvitationChatInfoWidget({
-    super.key,
     required this.status,
   });
 
@@ -122,8 +147,23 @@ class _InvitationChatInfoWidget extends StatelessWidget {
             style: context.textTheme.bodyMMedium.copyWith(
               color: context.colors.base_80,
             ),
-          )
+          ),
+        InvitationStatus.loading => const _LoadingInvitationStatusWidget(),
       };
+}
+
+class _LoadingInvitationStatusWidget extends StatelessWidget {
+  const _LoadingInvitationStatusWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SizedBox.square(
+        dimension: 40.toFigmaSize,
+        child: const CircularProgressIndicator.adaptive(),
+      ),
+    );
+  }
 }
 
 class _InvitationMessageActionButton extends StatelessWidget {
@@ -132,7 +172,6 @@ class _InvitationMessageActionButton extends StatelessWidget {
   final VoidCallback? onPressed;
 
   const _InvitationMessageActionButton({
-    super.key,
     required this.text,
     required this.color,
     this.onPressed,
@@ -163,7 +202,6 @@ class _InvitationDataRowWidget extends StatelessWidget {
   final String value;
 
   const _InvitationDataRowWidget({
-    super.key,
     required this.iconPath,
     required this.title,
     required this.value,
@@ -211,7 +249,6 @@ class _InvitationDataRowWidget extends StatelessWidget {
 
 class _InvitationMessageHeaderWidget extends StatelessWidget {
   const _InvitationMessageHeaderWidget({
-    super.key,
   });
 
   @override

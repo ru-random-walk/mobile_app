@@ -4,7 +4,6 @@ class _ChatDateSeparatorWidget extends StatelessWidget {
   final DateTime date;
 
   const _ChatDateSeparatorWidget({
-    super.key,
     required this.date,
   });
 
@@ -45,7 +44,7 @@ class _ChatDateSeparatorWidget extends StatelessWidget {
 
 String _getDate(DateTime date) {
   final now = DateTime.now();
-  final difference = now.difference(date).inDays;
+  final difference = now.day - date.day;
   if (difference == 0) return 'Сегодня';
   if (difference == 1) return 'Вчера';
   final isThisYear = date.year == now.year;

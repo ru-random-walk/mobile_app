@@ -4,11 +4,13 @@ class InvitationMessageEntity extends MessageEntity {
   final DateTime planDateTimeOfMeeting;
   final Geolocation place;
   final InvitationStatus status;
+  final String? appointmentId;
 
   TimeOfDay get planTimeOfMeeting =>
       TimeOfDay.fromDateTime(planDateTimeOfMeeting);
 
   InvitationMessageEntity({
+    required this.appointmentId,
     required super.id,
     required super.timestamp,
     required super.isMy,
@@ -20,8 +22,10 @@ class InvitationMessageEntity extends MessageEntity {
 
   InvitationMessageEntity copyWith({
     InvitationStatus? status,
+    String? appointmentId,
   }) =>
       InvitationMessageEntity(
+        appointmentId: appointmentId ?? this.appointmentId,
         id: id,
         timestamp: timestamp,
         isMy: isMy,

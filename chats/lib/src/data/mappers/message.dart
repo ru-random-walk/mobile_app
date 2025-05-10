@@ -23,6 +23,7 @@ extension MessageMapper on MessageModel {
           planDateTimeOfMeeting: message.payload.startsAt,
           place: message.payload.location.toDomain(),
           status: statusFromBool(message.payload.answer),
+          appointmentId: message.payload.appointmentId,
         ),
       final TextSocketResponseMessageModel msg => TextMessageEntity(
           id: msg.id,
@@ -38,8 +39,9 @@ extension MessageMapper on MessageModel {
           isChecked: isChecked,
           planDateTimeOfMeeting: message.payload.startsAt,
           place: message.payload.location.toDomain(),
-          status: statusFromBool(message.payload.answer),
+          status: InvitationStatus.loading,
           id: message.id,
+          appointmentId: message.payload.appointmentId,
         ),
     };
   }

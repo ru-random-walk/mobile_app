@@ -9,7 +9,7 @@ part of 'base.dart';
 class RequestForWalkPayloadModelResponse
     extends BaseRequestForWalkPayloadModel {
   final bool? answer;
-  final String appointmentId;
+  final String? appointmentId;
 
   RequestForWalkPayloadModelResponse({
     required super.location,

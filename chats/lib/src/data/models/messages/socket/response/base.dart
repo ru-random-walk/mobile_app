@@ -14,12 +14,19 @@ sealed class SocketEventModel {
       };
     }
 
-    final stringType = json['payload']['type'] as String?;
-    switch (stringType) {
+    final payload = json['payload'] as Map<String, dynamic>?;
+    switch (payload) {
       case null:
-        return WalkRequestStatusChangedModel.fromJson(json);
-      case String value:
-        return parseMessage(value);
+        final appointmentId = json['appointmentId'] as String?;
+        switch (appointmentId) {
+          case null:
+            return WalkRequestStatusChangedModel.fromJson(json);
+          case String _:
+            return AppointmentCreatedSocketEventModel.fromJson(json);
+        }
+      case Map<String, dynamic> _:
+        final stringType = payload['type'] as String;
+        return parseMessage(stringType);
     }
   }
 }

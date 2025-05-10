@@ -47,7 +47,7 @@ abstract class MatcherDataSource {
     @Path('id') String id,
   );
 
-  @DELETE(_appointmentId)
+  @DELETE('$_appointmentId/cancel')
   Future<HttpResponse> cancelAppointment(
     @Path('id') String id,
   );

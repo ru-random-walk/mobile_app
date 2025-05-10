@@ -3,11 +3,11 @@ part of '../../message.dart';
 @JsonSerializable(createToJson: false)
 class WalkRequestStatusChangedModel extends SocketEventModel {
   final String messageId;
-  final bool isAcccepted;
+  final bool isAccepted;
 
   WalkRequestStatusChangedModel({
     required this.messageId,
-    required this.isAcccepted,
+    required this.isAccepted,
   });
 
   factory WalkRequestStatusChangedModel.fromJson(Map<String, dynamic> json) =>
