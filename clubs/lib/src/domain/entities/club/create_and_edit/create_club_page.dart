@@ -19,14 +19,14 @@ part 'club/condition_string.dart';
 part 'club/body.dart';
 part 'get_id_user.dart';
 
-class GroupFormScreen extends StatefulWidget {
-  const GroupFormScreen({super.key});
+class ClubFormScreen extends StatefulWidget {
+  const ClubFormScreen({super.key});
 
   @override
-  State<GroupFormScreen> createState() => _GroupFormScreenState();
+  State<ClubFormScreen> createState() => _ClubFormScreenState();
 }
 
-class _GroupFormScreenState extends State<GroupFormScreen> {
+class _ClubFormScreenState extends State<ClubFormScreen> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   String? attempts;
