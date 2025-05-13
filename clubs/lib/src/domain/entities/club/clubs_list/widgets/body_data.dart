@@ -1,9 +1,9 @@
-part of '../../screens.dart';
+part of '../page.dart';
 
-class GroupListBodyData extends StatelessWidget {
+class ClubListBodyData extends StatelessWidget {
   final List<Map<String, String>> groups;
 
-  const GroupListBodyData({
+  const ClubListBodyData({
     super.key, 
     required this.groups,
     });
