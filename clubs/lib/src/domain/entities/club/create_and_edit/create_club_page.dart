@@ -115,10 +115,36 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
                     }
 
                     if (result != null) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Группа создана')));
-                      Navigator.pop(context); 
+                      final data = result['data'];
+                      final errors = result['errors'];
+
+                      if (data != null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Группа создана', style: TextStyle(color: context.colors.base_0),),
+                            backgroundColor: context.colors.main_50, 
+                          ),
+                        );
+                        Navigator.pop(context, true);
+                      } else {
+                        String errorMessage = 'Не удалось создать группу';
+
+                        if (errors != null) {
+                          if (errors.any((e) =>
+                              e.toString().contains('maximum count of clubs') ||
+                              e.toString().contains('You are reached maximum count of clubs'))) {
+                            errorMessage = 'Вы не можете создать больше 3 групп';
+                          }
+                        }
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(errorMessage)),
+                        );
+                      }
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Не удалось создать группу')));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Произошла ошибка при отправке запроса')),
+                      );
                     }
                   }
                 ),

@@ -48,11 +48,16 @@ class _ClubsScreenState extends State<ClubsScreen> {
     return Scaffold(
       appBar: _ClubsListAppBar(),
       floatingActionButton: AddClubButton(
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          final result = await Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const ClubFormScreen()),
+            MaterialPageRoute(
+              builder: (context) => ClubFormScreen(),
+            ),
           );
+          if (result == true) {
+            context.read<ClubsListBloc>().add(LoadClubsEvent());
+          }
         },
       ),
       body: RefreshIndicator.adaptive(
@@ -98,7 +103,7 @@ class _ClubsScreenState extends State<ClubsScreen> {
                           delegate: SliverChildBuilderDelegate(
                             (context, index) {
                               final group = _filtered(groups)[index];
-                              return GroupWidget(
+                              return ClubWidget(
                                 title: group['club']?['name'] ?? '',
                                 subscribers: formatMemberCount((group['club']?['members'] as List?)?.length ?? 0),
                               );

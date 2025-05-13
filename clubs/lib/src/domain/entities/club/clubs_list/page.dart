@@ -7,7 +7,7 @@ import 'package:ui_utils/ui_utils.dart';
 import 'package:clubs/src/domain/entities/club/clubs_list/get_clubs_use_case.dart';
 import 'package:clubs/src/data/clubs_api_service.dart';
 import 'package:clubs/src/domain/entities/club/clubs_list/bloc/clubs_list_bloc.dart';
-import 'package:clubs/src/domain/entities/club/clubs_list/widgets/widget_group.dart';
+import 'package:clubs/src/domain/entities/club/clubs_list/widgets/widget_clubs.dart';
 import 'package:clubs/src/domain/entities/club/clubs_list/widgets/filters_clubs/filters_button.dart';
 import 'package:clubs/src/domain/entities/club/clubs_list/widgets/add_button.dart';
 import 'package:clubs/src/domain/entities/club/create_and_edit/create_club_page.dart';

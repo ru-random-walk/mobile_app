@@ -18,7 +18,7 @@ class ClubListBodyData extends StatelessWidget {
         ),
         itemBuilder: (_, index) {
           final group = groups[index];
-          return GroupWidget(
+          return ClubWidget(
             image: group["image"] ?? "",
             title: group["title"] ?? "",
             subscribers: group["subtitle"] ?? "",

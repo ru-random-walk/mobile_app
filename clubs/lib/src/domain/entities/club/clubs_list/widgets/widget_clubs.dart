@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:ui_utils/ui_utils.dart';
 
-class GroupWidget extends StatelessWidget {
+class ClubWidget extends StatelessWidget {
   final String title;
   final String subscribers;
   final String image;
   final void Function()? onTap;
 
-  const GroupWidget({
+  const ClubWidget({
     super.key,
     required this.title,
     required this.subscribers,
