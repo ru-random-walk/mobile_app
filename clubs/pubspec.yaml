@@ -44,6 +44,7 @@ flutter:
     - packages/clubs/assets/images/avatar.png
     - packages/clubs/assets/icons/minus.svg
     - packages/clubs/assets/icons/plus.svg
+    - packages/clubs/assets/icons/clubs.svg
     
   # To add assets to your package, add an assets section, like this:
   # assets:

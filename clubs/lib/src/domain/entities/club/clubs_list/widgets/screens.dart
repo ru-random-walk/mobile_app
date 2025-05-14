@@ -103,9 +103,20 @@ class _ClubsScreenState extends State<ClubsScreen> {
                           delegate: SliverChildBuilderDelegate(
                             (context, index) {
                               final group = _filtered(groups)[index];
+                              final role = group['userRole'];
+                              final club = group['club'];
                               return ClubWidget(
                                 title: group['club']?['name'] ?? '',
                                 subscribers: formatMemberCount((group['club']?['members'] as List?)?.length ?? 0),
+                                onTap: () {
+                                  if (role == 'ADMIN') {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => ClubAdminScreen(club: club),
+                                      ),
+                                    );
+                                  } }
                               );
                             },
                             childCount: _filtered(groups).length,

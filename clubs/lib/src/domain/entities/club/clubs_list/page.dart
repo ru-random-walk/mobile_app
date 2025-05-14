@@ -11,6 +11,7 @@ import 'package:clubs/src/domain/entities/club/clubs_list/widgets/widget_clubs.d
 import 'package:clubs/src/domain/entities/club/clubs_list/widgets/filters_clubs/filters_button.dart';
 import 'package:clubs/src/domain/entities/club/clubs_list/widgets/add_button.dart';
 import 'package:clubs/src/domain/entities/club/create_and_edit/create_club_page.dart';
+import 'package:clubs/src/domain/entities/club/clubs_pages/administrator/admin_page.dart';
 
 part 'widgets/app_bar/app_bar.dart';
 part 'widgets/app_bar/search_paint.dart';
