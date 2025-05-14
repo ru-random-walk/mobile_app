@@ -16,7 +16,7 @@ class ClubAdminBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return SingleChildScrollView(
       padding: EdgeInsets.symmetric(
         vertical: 4.toFigmaSize,
         horizontal: 20.toFigmaSize,
@@ -112,9 +112,22 @@ class ClubAdminBody extends StatelessWidget {
           ),
           SizedBox(height: 8.toFigmaSize),
 
-          const MemberTile(name: 'Нюша', avatar: '🐷'),
-          const MemberTile(name: 'Локи', avatar: '🧝‍♂️'),
-          const MemberTile(name: 'Хаул', avatar: '🧙‍♂️'),
+          MemberTile(
+            name: 'Нюша',
+            role: 'Участник',
+            avatarPath: 'packages/clubs/assets/images/avatar.png',
+            onMenuPressed: () {
+              // открыть оверлей
+            },
+          ),
+          MemberTile(
+            name: 'Нюша',
+            role: 'Участник',
+            avatarPath: 'packages/clubs/assets/images/avatar.png',
+            onMenuPressed: () {
+              // открыть оверлей
+            },
+          ),
         ],
       ),
     );
@@ -138,36 +151,3 @@ String formatMemberCount(int count) {
 
     return '$count $suffix';
   }
-
-class MemberTile extends StatelessWidget {
-  final String name;
-  final String avatar;
-
-  const MemberTile({
-    super.key,
-    required this.name,
-    required this.avatar,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: CircleAvatar(
-        child: Text(avatar),
-      ),
-      title: Text(
-        name,
-        style: context.textTheme.bodyLRegular.copyWith(
-                  color: context.colors.base_90,
-                ),
-      ),
-      subtitle: Text(
-        'Участник',
-        style: context.textTheme.bodySRegular.copyWith(
-                  color: context.colors.base_50,
-                ),
-      ),
-      trailing: const Icon(Icons.more_vert),
-    );
-  }
-}

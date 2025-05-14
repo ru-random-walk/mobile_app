@@ -56,105 +56,99 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return UserIdProvider(
-    builder: (context, userId) {
-      
-      return ColoredBox(
-        color: context.colors.base_0,
-        child: SafeArea(
-          child: Scaffold(
-            appBar: const CreateAndEditPageAppBar(),
-            body: ClubFormBody(
-              nameController: nameController,
-              descriptionController: descriptionController,
-              isConditionAdded: isConditionAdded,
-              conditionName: conditionName,
-              infoCount: infoCount,
-              onConditionAdded: onConditionAdded,
-              removeCondition: removeCondition,
-            ),
-            bottomNavigationBar: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.toFigmaSize, vertical: 4.toFigmaSize),
-              child: SizedBox(
-                width: double.infinity,
-                child: CustomButton(
-                  size: ButtonSize.M,
-                  type: ButtonType.primary,
-                  color: ButtonColor.green,
-                  text: 'Готово',
-                  onPressed: () async {
-                    final name = nameController.text.trim();
-                    final description = descriptionController.text.trim();
-                    if (name.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Введите название группы')));
-                      return;
-                    }
-
-                    Map<String, dynamic>? result;      
-                    //await deleteAllUserClubs(userId: userId, apiService: ClubApiService());
-
-                    if (!isConditionAdded) {
-                      result = await createClub(
-                        name: name, 
-                        description: description.isEmpty ? null : description,
-                        apiService: ClubApiService());
-                    } else if (conditionName == "Запрос на вступление") {
-                      result = await createClubWithConfirmApprovement(
-                        name: name,
-                        description: description.isEmpty ? null : description,
-                        infoCount: infoCount,
-                        apiService: ClubApiService(),
-                      );
-                    } else {
-                      result = await createClubWithFormApprovement(
-                        name: name,
-                        description: description.isEmpty ? null : description,
-                        questions: questions ?? [],
-                        apiService: ClubApiService(),
-                      );
-                    }
-
-                    if (result != null) {
-                      final data = result['data'];
-                      final errors = result['errors'];
-
-                      if (data != null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            backgroundColor: context.colors.main_50,
-                            content: Text('Группа создана', style: context.textTheme.bodySRegular.copyWith(
-                              color: context.colors.base_0,),),
-                          ),
-                        );
-                        Navigator.pop(context, true);
-                      } else {
-                        String errorMessage = 'Не удалось создать группу';
-
-                        if (errors != null) {
-                          if (errors.any((e) =>
-                              e.toString().contains('maximum count of clubs') ||
-                              e.toString().contains('You are reached maximum count of clubs'))) {
-                            errorMessage = 'Вы не можете создать больше 3 групп';
-                          }
-                        }
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(errorMessage)),
-                        );
-                      }
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Произошла ошибка при отправке запроса')),
-                      );
-                    }
+    return ColoredBox(
+      color: context.colors.base_0,
+      child: SafeArea(
+        child: Scaffold(
+          appBar: const CreateAndEditPageAppBar(),
+          body: ClubFormBody(
+            nameController: nameController,
+            descriptionController: descriptionController,
+            isConditionAdded: isConditionAdded,
+            conditionName: conditionName,
+            infoCount: infoCount,
+            onConditionAdded: onConditionAdded,
+            removeCondition: removeCondition,
+          ),
+          bottomNavigationBar: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.toFigmaSize, vertical: 4.toFigmaSize),
+            child: SizedBox(
+              width: double.infinity,
+              child: CustomButton(
+                size: ButtonSize.M,
+                type: ButtonType.primary,
+                color: ButtonColor.green,
+                text: 'Готово',
+                onPressed: () async {
+                  final name = nameController.text.trim();
+                  final description = descriptionController.text.trim();
+                  if (name.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Введите название группы')));
+                    return;
                   }
-                ),
+
+                  Map<String, dynamic>? result;      
+
+                  if (!isConditionAdded) {
+                    result = await createClub(
+                      name: name, 
+                      description: description.isEmpty ? null : description,
+                      apiService: ClubApiService());
+                  } else if (conditionName == "Запрос на вступление") {
+                    result = await createClubWithConfirmApprovement(
+                      name: name,
+                      description: description.isEmpty ? null : description,
+                      infoCount: infoCount,
+                      apiService: ClubApiService(),
+                    );
+                  } else {
+                    result = await createClubWithFormApprovement(
+                      name: name,
+                      description: description.isEmpty ? null : description,
+                      questions: questions ?? [],
+                      apiService: ClubApiService(),
+                    );
+                  }
+
+                  if (result != null) {
+                    final data = result['data'];
+                    final errors = result['errors'];
+
+                    if (data != null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: context.colors.main_50,
+                          content: Text('Группа создана', style: context.textTheme.bodySMediumBase0),
+                        ),
+                      );
+                      Navigator.pop(context, true);
+                    } else {
+                      String errorMessage = 'Не удалось создать группу';
+
+                      if (errors != null) {
+                        if (errors.any((e) =>
+                            e.toString().contains('maximum count of clubs') ||
+                            e.toString().contains('You are reached maximum count of clubs'))) {
+                          errorMessage = 'Вы не можете создать больше 3 групп';
+                        }
+                      }
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(errorMessage)),
+                      );
+                    }
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Произошла ошибка при отправке запроса')),
+                    );
+                  }
+                }
               ),
             ),
           ),
         ),
-      );
-    },);
+      ),
+    );
   }
 }
 

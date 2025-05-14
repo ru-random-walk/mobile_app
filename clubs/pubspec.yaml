@@ -45,6 +45,8 @@ flutter:
     - packages/clubs/assets/icons/minus.svg
     - packages/clubs/assets/icons/plus.svg
     - packages/clubs/assets/icons/clubs.svg
+    - packages/clubs/assets/icons/edit.svg
+    - packages/clubs/assets/icons/delete.svg
     
   # To add assets to your package, add an assets section, like this:
   # assets:
