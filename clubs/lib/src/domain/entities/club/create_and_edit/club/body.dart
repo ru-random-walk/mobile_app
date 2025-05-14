@@ -1,6 +1,6 @@
 part of '../create_club_page.dart';
 
-class GroupFormBody extends StatelessWidget {
+class ClubFormBody extends StatelessWidget {
   final TextEditingController nameController;
   final TextEditingController descriptionController;
   final bool isConditionAdded;
@@ -9,7 +9,7 @@ class GroupFormBody extends StatelessWidget {
   final void Function(String, int, String, List<Map<String, dynamic>>? questions) onConditionAdded;
   final void Function() removeCondition;
 
-  const GroupFormBody({
+  const ClubFormBody({
     Key? key,
     required this.nameController,
     required this.descriptionController,

@@ -64,7 +64,7 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
         child: SafeArea(
           child: Scaffold(
             appBar: const CreateAndEditPageAppBar(),
-            body: GroupFormBody(
+            body: ClubFormBody(
               nameController: nameController,
               descriptionController: descriptionController,
               isConditionAdded: isConditionAdded,
@@ -121,8 +121,9 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
                       if (data != null) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text('Группа создана', style: TextStyle(color: context.colors.base_0),),
-                            backgroundColor: context.colors.main_50, 
+                            backgroundColor: context.colors.main_50,
+                            content: Text('Группа создана', style: context.textTheme.bodySRegular.copyWith(
+                              color: context.colors.base_0,),),
                           ),
                         );
                         Navigator.pop(context, true);
