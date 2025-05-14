@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:ui_utils/ui_utils.dart';
 
-class GroupWidget extends StatelessWidget {
+class ClubWidget extends StatelessWidget {
   final String title;
   final String subscribers;
   final String image;
   final void Function()? onTap;
 
-  const GroupWidget({
+  const ClubWidget({
     super.key,
     required this.title,
     required this.subscribers,
-    required this.image,
+    this.image =  'packages/clubs/assets/images/avatar.png',
     this.onTap,
   });
 
@@ -37,11 +37,7 @@ class GroupWidget extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 32.toFigmaSize,
-              backgroundColor: context.colors.main_7,
-              child: Text(
-                image,
-                style: TextStyle(fontSize: 28.toFigmaSize),
-              ),
+              backgroundImage: AssetImage(image),
             ),
             SizedBox(width: 16.toFigmaSize),
             Expanded(

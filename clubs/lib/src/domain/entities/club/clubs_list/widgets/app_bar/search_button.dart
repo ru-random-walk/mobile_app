@@ -1,4 +1,4 @@
-part of '../../../screens.dart';
+part of '../../page.dart';
 
 class _SearchButton extends StatelessWidget {
   final double dimension;

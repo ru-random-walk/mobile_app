@@ -24,7 +24,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   final pages = [
     const MatcherPage(),
-    GroupsScreen(),
+    const ClubsListPage(),
     const ChatsListPage(),
     const Center(
       child: Text('4'),

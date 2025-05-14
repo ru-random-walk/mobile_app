@@ -1,8 +1,8 @@
-part of '../../../screens.dart';
+part of '../../page.dart';
 
 final _appBarHeight = 56.toFigmaSize;
 
-class _GroupListAppBar extends StatelessWidget implements PreferredSizeWidget {
+class _ClubsListAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return Row(

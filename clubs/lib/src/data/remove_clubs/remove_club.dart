@@ -14,5 +14,6 @@ Future<Map<String, dynamic>?> removeClub({
     'clubId': clubId,
   };
  
-  return await apiService.performPostRequest(query, variables);
+  final result = await apiService.performPostRequest(query, variables);
+  return result!['data'];
 }
