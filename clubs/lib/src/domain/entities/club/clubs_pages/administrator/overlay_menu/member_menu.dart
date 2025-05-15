@@ -7,6 +7,7 @@ class MemberRoleMenu extends StatelessWidget {
   final VoidCallback onMakeInspector;
   final VoidCallback onMakeMember;
   final VoidCallback onRemoveFromGroup;
+  final String currentRole;
 
   const MemberRoleMenu({
     super.key,
@@ -16,6 +17,7 @@ class MemberRoleMenu extends StatelessWidget {
     required this.onMakeInspector,
     required this.onMakeMember,
     required this.onRemoveFromGroup,
+    required this.currentRole,
   });
 
   @override
@@ -42,33 +44,39 @@ class MemberRoleMenu extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    _buildItem(
-                      context,
-                      text: 'Сделать администратором',
-                      onTap: () {
-                        closeMenu();
-                        onMakeAdmin();
-                      },
-                    ),
-                    _divider(context),
-                    _buildItem(
-                      context,
-                      text: 'Сделать инспектором',
-                      onTap: () {
-                        closeMenu();
-                        onMakeInspector();
-                      },
-                    ),
-                    _divider(context),
-                    _buildItem(
-                      context,
-                      text: 'Сделать участником',
-                      onTap: () {
-                        closeMenu();
-                        onMakeMember();
-                      },
-                    ),
-                    _divider(context),
+                    if (currentRole != 'ADMIN') ...[
+                      _buildItem(
+                        context,
+                        text: 'Сделать администратором',
+                        onTap: () {
+                          closeMenu();
+                          onMakeAdmin();
+                        },
+                      ),
+                      _divider(context),
+                    ],
+                    if (currentRole != 'INSPECTOR') ...[
+                      _buildItem(
+                        context,
+                        text: 'Сделать инспектором',
+                        onTap: () {
+                          closeMenu();
+                          onMakeInspector();
+                        },
+                      ),
+                      _divider(context),
+                    ],
+                    if (currentRole != 'USER') ...[
+                      _buildItem(
+                        context,
+                        text: 'Сделать участником',
+                        onTap: () {
+                          closeMenu();
+                          onMakeMember();
+                        },
+                      ),
+                      _divider(context),
+                    ],
                     _buildItem(
                       context,
                       text: 'Удалить из группы',

@@ -6,6 +6,7 @@ class ClubAdminBody extends StatefulWidget {
   final List<Map<String, dynamic>> approvement;
   final String clubId;
   final ClubApiService apiService;
+  final String currentUserId;
 
   const ClubAdminBody({
     super.key,
@@ -14,6 +15,7 @@ class ClubAdminBody extends StatefulWidget {
     required this.approvement,
     required this.clubId,
     required this.apiService,
+    required this.currentUserId,
   });
 
   @override
@@ -101,8 +103,15 @@ class _ClubAdminBodyState extends State<ClubAdminBody> {
     }
   }
 
+  String getUserRole(String userId) {
+  final memberInfo = _members.firstWhere((m) => m['id'] == userId, orElse: () => {});
+  return memberInfo['role'] ?? 'USER';
+}
+
   void _showMemberMenu(BuildContext context, Offset offset, UserEntity user) {
   _hideMenu();
+
+  final role = getUserRole(user.id);
 
   final overlay = Overlay.of(context);
   _menuOverlay = OverlayEntry(
@@ -113,6 +122,7 @@ class _ClubAdminBodyState extends State<ClubAdminBody> {
       onMakeInspector: () => _handleRoleChange(user.id, 'INSPECTOR'),
       onMakeMember: () => _handleRoleChange(user.id, 'USER'),
       onRemoveFromGroup: () => _handleRemove(user.id),
+      currentRole: role,
     ),
   );
   overlay.insert(_menuOverlay!);
@@ -123,13 +133,74 @@ void _hideMenu() {
   _menuOverlay = null;
 }
 
-void _handleRoleChange(String userId, String newRole) {
-  print('Изменить роль $userId на $newRole');
+Future<void> _handleRoleChange(String userId, String newRole) async {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return ConfirmActionDialog(
+        message: 'Вы уверены, что хотите изменить роль?',
+        confirmText: 'Изменить',
+        onConfirm: () async {
+          try {
+            final result = await changeMemberRole(
+              clubId: widget.clubId,
+              memberId: userId,
+              role: newRole,
+              apiService: widget.apiService,
+            );
+
+            if (result != null && result['changeMemberRole'] != null) {
+              final updatedRole = result['changeMemberRole']['role'];
+              setState(() {
+                final index = _members.indexWhere((m) => m['id'] == userId);
+                if (index != -1) {
+                  _members[index]['role'] = updatedRole;
+                }
+              });
+            }
+          } catch (e) {
+            print('Ошибка при изменении роли: $e');
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Не удалось изменить роль')),
+            );
+          }
+        },
+      );
+    },
+  );
   _hideMenu();
 }
 
-void _handleRemove(String userId) {
-  print('Удалить пользователя $userId');
+void _handleRemove(String userId) async {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return ConfirmActionDialog(
+        message: 'Вы уверены, что хотите удалить участника из группы?',
+        confirmText: 'Удалить',
+        customColor: const Color(0xFFFF281A),
+        onConfirm: () async {
+          try {
+            await removeMemberFromClub(
+              clubId: widget.clubId,
+              memberId: userId,
+              apiService: widget.apiService,
+            );
+
+            setState(() {
+              _users.removeWhere((u) => u.id == userId);
+              _members.removeWhere((m) => m['id'] == userId);
+            });
+          } catch (e) {
+            print('Ошибка при удалении: $e');
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Не удалось удалить участника')),
+            );
+          }
+        },
+      );
+    },
+  );
   _hideMenu();
 }
 
@@ -161,16 +232,13 @@ void _handleRemove(String userId) {
           }
           final userIndex = index - 1;
           final user = _users[userIndex];
-          final memberInfo = _members.firstWhere(
-            (m) => m['id'] == user.id,
-            orElse: () => {},
-          );
-          final role = memberInfo['role'] ?? 'Участник';
+          final role = getUserRole(user.id);
           return MemberTile(
             name: user.fullName,
             role: role,
             avatarPath: user.avatar,
-            onMenuPressed: (Offset position) {
+            onMenuPressed: user.id == widget.currentUserId ? null : (Offset position) {
+            //onMenuPressed: (Offset position) {
               _showMemberMenu(context, position, user);
             },
           );

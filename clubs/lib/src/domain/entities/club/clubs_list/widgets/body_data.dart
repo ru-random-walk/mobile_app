@@ -1,36 +1,114 @@
 part of '../page.dart';
 
-class ClubListBodyData extends StatelessWidget {
-  final List<Map<String, String>> groups;
+class ClubsBody extends StatefulWidget {
+  final String currentUserId;
 
-  const ClubListBodyData({
-    super.key, 
-    required this.groups,
-    });
+  const ClubsBody({super.key, required this.currentUserId});
+
+  @override
+  State<ClubsBody> createState() => _ClubsBodyState();
+}
+
+class _ClubsBodyState extends State<ClubsBody> {
+  int _selectedFilterIndex = 0;
+
+  List<Map<String, dynamic>> _filtered(List<Map<String, dynamic>> groups) {
+    switch (_selectedFilterIndex) {
+      case 1:
+        return groups.where((g) => ['ADMIN', 'INSPECTOR'].contains(g['userRole'])).toList();
+      case 2:
+        return groups.where((g) => g['userRole'] == 'PENDING_APPROVAL').toList();
+      default:
+        return groups;
+    }
+  }
+
+  String formatMemberCount(int count) {
+    final mod10 = count % 10;
+    final mod100 = count % 100;
+
+    if (mod100 >= 11 && mod100 <= 14) return '$count участников';
+    if (mod10 == 1) return '$count участник';
+    if (mod10 >= 2 && mod10 <= 4) return '$count участника';
+    return '$count участников';
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView.separated(
-        padding: EdgeInsets.symmetric(
-          horizontal: 16.toFigmaSize, 
-          vertical: 8.toFigmaSize,
-        ),
-        itemBuilder: (_, index) {
-          final group = groups[index];
-          return ClubWidget(
-            image: group["image"] ?? "",
-            title: group["title"] ?? "",
-            subscribers: group["subtitle"] ?? "",
-            onTap: () {
-              // Navigator.push(...);
+    final bloc = context.read<ClubsListBloc>();
+
+    return RefreshIndicator.adaptive(
+      onRefresh: () async => bloc.add(LoadClubsEvent()),
+      child: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        slivers: [
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                SizedBox(height: 8.toFigmaSize),
+                GroupFilters(
+                  selectedIndex: _selectedFilterIndex,
+                  onFilterChanged: (index) {
+                    setState(() {
+                      _selectedFilterIndex = index;
+                    });
+                  },
+                ),
+                SizedBox(height: 8.toFigmaSize),
+              ],
+            ),
+          ),
+          BlocBuilder<ClubsListBloc, ClubsState>(
+            builder: (context, state) {
+              return switch (state) {
+                ClubsLoading() => const SliverFillRemaining(
+                  child: Center(child: CircularProgressIndicator.adaptive()),
+                ),
+                ClubsLoaded(:final groups) => _filtered(groups).isEmpty
+                    ? SliverFillRemaining(
+                        child: Center(
+                          child: Text('Пусто', style: context.textTheme.h4),
+                        ),
+                      )
+                    : SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            final group = _filtered(groups)[index];
+                            final role = group['userRole'];
+                            return ClubWidget(
+                              title: group['club']?['name'] ?? '',
+                              subscribers: formatMemberCount(
+                                (group['club']?['members'] as List?)?.length ?? 0,
+                              ),
+                              onTap: () {
+                                if (role == 'ADMIN') {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => ClubAdminScreen(
+                                        clubId: group['club']?['id'],
+                                        currentId: widget.currentUserId,
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
+                            );
+                          },
+                          childCount: _filtered(groups).length,
+                        ),
+                      ),
+                ClubsError() => SliverFillRemaining(
+                  child: Center(
+                    child: Text('Ошибка загрузки групп', style: context.textTheme.h4),
+                  ),
+                ),
+                _ => const SliverToBoxAdapter(child: SizedBox.shrink()),
+              };
             },
-          );
-        },
-        separatorBuilder: (_, __) => SizedBox(
-          height: 4.toFigmaSize,
-        ),
-        itemCount: groups.length,
+          ),
+          SliverToBoxAdapter(child: SizedBox(height: 8.toFigmaSize)),
+        ],
       ),
     );
   }

@@ -14,14 +14,20 @@ part '../app_bar.dart';
 part 'widgets/body.dart';
 part 'widgets/member_tile.dart';
 part 'widgets/header.dart';
+part 'widgets/alert_dialogs.dart';
 part 'overlay_menu/overlay_menu.dart';
 part 'overlay_menu/row_menu.dart';
 part 'overlay_menu/member_menu.dart';
 
 class ClubAdminScreen extends StatefulWidget  {
   final String clubId;
+  final String currentId;
 
-  const ClubAdminScreen({super.key, required this.clubId});
+  const ClubAdminScreen({
+    super.key, 
+    required this.clubId,
+    required this.currentId,
+  });
 
   @override
   State<ClubAdminScreen> createState() => _ClubAdminScreenState();
@@ -88,6 +94,7 @@ class _ClubAdminScreenState extends State<ClubAdminScreen> {
                     approvement: List<Map<String, dynamic>>.from(_club!['approvements'] ?? []),
                     clubId: widget.clubId,
                     apiService: _clubApiService,
+                    currentUserId: widget.currentId,
           ),
         ),
       ),
