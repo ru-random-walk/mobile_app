@@ -4,7 +4,7 @@ class MemberTile extends StatelessWidget {
   final String name;
   final String role;
   final String avatarPath;
-  final VoidCallback? onMenuPressed;
+  final void Function(Offset position)? onMenuPressed;
 
   const MemberTile({
     super.key,
@@ -85,7 +85,18 @@ class MemberTile extends StatelessWidget {
                   size: 28.toFigmaSize, 
                   color: context.colors.base_60,
                 ),
-                onPressed: onMenuPressed,
+                onPressed: () {
+                  final renderBox = context.findRenderObject();
+                  final overlay = Overlay.of(context);
+
+                  if (renderBox is RenderBox && overlay?.context.findRenderObject() is RenderBox) {
+                    final overlayBox = overlay!.context.findRenderObject() as RenderBox;
+                    final position = renderBox.localToGlobal(Offset.zero, ancestor: overlayBox);
+                    onMenuPressed?.call(position);
+                  } else {
+                    debugPrint('RenderBox not ready yet');
+                  }
+                },
                 constraints: const BoxConstraints(), 
                 padding: EdgeInsets.zero, 
                 visualDensity: VisualDensity.compact,

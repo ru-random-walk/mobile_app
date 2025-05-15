@@ -22,6 +22,7 @@ class ClubAdminBody extends StatefulWidget {
 
 class _ClubAdminBodyState extends State<ClubAdminBody> {
   final ScrollController _scrollController = ScrollController();
+  OverlayEntry? _menuOverlay;
 
   bool _isLoading = true;      
   bool _isLoadingMore = false; 
@@ -100,6 +101,38 @@ class _ClubAdminBodyState extends State<ClubAdminBody> {
     }
   }
 
+  void _showMemberMenu(BuildContext context, Offset offset, UserEntity user) {
+  _hideMenu();
+
+  final overlay = Overlay.of(context);
+  _menuOverlay = OverlayEntry(
+    builder: (context) => MemberRoleMenu(
+      dY: offset.dy,
+      closeMenu: _hideMenu,
+      onMakeAdmin: () => _handleRoleChange(user.id, 'ADMIN'),
+      onMakeInspector: () => _handleRoleChange(user.id, 'INSPECTOR'),
+      onMakeMember: () => _handleRoleChange(user.id, 'USER'),
+      onRemoveFromGroup: () => _handleRemove(user.id),
+    ),
+  );
+  overlay.insert(_menuOverlay!);
+}
+
+void _hideMenu() {
+  _menuOverlay?.remove();
+  _menuOverlay = null;
+}
+
+void _handleRoleChange(String userId, String newRole) {
+  print('Изменить роль $userId на $newRole');
+  _hideMenu();
+}
+
+void _handleRemove(String userId) {
+  print('Удалить пользователя $userId');
+  _hideMenu();
+}
+
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
@@ -137,7 +170,8 @@ class _ClubAdminBodyState extends State<ClubAdminBody> {
             name: user.fullName,
             role: role,
             avatarPath: user.avatar,
-            onMenuPressed: () {
+            onMenuPressed: (Offset position) {
+              _showMemberMenu(context, position, user);
             },
           );
         },
