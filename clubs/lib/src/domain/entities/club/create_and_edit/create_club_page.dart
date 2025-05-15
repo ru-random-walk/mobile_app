@@ -12,29 +12,52 @@ import 'package:clubs/src/domain/entities/club/create_and_edit/tests/create_test
 import 'package:clubs/src/domain/entities/club/create_and_edit/app_bar.dart'; 
 import 'package:clubs/src/data/clubs_api_service.dart';
 
-import 'package:clubs/src/data/remove_clubs/club_utils.dart';
-
 part 'club/popup.dart';
 part 'club/condition_string.dart';
 part 'club/body.dart';
 part 'get_id_user.dart';
 
 class ClubFormScreen extends StatefulWidget {
-  const ClubFormScreen({super.key});
+  final String? initialName;
+  final String? initialDescription;
+  final bool initialIsConditionAdded;
+  final String? initialConditionName;
+  final int initialInfoCount;
+  final List<Map<String, dynamic>>? initialQuestions;
+
+  const ClubFormScreen({
+    super.key,
+    this.initialName,
+    this.initialDescription,
+    this.initialIsConditionAdded = false,
+    this.initialConditionName,
+    this.initialInfoCount = 1,
+    this.initialQuestions,
+  });
 
   @override
   State<ClubFormScreen> createState() => _ClubFormScreenState();
 }
 
 class _ClubFormScreenState extends State<ClubFormScreen> {
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController descriptionController = TextEditingController();
-  String? attempts;
-  bool isConditionAdded = false;
-  int infoCount = 1; 
-  String conditionName = "";
-  final ClubApiService clubApiService = ClubApiService();
+  late TextEditingController nameController;
+  late TextEditingController descriptionController;
+  late bool isConditionAdded;
+  late String conditionName;
+  late int infoCount;
   List<Map<String, dynamic>>? questions;
+  final ClubApiService clubApiService = ClubApiService();
+
+  @override
+  void initState() {
+    super.initState();
+    nameController = TextEditingController(text: widget.initialName ?? '');
+    descriptionController = TextEditingController(text: widget.initialDescription ?? '');
+    isConditionAdded = widget.initialIsConditionAdded;
+    conditionName = widget.initialConditionName ?? '';
+    infoCount = widget.initialInfoCount;
+    questions = widget.initialQuestions;
+  }
 
   void onConditionAdded(String name, int count, List<Map<String, dynamic>>? questionInputs) {
   setState(() {

@@ -10,6 +10,7 @@ part 'remove_clubs/remove_club.dart';
 part 'get_clubs/get_id_clubs.dart';
 part 'get_clubs/get_clubs_info.dart';
 part 'get_clubs/get_members_club.dart';
+part 'get_clubs/get_approvement_info.dart';
 
 class ClubApiService {
   final dioClient = NetworkConfig.instance.dio;

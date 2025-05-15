@@ -1,13 +1,19 @@
 part of 'administrator/admin_page.dart';
 
 class ClubAdminAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final ClubApiService apiService; 
+  final String title;
+  final String description;
+  final List<Map<String, dynamic>> approvement;
   final String clubId;
+  final ClubApiService apiService;
 
   const ClubAdminAppBar({
     super.key,
-    required this.apiService,
+    required this.title,
+    required this.description,
+    required this.approvement,
     required this.clubId,
+    required this.apiService,
   });
 
   @override
@@ -53,10 +59,13 @@ class ClubAdminAppBar extends StatelessWidget implements PreferredSizeWidget {
                           await removeClub(clubId: clubId, apiService: apiService);
                           overlay.remove();
                           overlay.dispose();
-                          Navigator.of(context).pop(); // Уходим с экрана
+                          Navigator.of(context).pop();
                         },
                         clubId: clubId,
                         apiService: apiService,
+                        title:title,
+                        description: description,
+                        approvement: approvement,
                       ),
                     ),
                   );

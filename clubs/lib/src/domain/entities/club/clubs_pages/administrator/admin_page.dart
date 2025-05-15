@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auth/auth.dart';
 import 'package:core/src/network/page_query/page_query.dart';
 import 'package:auth/auth.dart';
+import 'package:clubs/src/domain/entities/club/create_and_edit/create_club_page.dart';
 
 part '../app_bar.dart';
 part 'widgets/body.dart';
@@ -15,6 +16,7 @@ part 'widgets/member_tile.dart';
 part 'widgets/header.dart';
 part 'overlay_menu/overlay_menu.dart';
 part 'overlay_menu/row_menu.dart';
+part 'overlay_menu/member_menu.dart';
 
 class ClubAdminScreen extends StatefulWidget  {
   final String clubId;
@@ -63,15 +65,19 @@ class _ClubAdminScreenState extends State<ClubAdminScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final ClubApiService clubApiService = ClubApiService();
     return ColoredBox(
       color: context.colors.base_0,
       child: SafeArea(
         child: Scaffold(
-          appBar: ClubAdminAppBar(
-            apiService: clubApiService,
-            clubId: widget.clubId,
-          ),
+          appBar: _isLoading || _club == null
+            ? null
+            : ClubAdminAppBar(
+                title: _club!['name'],
+                description: _club!['description'],
+                approvement: List<Map<String, dynamic>>.from(_club!['approvements'] ?? []),
+                clubId: widget.clubId,
+                apiService: _clubApiService,
+              ),
           body: _isLoading
             ? const Center(child: CircularProgressIndicator())
             : _club == null

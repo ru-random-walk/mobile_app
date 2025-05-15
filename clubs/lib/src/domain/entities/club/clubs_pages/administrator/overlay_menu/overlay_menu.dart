@@ -5,6 +5,9 @@ class ClubAdminMenu extends StatelessWidget {
   final VoidCallback closeMenu;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
+  final String title;
+  final String description;
+  final List<Map<String, dynamic>> approvement;
   final String clubId;
   final ClubApiService apiService;
 
@@ -15,6 +18,9 @@ class ClubAdminMenu extends StatelessWidget {
     required this.closeMenu,
     required this.onEdit,
     required this.onDelete,
+    required this.title,
+    required this.description,
+    required this.approvement,
     required this.clubId,
     required this.apiService,
   });
@@ -43,7 +49,65 @@ class ClubAdminMenu extends StatelessWidget {
                     RowMenuWidget(
                       text: 'Изменить',
                       imagePath: 'assets/icons/edit.svg',
-                      onTap:() {},
+                      onTap: () async {
+                        try {
+                          final clubData = await getApprovementInfo(clubId: clubId, apiService: apiService,);
+
+                          final approvements = clubData?['getClub']?['approvements'] as List<dynamic>?;
+
+                          if (approvements == null || approvements.isEmpty) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => ClubFormScreen(
+                                  initialName: title,
+                                  initialDescription: description,
+                                  initialIsConditionAdded: false,
+                                ),
+                              ),
+                            );
+                            closeMenu();
+                            return;
+                          }
+
+                          final data = approvements.first['data'];
+                          final typename = data['__typename'];
+
+                          String conditionName = '';
+                          int infoCount = 0;
+                          List<Map<String, dynamic>>? questions; 
+
+                          if (typename == 'FormApprovementData') {
+                            conditionName = 'Тест';
+                            questions = (data['questions'] as List<dynamic>?)
+                              ?.map((q) => Map<String, dynamic>.from(q))
+                              .toList();
+                            infoCount = questions?.length ?? 0;
+                          } else if (typename == 'MembersConfirmApprovementData') {
+                            conditionName = 'Запрос на подтверждение';
+                            infoCount = data['requiredConfirmationNumber'];
+                          }                         
+
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ClubFormScreen(
+                                initialName: title,
+                                initialDescription: description,
+                                initialIsConditionAdded: true,
+                                initialConditionName: conditionName,
+                                initialInfoCount: infoCount,
+                                initialQuestions: questions,
+                              ),
+                            ),
+                          );
+                          closeMenu();
+                        }catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Ошибка при получении данных'),
+                            ),
+                          );
+                        }
+                      },
                     ),
                     SizedBox(
                       width: 200.toFigmaSize,
@@ -57,29 +121,20 @@ class ClubAdminMenu extends StatelessWidget {
                       imagePath: 'assets/icons/delete.svg',
                       onTap: () async {
                         try {
-                          // Пытаемся выполнить удаление
                           final result = await removeClub(clubId: clubId, apiService: apiService);
-                          
-                          // Если удаление прошло успешно
                           closeMenu();
-                          Navigator.of(context).pop(); // Возвращаем назад
-                          
-                          // Показываем SnackBar с успешным сообщением
+                          Navigator.of(context).pop(); 
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text('Клуб удален успешно!', style: context.textTheme.bodySMediumBase0),
-                              backgroundColor: Colors.green,
+                              backgroundColor: context.colors.main_50,
                             ),
                           );
                         } catch (e) {
-                          // В случае ошибки
                           closeMenu();
-                          
-                          // Показываем SnackBar с ошибкой
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Ошибка при удалении клуба: ${e.toString()}'),
-                              backgroundColor: Colors.red,
+                            const SnackBar(
+                              content: Text('Ошибка при удалении клуба'),
                             ),
                           );
                         }
