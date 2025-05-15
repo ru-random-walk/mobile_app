@@ -1,4 +1,4 @@
-part of 'admin_page.dart';
+part of '../admin_page.dart';
 
 class MemberTile extends StatelessWidget {
   final String name;
@@ -14,6 +14,28 @@ class MemberTile extends StatelessWidget {
     this.onMenuPressed,
   });
 
+  Widget _defaultAvatar() {
+    return Image.asset(
+      'packages/clubs/assets/images/avatar.png',
+      width: 48.toFigmaSize,
+      height: 48.toFigmaSize,
+      fit: BoxFit.cover,
+    );
+  }
+
+  String getRoleLabel(String role) {
+    switch (role) {
+      case 'ADMIN':
+        return 'Администратор';
+      case 'USER':
+        return 'Участник';
+      case 'INSPECTOR':
+        return 'Инспектор';
+      default:
+        return 'Участник';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -25,12 +47,17 @@ class MemberTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ClipOval(
-                child: Image.asset(
-                  avatarPath,
-                  width: 48.toFigmaSize,
-                  height: 48.toFigmaSize,
-                  fit: BoxFit.cover,
-                ),
+                child: avatarPath.isNotEmpty
+                  ? Image.network(
+                      avatarPath,
+                      width: 48.toFigmaSize,
+                      height: 48.toFigmaSize,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return _defaultAvatar(); 
+                      },
+                    )
+                  : _defaultAvatar(),
               ),
               SizedBox(width: 16.toFigmaSize),
               Expanded(
@@ -44,7 +71,7 @@ class MemberTile extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      role,
+                      getRoleLabel(role),
                       style: context.textTheme.bodySRegular.copyWith(
                         color: context.colors.base_50,
                       ),

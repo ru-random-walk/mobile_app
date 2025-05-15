@@ -10,16 +10,9 @@ Future<Map<String, dynamic>?> getUserClubs({
         club {
           id
           name
-          description
           members{
             id
-            role
           }
-          approvements{
-            id
-            type
-          }
-          photoVersion
         }
         userRole
       }
