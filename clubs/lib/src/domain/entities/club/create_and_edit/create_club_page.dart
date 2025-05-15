@@ -36,9 +36,8 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
   final ClubApiService clubApiService = ClubApiService();
   List<Map<String, dynamic>>? questions;
 
-  void onConditionAdded(String condition, int count, String name, List<Map<String, dynamic>>? questionInputs) {
+  void onConditionAdded(String name, int count, List<Map<String, dynamic>>? questionInputs) {
   setState(() {
-    attempts = condition;
     infoCount = count;
     isConditionAdded = true;
     conditionName = name;

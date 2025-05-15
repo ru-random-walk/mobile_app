@@ -6,7 +6,7 @@ class ClubFormBody extends StatelessWidget {
   final bool isConditionAdded;
   final String conditionName;
   final int infoCount;
-  final void Function(String, int, String, List<Map<String, dynamic>>? questions) onConditionAdded;
+  final void Function(String, int, List<Map<String, dynamic>>? questions) onConditionAdded;
   final void Function() removeCondition;
 
   const ClubFormBody({
@@ -83,12 +83,11 @@ class ClubFormBody extends StatelessWidget {
                   },
                 ).then((result) {
                   if (result != null) {
-                    String testName = result['testName'];
+                    String approvementName = result['approvementName'];
                     int questionCount = result['questionCount'];
-                    String attempts = result['attempts'];
                     List<Map<String, dynamic>> questions = result['questions'];
 
-                    onConditionAdded(attempts, questionCount, testName, questions); 
+                    onConditionAdded(approvementName, questionCount, questions); 
                     }
                   });
                 },

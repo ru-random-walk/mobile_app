@@ -55,8 +55,8 @@ class MemberTile extends StatelessWidget {
               IconButton(
                 icon: Icon(
                   Icons.more_vert,
-                  size: 32.toFigmaSize, 
-                  color: context.colors.base_50,
+                  size: 28.toFigmaSize, 
+                  color: context.colors.base_60,
                 ),
                 onPressed: onMenuPressed,
                 constraints: const BoxConstraints(), 

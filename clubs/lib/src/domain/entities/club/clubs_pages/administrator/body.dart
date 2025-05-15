@@ -68,13 +68,12 @@ class ClubAdminBody extends StatelessWidget {
               ),
             ),
             ...approvement
-                .where((a) => a['type'] == 'FORM' || a['type'] == 'MEMBER_CONFIRM')
+                .where((a) => a['type'] == 'FORM' || a['type'] == 'MEMBERS_CONFIRM')
                 .map((a) {
               final type = a['type'];
               if (type == 'FORM') {
-                final testName = a['name'] ?? 'Без названия';
                 return Text(
-                  'Тест: $testName',
+                  'Тест',
                   style: context.textTheme.bodyLRegular.copyWith(
                     color: context.colors.base_80,
                   ),
