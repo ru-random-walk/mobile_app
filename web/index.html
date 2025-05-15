@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -22,17 +23,30 @@
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="random_walk">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
+  <style>
+    #flt-glass-pane {
+      padding-bottom: env(safe-area-inset-bottom);
+      padding-top: env(safe-area-inset-top);
+    }
+  </style>
+
+
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="icon" type="image/png" href="favicon.png" />
+
+  <script src='https://unpkg.com/maplibre-gl@^4.3/dist/maplibre-gl.js'></script>
+  <link href='https://unpkg.com/maplibre-gl@^4.3/dist/maplibre-gl.css' rel='stylesheet' />
 
   <title>random_walk</title>
   <link rel="manifest" href="manifest.json">
 </head>
+
 <body>
   <script src="flutter_bootstrap.js" async></script>
 </body>
+
 </html>
