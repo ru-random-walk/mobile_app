@@ -18,6 +18,7 @@ part 'widgets/alert_dialogs.dart';
 part 'overlay_menu/overlay_menu.dart';
 part 'overlay_menu/row_menu.dart';
 part 'overlay_menu/member_menu.dart';
+part 'logic/club_admin_controller.dart';
 
 class ClubAdminScreen extends StatefulWidget  {
   final String clubId;
