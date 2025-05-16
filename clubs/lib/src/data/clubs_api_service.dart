@@ -13,6 +13,7 @@ part 'get_clubs/get_members_club.dart';
 part 'get_clubs/get_approvement_info.dart';
 part 'change_member_role/change_member_role.dart';
 part 'change_member_role/remove_member.dart';
+part 'change_member_role/add_member_in_club.dart';
 
 class ClubApiService {
   final dioClient = NetworkConfig.instance.dio;

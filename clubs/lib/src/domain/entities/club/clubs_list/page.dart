@@ -14,6 +14,7 @@ import 'package:clubs/src/domain/entities/club/text_format/member_format.dart';
 import 'package:clubs/src/domain/entities/club/create_and_edit/create_club_page.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/administrator/admin_page.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/not_member/not_member_page.dart';
+import 'package:clubs/src/domain/entities/club/clubs_pages/member/member_page.dart';
 
 part 'widgets/app_bar/app_bar.dart';
 part 'widgets/app_bar/search_paint.dart';

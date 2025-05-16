@@ -150,8 +150,34 @@ class _NotMemberPageState extends State<NotMemberPage> {
               width: double.infinity,
               child: CustomButton(
                 text: 'Вступить',
-                onPressed: () {
-                  // TODO: обработка нажатия
+                onPressed: () async {
+                  try {
+                    final result = await addMemberInClub(
+                      clubId: widget.clubId,
+                      memberId: widget.currentId,
+                      apiService: _clubApiService,
+                    );
+                    final member = result?['addMemberInClub'];
+
+                    final message = member != null
+                        ? 'Вы успешно вступили в клуб'
+                        : 'Не удалось вступить в клуб';
+
+                    if (!mounted) return;
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(message)),
+                    );
+
+                    if (member != null) {
+                      Navigator.pop(context);
+                    }
+                  } catch (e) {
+                    if (!mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Ошибка: $e')),
+                    );
+                  }
                 },
               ),
             ),
