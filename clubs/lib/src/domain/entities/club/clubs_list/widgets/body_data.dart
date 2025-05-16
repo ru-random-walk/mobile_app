@@ -75,19 +75,33 @@ class _ClubsBodyState extends State<ClubsBody> {
                           (context, index) {
                             final group = _filtered(groups)[index];
                             final role = group['userRole'];
+                            final membersCount = (group['club']?['members'] as List).length;
                             return ClubWidget(
                               title: group['club']?['name'] ?? '',
-                              subscribers: formatMemberCount(
-                                (group['club']?['members'] as List?)?.length ?? 0,
-                              ),
+                              subscribers: formatMemberCount(membersCount),
                               onTap: () {
-                                if (role == 'ADMIN') {
+                                final clubId = group['club']?['id'];
+
+                                //if (role == 'ADMIN') {
+                                if (role == 'USER') {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (_) => ClubAdminScreen(
-                                        clubId: group['club']?['id'],
+                                        clubId: clubId,
                                         currentId: widget.currentUserId,
+                                        membersCount: membersCount,
+                                      ),
+                                    ),
+                                  );
+                                } else if (role == 'ADMIN') {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => NotMemberPage(
+                                        clubId: clubId,
+                                        currentId: widget.currentUserId,
+                                        membersCount: membersCount,
                                       ),
                                     ),
                                   );

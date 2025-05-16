@@ -90,8 +90,8 @@ class MemberTile extends StatelessWidget {
                     final renderBox = context.findRenderObject();
                     final overlay = Overlay.of(context);
 
-                    if (renderBox is RenderBox && overlay?.context.findRenderObject() is RenderBox) {
-                      final overlayBox = overlay!.context.findRenderObject() as RenderBox;
+                    if (renderBox is RenderBox && overlay.context.findRenderObject() is RenderBox) {
+                      final overlayBox = overlay.context.findRenderObject() as RenderBox;
                       final position = renderBox.localToGlobal(Offset.zero, ancestor: overlayBox);
                       onMenuPressed?.call(position);
                     } else {

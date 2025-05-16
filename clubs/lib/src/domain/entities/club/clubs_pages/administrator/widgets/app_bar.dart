@@ -1,7 +1,7 @@
-part of 'administrator/admin_page.dart';
+part of '../admin_page.dart';
 
 class ClubAdminAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String title;
+  final String clubName;
   final String description;
   final List<Map<String, dynamic>> approvement;
   final String clubId;
@@ -9,7 +9,7 @@ class ClubAdminAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   const ClubAdminAppBar({
     super.key,
-    required this.title,
+    required this.clubName,
     required this.description,
     required this.approvement,
     required this.clubId,
@@ -63,7 +63,7 @@ class ClubAdminAppBar extends StatelessWidget implements PreferredSizeWidget {
                         },
                         clubId: clubId,
                         apiService: apiService,
-                        title:title,
+                        title:clubName,
                         description: description,
                         approvement: approvement,
                       ),

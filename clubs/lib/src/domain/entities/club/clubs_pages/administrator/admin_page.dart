@@ -4,13 +4,11 @@ import 'package:ui_components/ui_components.dart';
 import 'package:ui_utils/ui_utils.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auth/auth.dart';
 import 'package:core/src/network/page_query/page_query.dart';
-import 'package:auth/auth.dart';
 import 'package:clubs/src/domain/entities/club/create_and_edit/create_club_page.dart';
 
-part '../app_bar.dart';
+part 'widgets/app_bar.dart';
 part 'widgets/body.dart';
 part 'widgets/member_tile.dart';
 part 'widgets/header.dart';
@@ -23,11 +21,13 @@ part 'logic/club_admin_controller.dart';
 class ClubAdminScreen extends StatefulWidget  {
   final String clubId;
   final String currentId;
+  final int membersCount;
 
   const ClubAdminScreen({
     super.key, 
     required this.clubId,
     required this.currentId,
+    required this.membersCount,
   });
 
   @override
@@ -79,7 +79,7 @@ class _ClubAdminScreenState extends State<ClubAdminScreen> {
           appBar: _isLoading || _club == null
             ? null
             : ClubAdminAppBar(
-                title: _club!['name'],
+                clubName: _club!['name'],
                 description: _club!['description'],
                 approvement: List<Map<String, dynamic>>.from(_club!['approvements'] ?? []),
                 clubId: widget.clubId,
@@ -90,10 +90,11 @@ class _ClubAdminScreenState extends State<ClubAdminScreen> {
             : _club == null
                 ? const Center(child: Text('Клуб не найден'))
                 : ClubAdminBody(
-                    title: _club!['name'],
+                    clubName: _club!['name'],
                     description: _club!['description'],
                     approvement: List<Map<String, dynamic>>.from(_club!['approvements'] ?? []),
                     clubId: widget.clubId,
+                    membersCount: widget.membersCount,
                     apiService: _clubApiService,
                     currentUserId: widget.currentId,
           ),

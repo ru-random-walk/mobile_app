@@ -1,18 +1,20 @@
 part of '../admin_page.dart';
 
 class ClubAdminBody extends StatefulWidget {
-  final String title;
+  final String clubName;
   final String description;
   final List<Map<String, dynamic>> approvement;
+  final int membersCount;
   final String clubId;
   final ClubApiService apiService;
   final String currentUserId;
 
   const ClubAdminBody({
     super.key,
-    required this.title,
+    required this.clubName,
     required this.description,
     required this.approvement,
+    required this.membersCount,
     required this.clubId,
     required this.apiService,
     required this.currentUserId,
@@ -59,10 +61,10 @@ class _ClubAdminBodyState extends State<ClubAdminBody> {
         itemBuilder: (context, index) {
           if (index == 0) {
             return ClubHeader(
-              title: widget.title,
+              title: widget.clubName,
               description: widget.description,
               approvement: widget.approvement,
-              membersCount: _controller.members.length,
+              membersCount: widget.membersCount,
             );
           }
           if (_controller.isLoadingMore && index == itemCount - 1) {

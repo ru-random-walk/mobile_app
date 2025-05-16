@@ -12,6 +12,7 @@ import 'package:clubs/src/domain/entities/club/clubs_list/widgets/filters_clubs/
 import 'package:clubs/src/domain/entities/club/clubs_list/widgets/add_button.dart';
 import 'package:clubs/src/domain/entities/club/create_and_edit/create_club_page.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/administrator/admin_page.dart';
+import 'package:clubs/src/domain/entities/club/clubs_pages/not_member/not_member_page.dart';
 
 part 'widgets/app_bar/app_bar.dart';
 part 'widgets/app_bar/search_paint.dart';
