@@ -4,13 +4,11 @@ import 'package:ui_components/ui_components.dart';
 import 'package:ui_utils/ui_utils.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:auth/auth.dart';
-import 'package:core/src/network/page_query/page_query.dart';
-import 'package:clubs/src/domain/entities/club/create_and_edit/create_club_page.dart';
-
 import 'package:clubs/src/domain/entities/club/text_format/member_format.dart';
+import 'package:clubs/src/domain/entities/club/clubs_pages/common/app_bar.dart';
 
-part 'widgets/app_bar.dart';
+part 'widgets/body.dart';
+part 'widgets/bottom_button.dart';
 
 class NotMemberPage extends StatefulWidget {
   final String clubId;
@@ -36,10 +34,10 @@ class _NotMemberPageState extends State<NotMemberPage> {
   @override
   void initState() {
     super.initState();
-    _loadClubInfo();
+    _loadClub();
   }
 
-  Future<void> _loadClubInfo() async {
+  Future<void> _loadClub() async {
     try {
       final data = await getClubInfo(
         clubId: widget.clubId,
@@ -71,116 +69,16 @@ class _NotMemberPageState extends State<NotMemberPage> {
       color: context.colors.base_0,
       child: SafeArea(
         child: Scaffold(
-          appBar: const ClubNotMemberAppBar(),
-          body: Padding(
-            padding: EdgeInsets.symmetric(
-            vertical: 4.toFigmaSize,
-            horizontal: 20.toFigmaSize,
+          appBar: const ClubPageAppBar(),
+          body: ClubNotMemberBody(
+            clubName: clubName,
+            description: description,
+            membersCount: membersCount,
           ),
-            child: ListView(
-              children: [
-                Center(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(16.toFigmaSize),
-                    child: SizedBox(
-                      width: 240.toFigmaSize,
-                      height: 240.toFigmaSize,
-                      child: Image.asset(
-                        'packages/clubs/assets/images/avatar.png',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20.toFigmaSize),
-                Center(
-                  child: Text(
-                    clubName,
-                    style: context.textTheme.h4.copyWith(
-                      color: context.colors.base_90,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 16.toFigmaSize),
-                Row(
-                  children: [
-                    SvgPicture.asset(
-                      'packages/clubs/assets/icons/clubs.svg',
-                      width: 24.toFigmaSize,
-                      height: 24.toFigmaSize,
-                      colorFilter: ColorFilter.mode(
-                        context.colors.base_80,
-                        BlendMode.srcIn,
-                      ),
-                    ),
-                    SizedBox(width: 4.toFigmaSize),
-                    Text(formatMemberCount(membersCount),
-                      style: context.textTheme.bodyLRegular.copyWith(
-                      color: context.colors.base_90,
-                    ),),
-                    const Spacer(),
-                    Text('Вы не в группе', 
-                      style: context.textTheme.bodyLRegular.copyWith(
-                      color: context.colors.base_50,
-                    ),),
-                  ],
-                ),
-                SizedBox(height: 16.toFigmaSize),
-                Text(
-                  'Описание:',
-                  style: context.textTheme.bodyLMedium.copyWith(
-                  color: context.colors.base_90,
-                  ),
-                ),
-                Text(
-                  description,
-                  style: context.textTheme.bodyLRegular.copyWith(
-                  color: context.colors.base_80,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          bottomNavigationBar: Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: 8.toFigmaSize,
-              horizontal: 16.toFigmaSize,
-            ),
-            child: SizedBox(
-              width: double.infinity,
-              child: CustomButton(
-                text: 'Вступить',
-                onPressed: () async {
-                  try {
-                    final result = await addMemberInClub(
-                      clubId: widget.clubId,
-                      memberId: widget.currentId,
-                      apiService: _clubApiService,
-                    );
-                    final member = result?['addMemberInClub'];
-
-                    final message = member != null
-                        ? 'Вы успешно вступили в клуб'
-                        : 'Не удалось вступить в клуб';
-
-                    if (!mounted) return;
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(message)),
-                    );
-
-                    if (member != null) {
-                      Navigator.pop(context);
-                    }
-                  } catch (e) {
-                    if (!mounted) return;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Ошибка: $e')),
-                    );
-                  }
-                },
-              ),
-            ),
+          bottomNavigationBar: BottomButton(
+            clubId: widget.clubId,
+            userId: widget.currentId,
+            clubApiService: _clubApiService,
           ),
         ),
       ),
