@@ -30,7 +30,7 @@ class ClubAdminMenu extends StatelessWidget {
     return Material(
       type: MaterialType.transparency,
       child: CustomSingleChildLayout(
-        delegate: _MenuLayoutDelegate(dY),
+        delegate: MenuLayoutDelegate(dY),
         child: DecoratedBox(
           decoration: BoxDecoration(
             color: const Color(
@@ -149,25 +149,4 @@ class ClubAdminMenu extends StatelessWidget {
       ),
     );
   }
-}
-
-class _MenuLayoutDelegate extends SingleChildLayoutDelegate {
-  final double dY;
-
-  const _MenuLayoutDelegate(this.dY);
-
-  @override
-  BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
-    return BoxConstraints.loose(
-        Size(constraints.maxWidth, constraints.maxHeight));
-  }
-
-  @override
-  Offset getPositionForChild(Size size, Size childSize) {
-    final dx = size.width - 10.toFigmaSize - childSize.width;
-    return Offset(dx, dY);
-  }
-
-  @override
-  bool shouldRelayout(covariant SingleChildLayoutDelegate oldDelegate) => false;
 }

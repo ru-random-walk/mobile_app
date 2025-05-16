@@ -8,15 +8,16 @@ import 'package:auth/auth.dart';
 import 'package:core/src/network/page_query/page_query.dart';
 import 'package:clubs/src/domain/entities/club/create_and_edit/create_club_page.dart';
 import 'package:clubs/src/domain/entities/club/text_format/member_format.dart';
+import 'package:clubs/src/domain/entities/club/clubs_pages/common/row_menu.dart';
+import 'package:clubs/src/domain/entities/club/clubs_pages/common/overlay_menu_position.dart';
+import 'package:clubs/src/domain/entities/club/clubs_pages/common/alert_dialogs.dart';
 
 part 'widgets/app_bar.dart';
 part 'widgets/body.dart';
 part 'widgets/member_tile.dart';
 part 'widgets/header.dart';
-part 'widgets/alert_dialogs.dart';
-part 'overlay_menu/overlay_menu.dart';
-part 'overlay_menu/row_menu.dart';
-part 'overlay_menu/member_menu.dart';
+part 'overlay_menu/admin_club_menu.dart';
+part 'overlay_menu/change_role_member_menu.dart';
 part 'logic/club_admin_controller.dart';
 
 class ClubAdminScreen extends StatefulWidget  {

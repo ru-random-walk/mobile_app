@@ -84,11 +84,23 @@ class _ClubsBodyState extends State<ClubsBody> {
                                       ),
                                     ),
                                   );
-                                } else if (role == 'ADMIN') {
+                                } //else if (role == 'ADMIN' || role == 'MEMBER') {
+                                  else if (role == 'NOTMEMBER') {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (_) => NotMemberPage(
+                                        clubId: clubId,
+                                        currentId: widget.currentUserId,
+                                        membersCount: membersCount,
+                                      ),
+                                    ),
+                                  );
+                                } else if (role == 'ADMIN') {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => MemberPage(
                                         clubId: clubId,
                                         currentId: widget.currentUserId,
                                         membersCount: membersCount,

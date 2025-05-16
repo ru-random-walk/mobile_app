@@ -1,4 +1,6 @@
-part of '../admin_page.dart';
+import 'package:flutter/material.dart';
+import 'package:ui_components/ui_components.dart';
+import 'package:ui_utils/ui_utils.dart';
 
 class ConfirmActionDialog  extends StatelessWidget {
   final String message;
@@ -44,18 +46,7 @@ class ConfirmActionDialog  extends StatelessWidget {
               ),
               SizedBox(width: 16.toFigmaSize),
               Expanded(
-                child: customColor != null
-                  ? CustomButton(
-                    size: ButtonSize.M,
-                    type: ButtonType.primary,
-                    text: confirmText,
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      onConfirm();
-                    },
-                    customColor: customColor,
-                  )
-                  : CustomButton(
+                child: CustomButton(
                     size: ButtonSize.M,
                     type: ButtonType.primary,
                     text: confirmText,
@@ -64,6 +55,7 @@ class ConfirmActionDialog  extends StatelessWidget {
                       onConfirm();
                     },
                     color: ButtonColor.grey,
+                    customColor: customColor,
                   ),
               ),
             ],

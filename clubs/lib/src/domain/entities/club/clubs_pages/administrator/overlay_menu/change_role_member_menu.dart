@@ -33,7 +33,7 @@ class MemberRoleMenu extends StatelessWidget {
             ),
           ),
           CustomSingleChildLayout(
-            delegate: _MenuLayoutDelegate(dY),
+            delegate: MenuLayoutDelegate(dY),
             child: DecoratedBox(
               decoration: BoxDecoration(
                 color: const Color(0xF2EAEAEA),
