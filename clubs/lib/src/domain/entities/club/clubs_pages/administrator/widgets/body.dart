@@ -8,6 +8,7 @@ class ClubAdminBody extends StatefulWidget {
   final String clubId;
   final ClubApiService apiService;
   final String currentUserId;
+  final ClubAdminController controller;
 
   const ClubAdminBody({
     super.key,
@@ -18,6 +19,7 @@ class ClubAdminBody extends StatefulWidget {
     required this.clubId,
     required this.apiService,
     required this.currentUserId,
+    required this.controller,
   });
 
   @override
@@ -27,22 +29,11 @@ class ClubAdminBody extends StatefulWidget {
 class _ClubAdminBodyState extends State<ClubAdminBody> {
   late final ClubAdminController _controller;
 
-  @override
-  void initState() {
-    super.initState();
-    _controller = ClubAdminController(
-      clubId: widget.clubId,
-      apiService: widget.apiService,
-      currentUserId: widget.currentUserId,
-      onUpdate: () => setState(() {}),
-    )..init();
-  }
-
-  @override
-  void dispose() {
-     _controller.dispose();
-    super.dispose();
-  }
+@override
+void initState() {
+  super.initState();
+  _controller = widget.controller;
+}
 
   @override
   Widget build(BuildContext context) {
@@ -76,8 +67,8 @@ class _ClubAdminBodyState extends State<ClubAdminBody> {
             name: user.fullName,
             role: role,
             avatarPath: user.avatar,
-            //onMenuPressed: user.id == widget.currentUserId ? null : (Offset position) {
-            onMenuPressed: (Offset position) {
+            onMenuPressed: user.id == widget.currentUserId ? null : (Offset position) {
+            //onMenuPressed: (Offset position) {
               _controller.showMemberMenu(context, position, user);
             },
           );

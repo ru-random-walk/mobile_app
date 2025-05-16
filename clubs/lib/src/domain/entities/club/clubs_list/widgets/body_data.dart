@@ -73,7 +73,7 @@ class _ClubsBodyState extends State<ClubsBody> {
                                 final clubId = group['club']?['id'];
 
                                 //if (role == 'ADMIN') {
-                                if (role == 'USER') {
+                                if (role == 'ADMIN') {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -96,7 +96,8 @@ class _ClubsBodyState extends State<ClubsBody> {
                                       ),
                                     ),
                                   );
-                                } else if (role == 'ADMIN') {
+                                } //else if (role == 'ADMIN') {
+                                  else if (role == 'MEMBER') {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(

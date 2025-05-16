@@ -5,6 +5,9 @@ class ClubAdminController {
   final ClubApiService apiService;
   final String currentUserId;
   final VoidCallback onUpdate;
+  final String clubName;
+  final String description;
+  final List<Map<String, dynamic>> approvement;
 
   final ScrollController scrollController = ScrollController();
   final int _pageSize = 30;
@@ -24,6 +27,9 @@ class ClubAdminController {
     required this.apiService,
     required this.currentUserId,
     required this.onUpdate,
+    required this.clubName,
+    required this.description,
+    required this.approvement,
   });
 
   void init() {
@@ -87,6 +93,42 @@ class ClubAdminController {
       isLoading = false;
       isLoadingMore = false;
     }
+  }
+
+  void showMenuClub(BuildContext context, double dy) {
+    late final OverlayEntry overlay;
+      overlay = OverlayEntry(
+        builder: (_) => TapRegion(
+          onTapOutside: (_) {
+            overlay.remove();
+            overlay.dispose();
+          },
+          child: ClubAdminMenu(
+            dY: dy,
+            closeMenu: () {
+              overlay.remove();
+              overlay.dispose();
+            },
+            onEdit: () {
+              debugPrint('Edit tapped');
+              overlay.remove();
+              overlay.dispose();
+            },
+            onDelete: () async {
+              await removeClub(clubId: clubId, apiService: apiService);
+              overlay.remove();
+              overlay.dispose();
+              Navigator.of(context).pop();
+            },
+            clubId: clubId,
+            apiService: apiService,
+            title:clubName,
+            description: description,
+            approvement: approvement,
+          ),
+        ),
+      );
+    Overlay.of(context).insert(overlay);
   }
 
   void showMemberMenu(BuildContext context, Offset offset, UserEntity user) {

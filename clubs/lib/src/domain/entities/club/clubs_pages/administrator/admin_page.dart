@@ -1,6 +1,5 @@
 import 'package:clubs/src/data/clubs_api_service.dart';
 import 'package:flutter/material.dart';
-import 'package:ui_components/ui_components.dart';
 import 'package:ui_utils/ui_utils.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -11,8 +10,8 @@ import 'package:clubs/src/domain/entities/club/text_format/member_format.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/common/row_menu.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/common/overlay_menu_position.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/common/alert_dialogs.dart';
+import 'package:clubs/src/domain/entities/club/clubs_pages/common/app_bar.dart';
 
-part 'widgets/app_bar.dart';
 part 'widgets/body.dart';
 part 'widgets/member_tile.dart';
 part 'widgets/header.dart';
@@ -40,11 +39,18 @@ class _ClubAdminScreenState extends State<ClubAdminScreen> {
   final ClubApiService _clubApiService = ClubApiService();
   bool _isLoading = true;
   Map<String, dynamic>? _club;
+  ClubAdminController? _controller;
 
   @override
   void initState() {
     super.initState();
     _loadClub();
+  }
+
+  @override
+  void dispose() {
+     _controller?.dispose();
+    super.dispose();
   }
 
   Future<void> _loadClub() async {
@@ -57,6 +63,15 @@ class _ClubAdminScreenState extends State<ClubAdminScreen> {
       if (data != null && data['getClub'] != null) {
         setState(() {
           _club = data['getClub'];
+          _controller = ClubAdminController(
+            clubId: widget.clubId,
+            apiService: _clubApiService,
+            currentUserId: widget.currentId,
+            onUpdate: () => setState(() {}),
+            clubName: _club!['name'],
+            description: _club?['description'] ?? 'Описание отсутствует',
+            approvement: List<Map<String, dynamic>>.from(_club!['approvements'] ?? []),
+          )..init();
           _isLoading = false;
         });
       } else {
@@ -80,25 +95,23 @@ class _ClubAdminScreenState extends State<ClubAdminScreen> {
         child: Scaffold(
           appBar: _isLoading || _club == null
             ? null
-            : ClubAdminAppBar(
-                clubName: _club!['name'],
-                description: _club!['description'],
-                approvement: List<Map<String, dynamic>>.from(_club!['approvements'] ?? []),
-                clubId: widget.clubId,
-                apiService: _clubApiService,
-              ),
+            : ClubPageAppBar(
+            showMenu: true,
+            onMenuPressed: (dy) => _controller!.showMenuClub(context, dy),
+          ), 
           body: _isLoading
             ? const Center(child: CircularProgressIndicator())
-            : _club == null
+            : _club == null || _controller == null
                 ? const Center(child: Text('Клуб не найден'))
                 : ClubAdminBody(
                     clubName: _club!['name'],
-                    description: _club!['description'],
+                    description: _club!['description'] ?? 'Описание отсутствует',
                     approvement: List<Map<String, dynamic>>.from(_club!['approvements'] ?? []),
                     clubId: widget.clubId,
                     membersCount: widget.membersCount,
                     apiService: _clubApiService,
                     currentUserId: widget.currentId,
+                    controller: _controller!,
           ),
         ),
       ),
