@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:auth/auth.dart';
 import 'package:core/src/network/page_query/page_query.dart';
 import 'package:clubs/src/domain/entities/club/create_and_edit/create_club_page.dart';
+import 'package:clubs/src/domain/entities/club/text_format/member_format.dart';
 
 part 'widgets/app_bar.dart';
 part 'widgets/body.dart';

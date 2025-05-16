@@ -10,6 +10,7 @@ import 'package:clubs/src/domain/entities/club/clubs_list/bloc/clubs_list_bloc.d
 import 'package:clubs/src/domain/entities/club/clubs_list/widgets/widget_clubs.dart';
 import 'package:clubs/src/domain/entities/club/clubs_list/widgets/filters_clubs/filters_button.dart';
 import 'package:clubs/src/domain/entities/club/clubs_list/widgets/add_button.dart';
+import 'package:clubs/src/domain/entities/club/text_format/member_format.dart';
 import 'package:clubs/src/domain/entities/club/create_and_edit/create_club_page.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/administrator/admin_page.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/not_member/not_member_page.dart';

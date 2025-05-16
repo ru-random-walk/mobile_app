@@ -23,16 +23,6 @@ class _ClubsBodyState extends State<ClubsBody> {
     }
   }
 
-  String formatMemberCount(int count) {
-    final mod10 = count % 10;
-    final mod100 = count % 100;
-
-    if (mod100 >= 11 && mod100 <= 14) return '$count участников';
-    if (mod10 == 1) return '$count участник';
-    if (mod10 >= 2 && mod10 <= 4) return '$count участника';
-    return '$count участников';
-  }
-
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<ClubsListBloc>();

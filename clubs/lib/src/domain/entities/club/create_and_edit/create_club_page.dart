@@ -11,6 +11,8 @@ import 'package:clubs/src/domain/entities/club/create_and_edit/club/button_creat
 import 'package:clubs/src/domain/entities/club/create_and_edit/tests/create_test_page.dart';
 import 'package:clubs/src/domain/entities/club/create_and_edit/app_bar.dart'; 
 import 'package:clubs/src/data/clubs_api_service.dart';
+import 'package:clubs/src/domain/entities/club/text_format/question_format.dart';
+import 'package:clubs/src/domain/entities/club/text_format/inspector_format.dart';
 
 part 'club/popup.dart';
 part 'club/condition_string.dart';

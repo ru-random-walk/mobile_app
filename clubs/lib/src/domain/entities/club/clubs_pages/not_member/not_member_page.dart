@@ -8,7 +8,7 @@ import 'package:auth/auth.dart';
 import 'package:core/src/network/page_query/page_query.dart';
 import 'package:clubs/src/domain/entities/club/create_and_edit/create_club_page.dart';
 
-import 'package:clubs/src/data/clubs_api_service.dart';
+import 'package:clubs/src/domain/entities/club/text_format/member_format.dart';
 
 part 'widgets/app_bar.dart';
 
@@ -114,7 +114,7 @@ class _NotMemberPageState extends State<NotMemberPage> {
                       ),
                     ),
                     SizedBox(width: 4.toFigmaSize),
-                    Text('$membersCount участников',
+                    Text(formatMemberCount(membersCount),
                       style: context.textTheme.bodyLRegular.copyWith(
                       color: context.colors.base_90,
                     ),),
