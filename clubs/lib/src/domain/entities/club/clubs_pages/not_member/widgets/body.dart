@@ -112,7 +112,11 @@ class ClubNotMemberBody extends StatelessWidget {
                     padding: EdgeInsets.all(4.toFigmaSize),
                     onPressed: () {
                       if (approvement['type'] == 'FORM') {
-                        // открыть форму прохождения теста
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const TestFormScreen(),
+                          ),
+                        );
                       } else {
                         // отправить запрос на подтверждение
                       }

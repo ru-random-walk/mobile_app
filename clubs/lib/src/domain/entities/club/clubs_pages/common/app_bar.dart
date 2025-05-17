@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:ui_utils/ui_utils.dart';
 
 class ClubPageAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final String? title;
   final bool showMenu;
   final void Function(double dY)? onMenuPressed;
 
   const ClubPageAppBar({
     super.key,
+    this.title,
     this.showMenu = false,
     this.onMenuPressed,
   });
@@ -24,6 +26,11 @@ class ClubPageAppBar extends StatelessWidget implements PreferredSizeWidget {
               onPressed: () => Navigator.of(context).pop(),
               icon: const Icon(Icons.arrow_back),
             ),
+            if (title != null) ...[
+              SizedBox(width: 16.toFigmaSize),
+              Text(title!, 
+                style: context.textTheme.h5.copyWith(color: context.colors.base_90),),
+            ],
             const Spacer(),
             if (showMenu && onMenuPressed != null)
               Builder(builder: (context) {
