@@ -1,25 +1,23 @@
 part of 'test_form_screen.dart';
 
 class TestFormBody extends StatelessWidget {
-
+  final Question question;
   final int questionIndex;
   final int totalQuestions;
   final String? selectedAnswer;
+  final Set<String> selectedAnswers;
   final void Function(String) onSelectAnswer;
 
   const TestFormBody({
     super.key,
+    required this.question,
     required this.questionIndex,
     required this.totalQuestions,
     required this.selectedAnswer,
+    required this.selectedAnswers,
     required this.onSelectAnswer,
   });
 
-//   @override
-//   State<TestFormBody> createState() => _TestFormBody();
-// }
-
-//class _TestFormBody extends State<TestFormBody> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -70,29 +68,39 @@ class TestFormBody extends StatelessWidget {
                         children: [
                           Center(
                             child: Text(
-                            'Кто пишет стихи?',
+                            question.text,
                               style: context.textTheme.bodyXLMedium.copyWith(
                                 color: context.colors.base_90,),
                             ),
                           ),
                           SizedBox(height: 20.toFigmaSize),
-                          CustomRadioButton(
-                            value: 'Бараш',
-                            groupValue: selectedAnswer,
-                            onChanged: (value) => onSelectAnswer(value!),
-                            label: 'Бараш',
-                            labelStyle: context.textTheme.bodyLRegular.copyWith(
-                              color: context.colors.base_70,),
-                          ),
-                          SizedBox(height: 16.toFigmaSize),
-                          CustomRadioButton(
-                            value: 'Совунья',
-                            groupValue: selectedAnswer,
-                            onChanged: (value) => onSelectAnswer(value!),
-                            label: 'Совунья',
-                            labelStyle: context.textTheme.bodyLRegular.copyWith(
-                              color: context.colors.base_70,),
-                          ),
+                          ...question.answerOptions.map((option) {
+                            if (question.answerType == 'MULTIPLE') {
+                              return Padding(
+                                padding: EdgeInsets.only(bottom: 12.toFigmaSize),
+                                child: CustomCheckbox(
+                                  value: selectedAnswers.contains(option),
+                                  onChanged: (_) => onSelectAnswer(option),
+                                  label: option,
+                                  labelStyle: context.textTheme.bodyLRegular.copyWith(
+                                    color: context.colors.base_70,
+                                  ),
+                                ),
+                              );
+                            } else {
+                              return Padding(
+                                padding: EdgeInsets.only(bottom: 16.toFigmaSize),
+                                child: CustomRadioButton(
+                                  value: option,
+                                  groupValue: selectedAnswer,
+                                  onChanged: (value) => onSelectAnswer(value!),
+                                  label: option,
+                                  labelStyle: context.textTheme.bodyLRegular.copyWith(
+                                    color: context.colors.base_70,),
+                                ),
+                              );
+                            }
+                          }).toList(),
                         ],
                       ),
                     ),

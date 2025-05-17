@@ -5,6 +5,7 @@ class ClubNotMemberBody extends StatelessWidget {
   final String description;
   final int membersCount;
   final List<Map<String, dynamic>> approvements;
+  final String clubId;
 
   const ClubNotMemberBody({
     super.key,
@@ -12,6 +13,7 @@ class ClubNotMemberBody extends StatelessWidget {
     required this.description,
     required this.membersCount,
     required this.approvements,
+    required this.clubId,
   });
 
   @override
@@ -114,7 +116,7 @@ class ClubNotMemberBody extends StatelessWidget {
                       if (approvement['type'] == 'FORM') {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) => const TestFormScreen(),
+                            builder: (_) => TestFormScreen(clubId: clubId,),
                           ),
                         );
                       } else {

@@ -79,6 +79,7 @@ class _NotMemberPageState extends State<NotMemberPage> {
             description: description,
             membersCount: membersCount,
             approvements: approvements,
+            clubId: widget.clubId,
           ),
           bottomNavigationBar: approvements.isEmpty
             ? BottomButton(
