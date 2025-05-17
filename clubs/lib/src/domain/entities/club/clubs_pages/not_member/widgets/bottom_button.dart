@@ -3,12 +3,14 @@ part of '../not_member_page.dart';
 class BottomButton extends StatelessWidget {
   final String clubId;
   final String userId;
+  final int membersCount;
   final ClubApiService clubApiService;
 
   const BottomButton({
     super.key,
     required this.clubId,
     required this.userId,
+    required this.membersCount,
     required this.clubApiService,
   });
 
@@ -41,7 +43,16 @@ class BottomButton extends StatelessWidget {
               );
 
               if (member != null) {
-                Navigator.pop(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MemberPage(
+                      clubId: clubId,
+                      currentId: userId,
+                      membersCount: membersCount+1,
+                    ),
+                  ),
+                );
               }
             } catch (e) {
               ScaffoldMessenger.of(context).showSnackBar(

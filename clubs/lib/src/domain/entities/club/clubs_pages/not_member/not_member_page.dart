@@ -6,7 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:clubs/src/domain/entities/club/text_format/member_format.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/common/app_bar.dart';
-
+import 'package:clubs/src/domain/entities/club/clubs_pages/member/member_page.dart';
 part 'widgets/body.dart';
 part 'widgets/bottom_button.dart';
 
@@ -78,6 +78,7 @@ class _NotMemberPageState extends State<NotMemberPage> {
           bottomNavigationBar: BottomButton(
             clubId: widget.clubId,
             userId: widget.currentId,
+            membersCount: membersCount,
             clubApiService: _clubApiService,
           ),
         ),
