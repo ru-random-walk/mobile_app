@@ -64,6 +64,8 @@ class _NotMemberPageState extends State<NotMemberPage> {
     final clubName = clubData?['name'];
     final description = clubData?['description'] ?? 'Описание отсутствует';
     final membersCount = widget.membersCount;
+    final List<Map<String, dynamic>> approvements = List<Map<String, dynamic>>.from(clubData?['approvements'] ?? []);
+
 
     return ColoredBox(
       color: context.colors.base_0,
@@ -74,13 +76,16 @@ class _NotMemberPageState extends State<NotMemberPage> {
             clubName: clubName,
             description: description,
             membersCount: membersCount,
+            approvements: approvements,
           ),
-          bottomNavigationBar: BottomButton(
-            clubId: widget.clubId,
-            userId: widget.currentId,
-            membersCount: membersCount,
-            clubApiService: _clubApiService,
-          ),
+          bottomNavigationBar: approvements.isEmpty
+            ? BottomButton(
+              clubId: widget.clubId,
+              userId: widget.currentId,
+              membersCount: membersCount,
+              clubApiService: _clubApiService,
+            )
+          : null,
         ),
       ),
     );

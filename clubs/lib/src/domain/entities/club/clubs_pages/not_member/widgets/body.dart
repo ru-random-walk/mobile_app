@@ -4,12 +4,14 @@ class ClubNotMemberBody extends StatelessWidget {
   final String clubName;
   final String description;
   final int membersCount;
+  final List<Map<String, dynamic>> approvements;
 
   const ClubNotMemberBody({
     super.key,
     required this.clubName,
     required this.description,
     required this.membersCount,
+    required this.approvements,
   });
 
   @override
@@ -80,6 +82,46 @@ class ClubNotMemberBody extends StatelessWidget {
             color: context.colors.base_80,
             ),
           ),
+          if (approvements.isNotEmpty) ...[
+            SizedBox(height: 16.toFigmaSize),
+            Text(
+              'Тесты для вступления',
+              style: context.textTheme.bodyLMedium.copyWith(
+                color: context.colors.base_90,
+              ),
+            ),
+            SizedBox(height: 4.toFigmaSize),
+            for (final approvement in approvements)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      approvement['type'] == 'FORM'
+                          ? 'Тест'
+                          : 'Запрос на вступление',
+                      style: context.textTheme.bodyLRegular.copyWith(
+                        color: context.colors.base_90,
+                      ),
+                    ),
+                  ),
+                  CustomButton(
+                    text: approvement['type'] == 'FORM' ? 'Пройти' : 'Отправить',
+                    customWidth: 140.toFigmaSize,
+                    customHeight: 44.toFigmaSize,
+                    padding: EdgeInsets.all(4.toFigmaSize),
+                    onPressed: () {
+                      if (approvement['type'] == 'FORM') {
+                        // открыть форму прохождения теста
+                      } else {
+                        // отправить запрос на подтверждение
+                      }
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(height: 8.toFigmaSize),
+          ],
         ],
       ),
     );
