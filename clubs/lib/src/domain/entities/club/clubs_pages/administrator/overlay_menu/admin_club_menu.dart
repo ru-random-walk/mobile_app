@@ -119,25 +119,9 @@ class ClubAdminMenu extends StatelessWidget {
                     RowMenuWidget(
                       text: 'Удалить',
                       imagePath: 'assets/icons/delete.svg',
-                      onTap: () async {
-                        try {
-                          final result = await removeClub(clubId: clubId, apiService: apiService);
-                          closeMenu();
-                          Navigator.of(context).pop(); 
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Клуб удален успешно!', style: context.textTheme.bodySMediumBase0),
-                              backgroundColor: context.colors.main_50,
-                            ),
-                          );
-                        } catch (e) {
-                          closeMenu();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Ошибка при удалении клуба'),
-                            ),
-                          );
-                        }
+                      onTap: () {
+                        closeMenu();
+                        onDelete();
                       },
                     ),
                   ],

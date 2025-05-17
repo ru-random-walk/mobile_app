@@ -40,6 +40,7 @@ class ClubAdminController {
   void dispose() {
     scrollController.dispose();
     _menuOverlay?.remove();
+    _menuOverlay = null;
   }
 
   void _onScroll() {
@@ -96,29 +97,55 @@ class ClubAdminController {
   }
 
   void showMenuClub(BuildContext context, double dy) {
-    late final OverlayEntry overlay;
-      overlay = OverlayEntry(
+    _hideMenu();
+
+    Overlay.of(context);
+
+    final scaffoldContext = context;
+
+     _menuOverlay = OverlayEntry(
         builder: (_) => TapRegion(
           onTapOutside: (_) {
-            overlay.remove();
-            overlay.dispose();
+            _hideMenu();
           },
           child: ClubAdminMenu(
             dY: dy,
             closeMenu: () {
-              overlay.remove();
-              overlay.dispose();
+              _hideMenu();
             },
             onEdit: () {
               debugPrint('Edit tapped');
-              overlay.remove();
-              overlay.dispose();
+              _hideMenu();
             },
             onDelete: () async {
-              await removeClub(clubId: clubId, apiService: apiService);
-              overlay.remove();
-              overlay.dispose();
-              Navigator.of(context).pop();
+              final confirmed = await showDialog<bool>(
+                context: context,
+                builder: (dialogContext) {
+                  return ConfirmActionDialog(
+                    message: 'Вы уверены, что хотите удалить группу?',
+                    confirmText: 'Удалить',
+                    customColor: const Color(0xFFFF281A),
+                    onConfirm: () async {
+                      try {
+                        await removeClub(clubId: clubId, apiService: apiService);
+                        Navigator.of(context).pop(true); 
+                      } catch (e) {
+                        ScaffoldMessenger.of(scaffoldContext).showSnackBar(
+                          const SnackBar(
+                            content: Text('Ошибка при удалении клуба'),
+                          ),
+                        );
+                      }
+
+                    },
+                  );
+                },
+              );
+
+              if (confirmed == true) {
+                _hideMenu();
+                Navigator.of(context).pop(true); 
+              }
             },
             clubId: clubId,
             apiService: apiService,
@@ -128,7 +155,7 @@ class ClubAdminController {
           ),
         ),
       );
-    Overlay.of(context).insert(overlay);
+    Overlay.of(context).insert(_menuOverlay!);
   }
 
   void showMemberMenu(BuildContext context, Offset offset, UserEntity user) {

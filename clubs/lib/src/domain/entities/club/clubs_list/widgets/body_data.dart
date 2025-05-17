@@ -69,12 +69,12 @@ class _ClubsBodyState extends State<ClubsBody> {
                             return ClubWidget(
                               title: group['club']?['name'] ?? '',
                               subscribers: formatMemberCount(membersCount),
-                              onTap: () {
+                              onTap: () async {
                                 final clubId = group['club']?['id'];
 
                                 //if (role == 'ADMIN') {
-                                if (role == 'l') {
-                                  Navigator.push(
+                                if (role == 'ADMIN') {
+                                  final result = await Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (_) => ClubAdminScreen(
@@ -84,8 +84,11 @@ class _ClubsBodyState extends State<ClubsBody> {
                                       ),
                                     ),
                                   );
-                                } //else if (role == 'ADMIN' || role == 'MEMBER') {
-                                  else if (role == 'ADMIN') {
+                                  if (result == true) {
+                                    bloc.add(LoadClubsEvent());
+                                  }
+                                } //else if (role == 'NOTMEMBER') {
+                                  else if (role == 'NOTMEMBER') {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -96,7 +99,7 @@ class _ClubsBodyState extends State<ClubsBody> {
                                       ),
                                     ),
                                   );
-                                } //else if (role == 'ADMIN') {
+                                } //else if (role == 'MEMBER') {
                                   else if (role == 'MEMBER') {
                                   Navigator.push(
                                     context,
