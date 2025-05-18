@@ -23,14 +23,24 @@
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="random_walk">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <style>
-    #flt-glass-pane {
-      padding-bottom: env(safe-area-inset-bottom);
-      padding-top: env(safe-area-inset-top);
+    :root {
+      --safe-area-inset-top: env(safe-area-inset-top);
+      --safe-area-inset-right: env(safe-area-inset-right);
+      --safe-area-inset-bottom: env(safe-area-inset-bottom);
+      --safe-area-inset-left: env(safe-area-inset-left);
+    }
+
+    body {
+      margin: 0;
+      padding-top: var(--safe-area-inset-top);
+      padding-right: var(--safe-area-inset-right);
+      padding-bottom: var(--safe-area-inset-bottom);
+      padding-left: var(--safe-area-inset-left);
     }
   </style>
 
