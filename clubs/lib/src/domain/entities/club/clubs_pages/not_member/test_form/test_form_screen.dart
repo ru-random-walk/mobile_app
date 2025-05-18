@@ -121,13 +121,15 @@ class _TestFormScreenState extends State<TestFormScreen> {
         message: 'Завершить тест?',
         subMessage: 'После завершения теста ответы изменить нельзя.',
         confirmText: 'Завершить',
-        onConfirm: _submitAnswers,
+        onConfirm:() {
+          _submitAnswers(sendForReview: true);
+        },
         customColor: context.colors.main_50,
       ),
     );
   }
 
-  Future<void> _submitAnswers() async {
+  Future<void> _submitAnswers({required bool sendForReview}) async {
     final questionAnswers = answersMap.entries.map((entry) {
       return {
         'optionNumbers': entry.value,
@@ -142,7 +144,8 @@ class _TestFormScreenState extends State<TestFormScreen> {
       );
 
       final answerId = response?['createApprovementAnswerForm']?['id'];
-      if (answerId != null) {
+
+      if (sendForReview && answerId != null) {
         await sendAnswersForReview(
           answerId: answerId,
           apiService: clubApiService,
@@ -150,25 +153,47 @@ class _TestFormScreenState extends State<TestFormScreen> {
       }
 
       if (mounted) {
-        Navigator.of(context).pop(); // Закрытие экрана после отправки
+        Navigator.of(context).pop();
       }
     } catch (e) {
       print('Ошибка отправки ответов: $e');
     }
   }
 
+  Future<bool> _onExitPressed() async {
+    final shouldExit = await showDialog<bool>(
+      context: context,
+      builder: (_) => ConfirmActionDialog(
+        message: 'Покинуть тест?',
+        subMessage: 'Ответы не будут сохранены.',
+        confirmText: 'Выйти',
+        customColor: const Color(0xFFFF281A),
+        onConfirm: () {
+          Navigator.of(context).pop(true);
+        },
+      ),
+    );
+    return shouldExit ?? false; 
+  }
 
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
-
-    return ColoredBox(
+    return WillPopScope(
+    onWillPop: () async {
+      final exit = await _onExitPressed();
+      return exit; 
+    },
+    child: ColoredBox(
       color: context.colors.base_0,
       child: SafeArea(
         child: Scaffold(
-          appBar: const ClubPageAppBar(title: 'Прохождение теста',),
+          appBar: ClubPageAppBar(
+            title: 'Прохождение теста',
+            onBackPressed: _onExitPressed,
+            ),
           body: TestFormBody(
             question: questions[currentQuestionIndex],
             questionIndex: currentQuestionIndex,
@@ -185,6 +210,7 @@ class _TestFormScreenState extends State<TestFormScreen> {
           ),
         ),
       ),
+    ),
     );
   }
 }

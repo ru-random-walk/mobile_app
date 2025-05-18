@@ -5,12 +5,14 @@ class ClubPageAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
   final bool showMenu;
   final void Function(double dY)? onMenuPressed;
+  final VoidCallback? onBackPressed;
 
   const ClubPageAppBar({
     super.key,
     this.title,
     this.showMenu = false,
     this.onMenuPressed,
+    this.onBackPressed,
   });
 
   @override
@@ -23,7 +25,7 @@ class ClubPageAppBar extends StatelessWidget implements PreferredSizeWidget {
           children: [
             IconButton(
               iconSize: 28.toFigmaSize,
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: onBackPressed ?? () => Navigator.of(context).pop(),
               icon: const Icon(Icons.arrow_back),
             ),
             if (title != null) ...[
