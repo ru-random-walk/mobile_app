@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:ui_utils/ui_utils.dart';
 import 'package:ui_components/ui_components.dart';
 
-class AddGroupButton extends StatelessWidget {
+class AddClubButton extends StatelessWidget {
   final VoidCallback onPressed;
 
-  const AddGroupButton({
+  const AddClubButton({
     super.key, 
     required this.onPressed,
     });

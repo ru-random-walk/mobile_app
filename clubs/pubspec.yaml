@@ -26,6 +26,8 @@ dependencies:
   dio: ^5.8.0+1
   logger: ^2.5.0
   flutter_bloc: ^8.1.6
+  bloc: ^8.1.4
+  provider: ^6.1.5
 
 dev_dependencies:
   flutter_test:
