@@ -143,20 +143,52 @@ class _TestFormScreenState extends State<TestFormScreen> {
         apiService: clubApiService,
       );
 
-      final answerId = response?['createApprovementAnswerForm']?['id'];
+      if (response == null) {
+        _showErrorSnackBar('Ошибка: пустой ответ сервера');
+        return;
+      }
+
+      if (response['errors'] != null && (response['errors'] as List).isNotEmpty) {
+        final errors = response['errors'] as List;
+        
+        final duplicateAnswerError = errors.firstWhere(
+          (e) => (e['message'] as String).contains('You can not have more than one answer for approvement'),
+          orElse: () => null,
+        );
+
+        if (duplicateAnswerError != null) {
+          _showErrorSnackBar('Вы не можете повторно пройти тест');
+          return;
+        }
+      }
+
+      final answerId = response['data']?['createApprovementAnswerForm']?['id'];
+      String? status;
 
       if (sendForReview && answerId != null) {
-        await sendAnswersForReview(
+        final result = await sendAnswersForReview(
           answerId: answerId,
           apiService: clubApiService,
         );
+        status = result?['setAnswerStatusToSent']?['status'];
       }
-
+      
       if (mounted) {
-        Navigator.of(context).pop();
+        Navigator.of(context).pop(status == 'PASSED');
       }
     } catch (e) {
       print('Ошибка отправки ответов: $e');
+    }
+  }
+
+  void _showErrorSnackBar(String message) {
+    final scaffoldMessenger = ScaffoldMessenger.maybeOf(context);
+    if (scaffoldMessenger != null) {
+      scaffoldMessenger.showSnackBar(
+        SnackBar(
+          content: Text(message),
+        ),
+      );
     }
   }
 
@@ -169,7 +201,7 @@ class _TestFormScreenState extends State<TestFormScreen> {
         confirmText: 'Выйти',
         customColor: const Color(0xFFFF281A),
         onConfirm: () {
-          Navigator.of(context).pop(true);
+          Navigator.of(context).pop();
         },
       ),
     );

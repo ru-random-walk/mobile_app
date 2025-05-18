@@ -47,7 +47,10 @@ flutter:
     - packages/clubs/assets/icons/clubs.svg
     - packages/clubs/assets/icons/edit.svg
     - packages/clubs/assets/icons/delete.svg
-    
+    - packages/clubs/assets/icons/fail.svg
+    - packages/clubs/assets/icons/success.svg
+
+
   # To add assets to your package, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

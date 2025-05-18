@@ -4,6 +4,7 @@ import 'package:ui_components/ui_components.dart';
 import 'package:ui_utils/ui_utils.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import 'package:clubs/src/domain/entities/club/clubs_pages/not_member/test_form/result_test_screen.dart';
 import 'package:clubs/src/domain/entities/club/text_format/member_format.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/common/app_bar.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/member/member_page.dart';
@@ -80,6 +81,7 @@ class _NotMemberPageState extends State<NotMemberPage> {
             membersCount: membersCount,
             approvements: approvements,
             clubId: widget.clubId,
+            userId: widget.currentId,
           ),
           bottomNavigationBar: approvements.isEmpty
             ? BottomButton(

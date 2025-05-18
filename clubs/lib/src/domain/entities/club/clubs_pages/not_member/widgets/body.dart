@@ -6,6 +6,7 @@ class ClubNotMemberBody extends StatelessWidget {
   final int membersCount;
   final List<Map<String, dynamic>> approvements;
   final String clubId;
+  final String userId;
 
   const ClubNotMemberBody({
     super.key,
@@ -14,6 +15,7 @@ class ClubNotMemberBody extends StatelessWidget {
     required this.membersCount,
     required this.approvements,
     required this.clubId,
+    required this.userId,
   });
 
   @override
@@ -112,13 +114,31 @@ class ClubNotMemberBody extends StatelessWidget {
                     customWidth: 140.toFigmaSize,
                     customHeight: 44.toFigmaSize,
                     padding: EdgeInsets.all(4.toFigmaSize),
-                    onPressed: () {
+                    onPressed: () async {
                       if (approvement['type'] == 'FORM') {
-                        Navigator.of(context).push(
+                        final result = await Navigator.of(context).push<bool>(
                           MaterialPageRoute(
-                            builder: (_) => TestFormScreen(clubId: clubId,),
+                            builder: (_) => TestFormScreen(clubId: clubId),
                           ),
                         );
+
+                        if (result != null) {
+                          final shouldReplace = await Navigator.of(context).push<bool>(
+                            MaterialPageRoute(
+                              builder: (_) => TestResultScreen(result: result),
+                            ),
+                          );
+                          if (shouldReplace == true) {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (_) => MemberPage(
+                                  clubId: clubId,
+                                  currentId: userId,
+                                  membersCount: membersCount,),
+                              ),
+                            );
+                          }
+                        }
                       } else {
                         // отправить запрос на подтверждение
                       }
