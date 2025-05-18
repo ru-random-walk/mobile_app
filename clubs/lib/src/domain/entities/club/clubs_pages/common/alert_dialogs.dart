@@ -4,6 +4,7 @@ import 'package:ui_utils/ui_utils.dart';
 
 class ConfirmActionDialog  extends StatelessWidget {
   final String message;
+  final String? subMessage;
   final String confirmText;
   final VoidCallback onConfirm;
   final Color? customColor;
@@ -11,6 +12,7 @@ class ConfirmActionDialog  extends StatelessWidget {
   const ConfirmActionDialog ({
     super.key,
     required this.message,
+    this.subMessage,
     required this.confirmText,
     required this.onConfirm,
     this.customColor,
@@ -29,9 +31,17 @@ class ConfirmActionDialog  extends StatelessWidget {
           SizedBox(height: 20.toFigmaSize),
           Text(
             message,
-            style: context.textTheme.bodyXLRegular.copyWith(color: context.colors.base_80),
+            style: context.textTheme.bodyXLMedium.copyWith(color: context.colors.base_80),
             textAlign: TextAlign.center,
           ),
+          if (subMessage != null) ...[
+            SizedBox(height: 16.toFigmaSize),
+            Text(
+              subMessage!,
+              style: context.textTheme.bodyLRegular.copyWith(color: context.colors.base_70),
+              textAlign: TextAlign.center,
+            ),
+          ],
           SizedBox(height: 28.toFigmaSize),
           Row(
             children: [

@@ -4,8 +4,7 @@ class TestFormBody extends StatelessWidget {
   final Question question;
   final int questionIndex;
   final int totalQuestions;
-  final String? selectedAnswer;
-  final Set<String> selectedAnswers;
+  final Set<int> selectedAnswerIndexes;
   final void Function(String) onSelectAnswer;
 
   const TestFormBody({
@@ -13,8 +12,7 @@ class TestFormBody extends StatelessWidget {
     required this.question,
     required this.questionIndex,
     required this.totalQuestions,
-    required this.selectedAnswer,
-    required this.selectedAnswers,
+    required this.selectedAnswerIndexes,
     required this.onSelectAnswer,
   });
 
@@ -75,11 +73,13 @@ class TestFormBody extends StatelessWidget {
                           ),
                           SizedBox(height: 20.toFigmaSize),
                           ...question.answerOptions.map((option) {
+                            final optionIndex = question.answerOptions.indexOf(option);
+
                             if (question.answerType == 'MULTIPLE') {
                               return Padding(
                                 padding: EdgeInsets.only(bottom: 12.toFigmaSize),
                                 child: CustomCheckbox(
-                                  value: selectedAnswers.contains(option),
+                                  value: selectedAnswerIndexes.contains(optionIndex),
                                   onChanged: (_) => onSelectAnswer(option),
                                   label: option,
                                   labelStyle: context.textTheme.bodyLRegular.copyWith(
@@ -92,7 +92,9 @@ class TestFormBody extends StatelessWidget {
                                 padding: EdgeInsets.only(bottom: 16.toFigmaSize),
                                 child: CustomRadioButton(
                                   value: option,
-                                  groupValue: selectedAnswer,
+                                  groupValue: selectedAnswerIndexes.isNotEmpty
+                                    ? question.answerOptions[selectedAnswerIndexes.first]
+                                    : null,
                                   onChanged: (value) => onSelectAnswer(value!),
                                   label: option,
                                   labelStyle: context.textTheme.bodyLRegular.copyWith(

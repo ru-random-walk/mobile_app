@@ -14,6 +14,8 @@ part 'get_clubs/get_approvement_info.dart';
 part 'change_member_role/change_member_role.dart';
 part 'change_member_role/remove_member_from_club.dart';
 part 'change_member_role/add_member_in_club.dart';
+part 'answers/create_answer_form.dart';
+part 'answers/send_answers_form.dart';
 
 class ClubApiService {
   final dioClient = NetworkConfig.instance.dio;
