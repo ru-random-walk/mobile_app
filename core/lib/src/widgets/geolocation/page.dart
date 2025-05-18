@@ -15,8 +15,8 @@ import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:ui_components/ui_components.dart';
 import 'package:ui_utils/ui_utils.dart';
 
-import '../../data/data_source/geocoder.dart';
-import '../../data/repository/geocoder.dart';
+import '../../data/remote/data_source/geocoder.dart';
+import '../../data/remote/repository/geocoder.dart';
 import '../../domain/enitites/geolocation.dart';
 import '../../domain/usecase/reverse_geocoding.dart';
 

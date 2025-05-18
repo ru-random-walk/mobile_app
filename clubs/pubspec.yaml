@@ -28,6 +28,8 @@ dependencies:
   flutter_bloc: ^8.1.6
   bloc: ^8.1.4
   provider: ^6.1.5
+  drift: ^2.26.1
+  drift_flutter: ^0.2.4
 
 dev_dependencies:
   flutter_test:

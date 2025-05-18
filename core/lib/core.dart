@@ -13,9 +13,11 @@ export 'src/widgets/time/time_picker.dart';
 export 'src/widgets/date_picker/date_picker.dart';
 export 'src/widgets/geolocation/geolocation_picker.dart';
 export 'src/widgets/row/widgets.dart';
-export 'src/data/models/geolocation.dart';
-export 'src/data/mappers/geolocation.dart';
+export 'src/data/remote/models/geolocation.dart';
+export 'src/data/remote/mappers/geolocation.dart';
 export 'src/widgets/map_viewer.dart';
-export 'src/data/data_source/geocoder.dart';
-export 'src/data/models/query.dart';
+export 'src/data/remote/data_source/geocoder.dart';
+export 'src/data/remote/models/query.dart';
+export 'src/data/local/cache/images.dart';
+export 'src/data/local/db/database.dart';
 
