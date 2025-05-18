@@ -28,10 +28,25 @@ dependencies:
   bloc_concurrency: ^0.2.5
   flutter_svg: ^2.0.10+1
   rxdart: ^0.28.0
-  flutter_map: ^7.0.2
-  vector_map_tiles: ^8.0.0
   maplibre_gl: ^0.21.0
   geolocator: ^14.0.0
+
+dependency_overrides:
+  maplibre_gl:
+    git:
+      url: https://github.com/maplibre/flutter-maplibre-gl.git
+      ref: main
+      path: maplibre_gl
+  maplibre_gl_web:
+    git:
+      url: https://github.com/maplibre/flutter-maplibre-gl.git
+      ref: main
+      path: maplibre_gl_web
+  maplibre_gl_platform_interface:
+    git:
+      url: https://github.com/maplibre/flutter-maplibre-gl.git
+      ref: main
+      path: maplibre_gl_platform_interface
 
 dev_dependencies:
   flutter_test:
