@@ -56,5 +56,4 @@ ios/Runner/GoogleService-Info.plist
 android/app/.cxx/
 Makefile
 auth/lib/src/data/repositories/google_client_id.dart
-firebase.json
 .firebase/
