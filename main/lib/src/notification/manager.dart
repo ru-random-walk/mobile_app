@@ -47,6 +47,7 @@ class NotificationManager {
   /// - Инициализирует [_firebaseNotificationManager]
   ///
   Future<void> init() async {
+    /// TODO: убрать Platform
     if (_initialized || Platform.isIOS) return;
     await _firebaseTokenManager.init();
     await _localNotificationsManager.init(
