@@ -29,19 +29,20 @@ class ClubApiService {
         ),
       );
 
-      if (response.statusCode == 200 && response.data['data'] != null) {
+      final responseData = <String, dynamic>{
+      'data': response.data['data'],
+      'errors': response.data['errors'],
+    };
+      if (response.statusCode == 200) {
         logger.i('Response Data: ${response.data}');
-        return response.data['data'];
-      } else {
-        handleError(response);
-        return null;
       }
+      return responseData;
     } on DioException catch (e, stackTrace) {
       handleError(e, stackTrace: stackTrace);
-      return null;
+      return {'data': null, 'errors': [e.toString()]};
     } catch (e, stackTrace) {
       handleError(e, stackTrace: stackTrace);
-      return null;
+      return {'data': null, 'errors': [e.toString()]};
     }
   }
 }

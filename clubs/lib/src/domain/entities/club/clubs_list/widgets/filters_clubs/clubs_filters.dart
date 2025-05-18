@@ -1,4 +1,4 @@
-part of '../../../screens.dart';
+part of '../../page.dart';
 
 class GroupFilters extends StatelessWidget {
   final int selectedIndex;
