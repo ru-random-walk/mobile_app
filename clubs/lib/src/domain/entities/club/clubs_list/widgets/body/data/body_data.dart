@@ -3,11 +3,13 @@ part of '../../../page.dart';
 class ClubsBody extends StatefulWidget {
   final String currentUserId;
   final bool isSearching;
+  final VoidCallback? onFindGroup;
 
   const ClubsBody({
     super.key, 
     required this.currentUserId,
     this.isSearching = false,
+    this.onFindGroup,
   });
 
   @override
@@ -43,6 +45,7 @@ class _ClubsBodyState extends State<ClubsBody> {
     return controller.buildWith(
       context: context,
       onFilterChanged: (index) => setState(() => controller.selectedFilterIndex = index),
+      onFindGroup: widget.onFindGroup,
     );
   }
 }

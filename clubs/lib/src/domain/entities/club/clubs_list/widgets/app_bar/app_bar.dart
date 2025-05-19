@@ -3,9 +3,10 @@ part of '../../page.dart';
 final _appBarHeight = 56.toFigmaSize;
 
 class _ClubsListAppBar extends StatefulWidget implements PreferredSizeWidget {
+  final void Function(void Function())? onToggleSearchInit;
   final void Function(bool isSearching, String query) onSearchChanged;
 
-  const _ClubsListAppBar({super.key, required this.onSearchChanged});
+  const _ClubsListAppBar({super.key,required this.onSearchChanged, this.onToggleSearchInit});
 
   @override
   State<_ClubsListAppBar> createState() => _ClubsListAppBarState();
@@ -51,6 +52,7 @@ class _ClubsListAppBarState extends State<_ClubsListAppBar> {
   @override
   void initState() {
     super.initState();
+    widget.onToggleSearchInit?.call(_toggleSearch);
     _searchController.addListener(() {
       setState(() {});
     });

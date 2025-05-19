@@ -38,6 +38,7 @@ class ClubsBodyController {
   Widget buildWith({
     required BuildContext context,
     required Function(int index) onFilterChanged,
+    VoidCallback? onFindGroup,
   }) {
     final bloc = context.read<ClubsListBloc>();
 
@@ -58,6 +59,7 @@ class ClubsBodyController {
             isSearching: widget.isSearching,
             widget: widget,
             filterClubs: filterClubs,
+            onFindGroup: onFindGroup,
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 8)),
         ],

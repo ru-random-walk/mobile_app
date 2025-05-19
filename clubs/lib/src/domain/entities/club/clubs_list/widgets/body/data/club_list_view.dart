@@ -4,12 +4,14 @@ class ClubListView extends StatelessWidget {
   final ClubsBody widget;
   final bool isSearching;
   final List<ClubModel> Function(List<ClubModel>) filterClubs;
+  final VoidCallback? onFindGroup;
 
   const ClubListView({
     super.key,
     required this.widget,
     required this.isSearching,
     required this.filterClubs,
+    this.onFindGroup,
   });
 
   @override
@@ -36,8 +38,8 @@ class ClubListView extends StatelessWidget {
     final filtered = isSearching ? clubModels : filterClubs(clubModels);
 
     if (filtered.isEmpty) {
-      return SliverFillRemaining(
-        child: Center(child: Text('Пусто', style: context.textTheme.h4)),
+      return _ClubsListBodyEmpty(
+        onFindGroup: onFindGroup ?? () {},
       );
     }
 

@@ -10,6 +10,7 @@ class ClubsScreen extends StatefulWidget {
 }
 
 class _ClubsScreenState extends State<ClubsScreen> {
+  void Function()? _toggleSearchExternal;
   bool _isSearching = false;
   String _searchQuery = '';
 
@@ -23,12 +24,17 @@ class _ClubsScreenState extends State<ClubsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _ClubsListAppBar(onSearchChanged: _onSearchChanged),
+      appBar: _ClubsListAppBar(
+        onSearchChanged: _onSearchChanged,
+        onToggleSearchInit: (callback) {
+          _toggleSearchExternal = callback;
+        },
+      ),
       floatingActionButton: AddClubButton(
         onPressed: () async {
           final result = await Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => ClubFormScreen()),
+            MaterialPageRoute(builder: (_) => const ClubFormScreen()),
           );
           if (result == true) {
             context.read<ClubsListBloc>().add(LoadClubsEvent());
@@ -37,7 +43,11 @@ class _ClubsScreenState extends State<ClubsScreen> {
       ),
       body: ClubsBody(
         currentUserId: widget.currentUserId,
-        isSearching: _isSearching,),
+        isSearching: _isSearching,
+        onFindGroup: () {
+          _toggleSearchExternal?.call();
+        }
+      ),
     );
   }
 }

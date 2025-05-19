@@ -1,6 +1,7 @@
 import 'package:auth/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:ui_utils/ui_utils.dart';
 import 'package:ui_components/ui_components.dart';
@@ -28,6 +29,7 @@ part 'widgets/body/data/clubs_body_controller.dart';
 part 'widgets/body/data/clubs_filters_section.dart';
 part 'widgets/body/data/club_list_view.dart';
 part 'widgets/body/data/club_item.dart';
+part 'widgets/body/empty/body_empty.dart';
 
 class ClubsListPage extends StatelessWidget {
   const ClubsListPage({super.key});
