@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:ui_utils/ui_utils.dart';
+import 'package:ui_components/ui_components.dart';
 
 import 'package:clubs/src/domain/entities/club/clubs_list/get_clubs_use_case.dart';
 import 'package:clubs/src/data/clubs_api_service.dart';
@@ -16,6 +17,7 @@ import 'package:clubs/src/domain/entities/club/clubs_pages/administrator/admin_p
 import 'package:clubs/src/domain/entities/club/clubs_pages/not_member/not_member_page.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/member/member_page.dart';
 
+part 'clubs_model.dart';
 part 'widgets/app_bar/app_bar.dart';
 part 'widgets/app_bar/search_paint.dart';
 part 'widgets/app_bar/search_button.dart';
