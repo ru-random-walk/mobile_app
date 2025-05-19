@@ -11,6 +11,7 @@ import 'package:clubs/src/domain/entities/club/create_and_edit/tests/components/
 part 'test_form_body.dart';
 part 'bottom_buttons.dart';
 part 'qustion.dart';
+part 'test_form_controller.dart';
 
 class TestFormScreen extends StatefulWidget {
   final String clubId;
@@ -25,174 +26,16 @@ class TestFormScreen extends StatefulWidget {
 }
 
 class _TestFormScreenState extends State<TestFormScreen> {
-  int currentQuestionIndex = 0;
-  List<Question> questions = [];
-  Set<int> selectedAnswerIndexes = {};
-  final Map<int, List<int>> answersMap = {}; 
-  int questionsCount = 0;
-  bool isLoading = true;
-  String? approvementId;
-  ClubApiService clubApiService = ClubApiService();
+  late final TestFormController controller;
 
   @override
   void initState() {
     super.initState();
-    _loadQuestions();
+    controller = TestFormController(widget.clubId, onUpdate: () => setState(() {}));
+    controller.loadQuestions();
   }
 
-  Future<void> _loadQuestions() async {
-    final clubId = widget.clubId;
-
-    final data = await getApprovementInfo(clubId: clubId, apiService: clubApiService);
-    final approvements = data?['getClub']?['approvements'] as List<dynamic>?;
-
-    if (approvements != null && approvements.isNotEmpty) {
-      approvementId = approvements.first['id'];
-
-      final questionsJson = approvements.first['data']['questions'] as List<dynamic>;
-      setState(() {
-        questions = questionsJson.map((q) => Question.fromJson(q)).toList();
-        questionsCount = questions.length;
-        isLoading = false;
-      });
-    } else {
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-
-  void _onPrevious() {
-    if (currentQuestionIndex > 0) {
-      setState(() {
-        currentQuestionIndex--;
-        _restoreAnswerState();
-      });
-    }
-  }
-
-  void _onNext() {
-    if (currentQuestionIndex < questionsCount - 1 && (_isAnswerSelected())) {
-      setState(() {
-        currentQuestionIndex++;
-        _restoreAnswerState();
-      });
-    }
-  }
-
-  void _restoreAnswerState() {
-    final currentAnswers = answersMap[currentQuestionIndex];
-    selectedAnswerIndexes = currentAnswers != null ? currentAnswers.toSet() : {};
-  }
-
-  bool _isAnswerSelected() {
-    return selectedAnswerIndexes.isNotEmpty;
-  }
-
-  void _onSelectAnswer(String answer) {
-    final question = questions[currentQuestionIndex];
-    final isMultiple = question.answerType == 'MULTIPLE';
-    final optionIndex = question.answerOptions.indexOf(answer);
-    
-    setState(() {
-      if (isMultiple) {
-        if (selectedAnswerIndexes.contains(optionIndex)) {
-          selectedAnswerIndexes.remove(optionIndex);
-        } else {
-          selectedAnswerIndexes.add(optionIndex);
-        }
-        answersMap[currentQuestionIndex] = selectedAnswerIndexes.toList();
-      } else {
-        selectedAnswerIndexes = {optionIndex};
-        answersMap[currentQuestionIndex] = [optionIndex];
-      }
-    });
-  }
-
-  Future<void> _onFinish() async {
-    if (approvementId == null) {
-      print('Ошибка: approvementId is null');
-      return;
-    }
-
-    showDialog(
-      context: context,
-      builder: (_) => ConfirmActionDialog(
-        message: 'Завершить тест?',
-        subMessage: 'После завершения теста ответы изменить нельзя.',
-        confirmText: 'Завершить',
-        onConfirm:() {
-          _submitAnswers(sendForReview: true);
-        },
-        customColor: context.colors.main_50,
-      ),
-    );
-  }
-
-  Future<void> _submitAnswers({required bool sendForReview}) async {
-    final questionAnswers = answersMap.entries.map((entry) {
-      return {
-        'optionNumbers': entry.value,
-      };
-    }).toList();
-
-    try {
-      final response = await createAnswerForm(
-        approvementId: approvementId!,
-        questionAnswers: questionAnswers,
-        apiService: clubApiService,
-      );
-
-      if (response == null) {
-        _showErrorSnackBar('Ошибка: пустой ответ сервера');
-        return;
-      }
-
-      if (response['errors'] != null && (response['errors'] as List).isNotEmpty) {
-        final errors = response['errors'] as List;
-        
-        final duplicateAnswerError = errors.firstWhere(
-          (e) => (e['message'] as String).contains('You can not have more than one answer for approvement'),
-          orElse: () => null,
-        );
-
-        if (duplicateAnswerError != null) {
-          _showErrorSnackBar('Вы не можете повторно пройти тест');
-          return;
-        }
-      }
-
-      final answerId = response['data']?['createApprovementAnswerForm']?['id'];
-      String? status;
-
-      if (sendForReview && answerId != null) {
-        final result = await sendAnswersForReview(
-          answerId: answerId,
-          apiService: clubApiService,
-        );
-        status = result?['setAnswerStatusToSent']?['status'];
-      }
-      
-      if (mounted) {
-        Navigator.of(context).pop(status == 'PASSED');
-      }
-    } catch (e) {
-      print('Ошибка отправки ответов: $e');
-    }
-  }
-
-  void _showErrorSnackBar(String message) {
-    final scaffoldMessenger = ScaffoldMessenger.maybeOf(context);
-    if (scaffoldMessenger != null) {
-      scaffoldMessenger.showSnackBar(
-        SnackBar(
-          content: Text(message),
-        ),
-      );
-    }
-  }
-
-  Future<bool> _onExitPressed() async {
+   Future<bool> _onExitPressed() async {
     final shouldExit = await showDialog<bool>(
       context: context,
       builder: (_) => ConfirmActionDialog(
@@ -205,44 +48,44 @@ class _TestFormScreenState extends State<TestFormScreen> {
         },
       ),
     );
-    return shouldExit ?? false; 
+    return shouldExit ?? false;
   }
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) {
+    if (controller.isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
     return WillPopScope(
-    onWillPop: () async {
-      final exit = await _onExitPressed();
-      return exit; 
-    },
-    child: ColoredBox(
-      color: context.colors.base_0,
-      child: SafeArea(
-        child: Scaffold(
-          appBar: ClubPageAppBar(
-            title: 'Прохождение теста',
-            onBackPressed: _onExitPressed,
+
+      onWillPop: _onExitPressed,
+      child: ColoredBox(
+        color: context.colors.base_0,
+        child: SafeArea(
+          child: Scaffold(
+            appBar: ClubPageAppBar(
+              title: 'Прохождение теста',
+              onBackPressed: _onExitPressed,
+              ),
+            body: TestFormBody(
+              question: controller.currentQuestion,
+              questionIndex: controller.currentIndex,
+              totalQuestions: controller.totalQuestions,
+              selectedAnswerIndexes: controller.selectedIndexes,
+              onSelectAnswer: controller.selectAnswer,
             ),
-          body: TestFormBody(
-            question: questions[currentQuestionIndex],
-            questionIndex: currentQuestionIndex,
-            totalQuestions: questionsCount,
-            selectedAnswerIndexes: selectedAnswerIndexes,
-            onSelectAnswer: _onSelectAnswer,
-          ),
-          bottomNavigationBar: BottomButtons(
-            onPrevious: _onPrevious,
-            onNext: currentQuestionIndex == questionsCount - 1 ? _onFinish : _onNext,
-            canGoBack: currentQuestionIndex > 0,
-            canGoNext: _isAnswerSelected(),
-            isLastQuestion: currentQuestionIndex == questionsCount - 1,
+            bottomNavigationBar: BottomButtons(
+              onPrevious: controller.onPrevious,
+              onNext: controller.isLastQuestion
+                  ? () => controller.finish(context)
+                  : controller.onNext,
+              canGoBack: controller.canGoBack,
+              canGoNext: controller.isAnswerSelected,
+              isLastQuestion: controller.isLastQuestion,
+            ),
           ),
         ),
       ),
-    ),
     );
   }
 }

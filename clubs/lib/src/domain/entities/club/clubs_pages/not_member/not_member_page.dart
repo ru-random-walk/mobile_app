@@ -12,6 +12,7 @@ import 'package:clubs/src/domain/entities/club/clubs_pages/not_member/test_form/
 
 part 'widgets/body.dart';
 part 'widgets/bottom_button.dart';
+part 'widgets/join_requirements.dart';
 
 class NotMemberPage extends StatefulWidget {
   final String clubId;

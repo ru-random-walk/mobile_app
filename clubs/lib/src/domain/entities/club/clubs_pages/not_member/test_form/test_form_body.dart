@@ -119,7 +119,7 @@ class TestFormBody extends StatelessWidget {
 
 class ExpandedSection extends StatelessWidget {
   final Widget child;
-  const ExpandedSection({required this.child});
+  const ExpandedSection({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {

@@ -86,68 +86,13 @@ class ClubNotMemberBody extends StatelessWidget {
             color: context.colors.base_80,
             ),
           ),
-          if (approvements.isNotEmpty) ...[
-            SizedBox(height: 16.toFigmaSize),
-            Text(
-              'Тесты для вступления',
-              style: context.textTheme.bodyLMedium.copyWith(
-                color: context.colors.base_90,
-              ),
+          if (approvements.isNotEmpty)
+            JoinRequirements(
+              approvements: approvements,
+              clubId: clubId,
+              userId: userId,
+              membersCount: membersCount,
             ),
-            SizedBox(height: 4.toFigmaSize),
-            for (final approvement in approvements)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text(
-                      approvement['type'] == 'FORM'
-                          ? 'Тест'
-                          : 'Запрос на вступление',
-                      style: context.textTheme.bodyLRegular.copyWith(
-                        color: context.colors.base_90,
-                      ),
-                    ),
-                  ),
-                  CustomButton(
-                    text: approvement['type'] == 'FORM' ? 'Пройти' : 'Отправить',
-                    customWidth: 140.toFigmaSize,
-                    customHeight: 44.toFigmaSize,
-                    padding: EdgeInsets.all(4.toFigmaSize),
-                    onPressed: () async {
-                      if (approvement['type'] == 'FORM') {
-                        final result = await Navigator.of(context).push<bool>(
-                          MaterialPageRoute(
-                            builder: (_) => TestFormScreen(clubId: clubId),
-                          ),
-                        );
-
-                        if (result != null) {
-                          final shouldReplace = await Navigator.of(context).push<bool>(
-                            MaterialPageRoute(
-                              builder: (_) => TestResultScreen(result: result),
-                            ),
-                          );
-                          if (shouldReplace == true) {
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                builder: (_) => MemberPage(
-                                  clubId: clubId,
-                                  currentId: userId,
-                                  membersCount: membersCount,),
-                              ),
-                            );
-                          }
-                        }
-                      } else {
-                        // отправить запрос на подтверждение
-                      }
-                    },
-                  ),
-                ],
-              ),
-              SizedBox(height: 8.toFigmaSize),
-          ],
         ],
       ),
     );
