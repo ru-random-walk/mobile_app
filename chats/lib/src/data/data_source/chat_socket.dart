@@ -66,10 +66,11 @@ class ChatMessagingSocketSource {
     };
   }
 
-  void _onConnect(StompFrame frame) {
+  Future<void> _onConnect(StompFrame frame) async {
     _client.subscribe(
       destination: _messageRecieveTopic,
       callback: _onFrameReceieved,
+      headers: await _authHeaders,
     );
   }
 
@@ -84,12 +85,13 @@ class ChatMessagingSocketSource {
     }
   }
 
-  void sendMessage(SendMessageModel message) {
+  Future<void> sendMessage(SendMessageModel message) async {
     final body = jsonEncode(message.toJson());
     log('Message body:\n$body');
     _client.send(
       destination: _messageSendTopic,
       body: body,
+      headers: await _authHeaders,
     );
   }
 
