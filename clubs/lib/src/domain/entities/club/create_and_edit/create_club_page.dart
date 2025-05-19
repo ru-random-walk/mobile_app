@@ -13,6 +13,7 @@ import 'package:clubs/src/domain/entities/club/create_and_edit/app_bar.dart';
 import 'package:clubs/src/data/clubs_api_service.dart';
 import 'package:clubs/src/domain/entities/club/text_format/question_format.dart';
 import 'package:clubs/src/domain/entities/club/text_format/inspector_format.dart';
+import 'package:clubs/utils/qraphql_error_utils.dart';
 
 part 'club/popup.dart';
 part 'club/condition_string.dart';
@@ -111,60 +112,42 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
                     return;
                   }
 
-                  Map<String, dynamic>? result;      
+                  Map<String, dynamic>? result;
 
-                  if (!isConditionAdded) {
-                    result = await createClub(
-                      name: name, 
-                      description: description.isEmpty ? null : description,
-                      apiService: ClubApiService());
-                  } else if (conditionName == "Запрос на вступление") {
-                    result = await createClubWithConfirmApprovement(
-                      name: name,
-                      description: description.isEmpty ? null : description,
-                      infoCount: infoCount,
-                      apiService: ClubApiService(),
-                    );
-                  } else {
-                    result = await createClubWithFormApprovement(
-                      name: name,
-                      description: description.isEmpty ? null : description,
-                      questions: questions ?? [],
-                      apiService: ClubApiService(),
-                    );
-                  }
-
-                  if (result != null) {
-                    final data = result['data'];
-                    final errors = result['errors'];
-
-                    if (data != null) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor: context.colors.main_50,
-                          content: Text('Группа создана', style: context.textTheme.bodySMediumBase0),
-                        ),
+                  try {      
+                    if (!isConditionAdded) {
+                      result = await createClub(
+                        name: name, 
+                        description: description.isEmpty ? null : description,
+                        apiService: ClubApiService());
+                    } else if (conditionName == "Запрос на вступление") {
+                      result = await createClubWithConfirmApprovement(
+                        name: name,
+                        description: description.isEmpty ? null : description,
+                        infoCount: infoCount,
+                        apiService: ClubApiService(),
                       );
-                      Navigator.pop(context, true);
                     } else {
-                      String errorMessage = 'Не удалось создать группу';
-
-                      if (errors != null) {
-                        if (errors.any((e) =>
-                            e.toString().contains('maximum count of clubs') ||
-                            e.toString().contains('You are reached maximum count of clubs'))) {
-                          errorMessage = 'Вы не можете создать больше 3 групп';
-                        }
-                      }
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(errorMessage)),
+                      result = await createClubWithFormApprovement(
+                        name: name,
+                        description: description.isEmpty ? null : description,
+                        questions: questions ?? [],
+                        apiService: ClubApiService(),
                       );
                     }
-                  } else {
+
+                    if (handleGraphQLErrors(context, result, fallbackMessage: 'Не удалось создать группу')) return;
+
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Произошла ошибка при отправке запроса')),
+                      SnackBar(
+                        backgroundColor: context.colors.main_50,
+                        content: Text('Группа создана', style: context.textTheme.bodySMediumBase0),
+                      ),
                     );
+
+                    Navigator.pop(context, true);
+                  } catch (e) {
+                    showErrorSnackbar(context, 'Произошла ошибка');
                   }
                 }
               ),

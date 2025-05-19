@@ -17,6 +17,5 @@ Future<Map<String, dynamic>?> sendAnswersForReview({
     'answerId': answerId,
   };
 
-  final result = await apiService.performPostRequest(query, variables);
-  return result!['data'];
+  return await apiService.performPostRequest(query, variables);
 }

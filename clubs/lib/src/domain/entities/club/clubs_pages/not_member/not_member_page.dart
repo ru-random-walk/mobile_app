@@ -9,6 +9,7 @@ import 'package:clubs/src/domain/entities/club/text_format/member_format.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/common/app_bar.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/member/member_page.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/not_member/test_form/test_form_screen.dart';
+import 'package:clubs/utils/qraphql_error_utils.dart';
 
 part 'widgets/body.dart';
 part 'widgets/bottom_button.dart';
@@ -46,11 +47,20 @@ class _NotMemberPageState extends State<NotMemberPage> {
       final data = await getClubInfo(
         clubId: widget.clubId,
         apiService: _clubApiService,);
+
+      if (handleGraphQLErrors(
+        context,
+        data,
+        fallbackMessage: 'Не удалось загрузить данные группы',
+      )) return;
+
       setState(() {
-        clubData = data!['getClub'];
+        clubData = data?['data']?['getClub'];
         isLoading = false;
       });
     } catch (e) {
+      print('Ошибка при загрузке групп: $e');
+      showErrorSnackbar(context, 'Произошла ошибка');
       setState(() {
         isLoading = false;
       });

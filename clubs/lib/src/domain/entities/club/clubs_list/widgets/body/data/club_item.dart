@@ -19,7 +19,7 @@ class ClubItemTile extends StatelessWidget {
         final clubId = group.id;
         final role = group.userRole;
 
-        if (role == '1') {
+        if (role == 'ADMIN') {
           final result = await Navigator.push(
             context,
             MaterialPageRoute(
@@ -33,7 +33,7 @@ class ClubItemTile extends StatelessWidget {
           if (result == true) {
             context.read<ClubsListBloc>().add(LoadClubsEvent());
           }
-        } else if (role == 'ADMIN') {
+        } else if (role == 'NOT_MEMBER') {
           Navigator.push(
             context,
             MaterialPageRoute(

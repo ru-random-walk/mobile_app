@@ -43,6 +43,7 @@ class ClubsListPage extends StatelessWidget {
           ProfileData() => Provider(
               create: (context) => GetClubsUseCase(
                 userId: state.user.id,
+                context: context,
                 apiService: ClubApiService(),
               ),
               child: BlocProvider(

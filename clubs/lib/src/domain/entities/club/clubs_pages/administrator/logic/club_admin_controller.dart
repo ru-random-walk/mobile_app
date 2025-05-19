@@ -127,16 +127,16 @@ class ClubAdminController {
                     customColor: const Color(0xFFFF281A),
                     onConfirm: () async {
                       try {
-                        await removeClub(clubId: clubId, apiService: apiService);
+                        final result = await removeClub(clubId: clubId, apiService: apiService);
+                        
+                        if (handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка при удалении группы')) {
+                          return;
+                        }
+
                         Navigator.of(context).pop(true); 
                       } catch (e) {
-                        ScaffoldMessenger.of(scaffoldContext).showSnackBar(
-                          const SnackBar(
-                            content: Text('Ошибка при удалении клуба'),
-                          ),
-                        );
+                        showErrorSnackbar(context, 'Произошла ошибка');
                       }
-
                     },
                   );
                 },
@@ -198,19 +198,22 @@ class ClubAdminController {
                 apiService: apiService,
               );
 
-              if (result != null && result['changeMemberRole'] != null) {
-                final updatedRole = result['changeMemberRole']['role'];
+              if (handleGraphQLErrors(context, result, fallbackMessage: 'Не удалось изменить роль')) return;
+
+              final updatedRole = result?['data']?['changeMemberRole']?['role'];
+              if (updatedRole != null) {
                 final index = members.indexWhere((m) => m['id'] == userId);
                 if (index != -1) {
                   members[index]['role'] = updatedRole;
                 }
                 onUpdate();
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Роль не была обновлена')),
+                );
               }
             } catch (e) {
-              print('Ошибка при изменении роли: $e');
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Не удалось изменить роль')),
-              );
+              showErrorSnackbar(context, 'Произошла ошибка');
             }
           },
         );
@@ -229,19 +232,19 @@ class ClubAdminController {
           customColor: const Color(0xFFFF281A),
           onConfirm: () async {
             try {
-              await removeMemberFromClub(
+              final result = await removeMemberFromClub(
                 clubId: clubId,
                 memberId: userId,
                 apiService: apiService,
               );
+
+              if (handleGraphQLErrors(context, result, fallbackMessage: 'Не удалось удалить участника')) return;
+
               users.removeWhere((u) => u.id == userId);
               members.removeWhere((m) => m['id'] == userId);
               onUpdate();
             } catch (e) {
-              print('Ошибка при удалении: $e');
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Не удалось удалить участника')),
-              );
+              showErrorSnackbar(context, 'Произошла ошибка');
             }
           },
         );

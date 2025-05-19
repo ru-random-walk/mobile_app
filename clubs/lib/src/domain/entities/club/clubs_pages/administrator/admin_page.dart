@@ -11,6 +11,7 @@ import 'package:clubs/src/domain/entities/club/clubs_pages/common/row_menu.dart'
 import 'package:clubs/src/domain/entities/club/clubs_pages/common/overlay_menu_position.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/common/alert_dialogs.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/common/app_bar.dart';
+import 'package:clubs/utils/qraphql_error_utils.dart';
 
 part 'widgets/body.dart';
 part 'widgets/member_tile.dart';
@@ -55,32 +56,37 @@ class _ClubAdminScreenState extends State<ClubAdminScreen> {
 
   Future<void> _loadClub() async {
     try {
-      final data = await getClubInfo(
+      final result = await getClubInfo(
         clubId: widget.clubId,
         apiService: _clubApiService,
       );
 
-      if (data != null && data['getClub'] != null) {
-        setState(() {
-          _club = data['getClub'];
-          _controller = ClubAdminController(
-            clubId: widget.clubId,
-            apiService: _clubApiService,
-            currentUserId: widget.currentId,
-            onUpdate: () => setState(() {}),
-            clubName: _club!['name'],
-            description: _club?['description'] ?? 'Описание отсутствует',
-            approvement: List<Map<String, dynamic>>.from(_club!['approvements'] ?? []),
-          )..init();
-          _isLoading = false;
-        });
-      } else {
-        setState(() {
-          _isLoading = false;
-        });
+      if (handleGraphQLErrors(
+        context, 
+        result, 
+        fallbackMessage: 'Ошибка загрузки клуба'
+      )) {
+        setState(() => _isLoading = false);
+        return;
       }
+
+      final data = result!['data'];
+      setState(() {
+        _club = data['getClub'];
+        _controller = ClubAdminController(
+          clubId: widget.clubId,
+          apiService: _clubApiService,
+          currentUserId: widget.currentId,
+          onUpdate: () => setState(() {}),
+          clubName: _club!['name'],
+          description: _club?['description'] ?? 'Описание отсутствует',
+          approvement: List<Map<String, dynamic>>.from(_club!['approvements'] ?? []),
+        )..init();
+        _isLoading = false;
+      });
     } catch (e) {
-      print('Ошибка загрузки клуба: $e');
+      print(e);
+      showErrorSnackbar(context, 'Произошла ошибка');
       setState(() {
         _isLoading = false;
       });

@@ -26,6 +26,5 @@ Future<Map<String, dynamic>?> searchClubs({
     },
   };
 
-  final result = await apiService.performPostRequest(query, variables);
-  return result!['data'];
+  return await apiService.performPostRequest(query, variables);
 }

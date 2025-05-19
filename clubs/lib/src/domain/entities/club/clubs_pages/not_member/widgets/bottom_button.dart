@@ -32,7 +32,10 @@ class BottomButton extends StatelessWidget {
                 memberId: userId,
                 apiService: clubApiService,
               );
-              final member = result?['addMemberInClub'];
+
+              if (handleGraphQLErrors(context, result, fallbackMessage: 'Не удалось вступить в клуб')) return;
+
+              final member = result?['data']?['addMemberInClub'];
 
               final message = member != null
                   ? 'Вы успешно вступили в клуб'
@@ -55,9 +58,7 @@ class BottomButton extends StatelessWidget {
                 );
               }
             } catch (e) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Ошибка: $e')),
-              );
+              showErrorSnackbar(context, 'Произошла ошибка: $e');
             }
           },
         ),

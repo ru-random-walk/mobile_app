@@ -23,6 +23,5 @@ Future<Map<String, dynamic>?> getUserClubs({
     'userId': userId,
   };
 
-  final result = await apiService.performPostRequest(query, variables);
-  return result!['data'];
+  return await apiService.performPostRequest(query, variables);
 }

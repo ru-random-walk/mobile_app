@@ -8,6 +8,7 @@ import 'package:clubs/src/domain/entities/club/clubs_pages/common/app_bar.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/common/row_menu.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/common/overlay_menu_position.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/common/alert_dialogs.dart';
+import 'package:clubs/utils/qraphql_error_utils.dart';
 
 part 'overlay_menu/overlay_menu.dart';
 part 'widgets/body.dart';
@@ -53,11 +54,19 @@ class _MemberPageState extends State<MemberPage> {
       final data = await getClubInfo(
         clubId: widget.clubId,
         apiService: _clubApiService,);
+
+      if (handleGraphQLErrors(
+        context,
+        data,
+        fallbackMessage: 'Не удалось загрузить данные клуба',
+      )) return;
+
       setState(() {
-        clubData = data!['getClub'];
+        clubData = data?['data']?['getClub'];
         isLoading = false;
       });
     } catch (e) {
+      showErrorSnackbar(context, 'Произошла ошибка');
       setState(() {
         isLoading = false;
       });

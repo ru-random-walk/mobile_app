@@ -34,6 +34,5 @@ Future<Map<String, dynamic>?> getApprovementInfo({
     'clubId': clubId,
   };
 
-  final result = await apiService.performPostRequest(query, variables);
-  return result!['data'];
+  return await apiService.performPostRequest(query, variables);
 }

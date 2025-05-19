@@ -53,7 +53,13 @@ class ClubAdminMenu extends StatelessWidget {
                         try {
                           final clubData = await getApprovementInfo(clubId: clubId, apiService: apiService,);
 
-                          final approvements = clubData?['getClub']?['approvements'] as List<dynamic>?;
+                          if (handleGraphQLErrors(
+                            context,
+                            clubData,
+                            fallbackMessage: 'Ошибка при загрузке группы',
+                          )) return;
+
+                          final approvements = clubData?['data']?['getClub']?['approvements'] as List<dynamic>?;
 
                           if (approvements == null || approvements.isEmpty) {
                             Navigator.of(context).push(
@@ -101,11 +107,7 @@ class ClubAdminMenu extends StatelessWidget {
                           );
                           closeMenu();
                         }catch (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Ошибка при получении данных'),
-                            ),
-                          );
+                          showErrorSnackbar(context, 'Произошла ошибка');
                         }
                       },
                     ),

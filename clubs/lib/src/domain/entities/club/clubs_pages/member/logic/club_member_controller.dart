@@ -52,22 +52,18 @@ class ClubMemberMenuController {
           customColor: const Color(0xFFFF281A),
           onConfirm: () async {
             try {
-              await removeMemberFromClub(
+              final result = await removeMemberFromClub(
                 clubId: clubId,
                 memberId: userId,
                 apiService: apiService,
               );
 
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Вы вышли из группы'),
-                backgroundColor: context.colors.main_50,),
-              );
+              if (handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка при выходе из группы')) return;
 
               Navigator.of(context).pop(); 
             } catch (e) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Ошибка при выходе из группы')),
-              );
+              print('Ошибка при выходе из группы: $e');
+              showErrorSnackbar(context, 'Ошибка при выходе из группы');
             }
           },
         );

@@ -1,19 +1,26 @@
 import 'package:clubs/src/data/clubs_api_service.dart';
+import 'package:flutter/material.dart';
+import 'package:clubs/utils/qraphql_error_utils.dart';
 
 class GetClubsUseCase {
   final String userId;
-  
+  BuildContext context;
   final ClubApiService apiService;
 
   GetClubsUseCase({
     required this.userId,
-
+    required this.context,
     required this.apiService,
   });
 
   Future<List<Map<String, dynamic>>> getClubs() async {
     final response = await getUserClubs(userId: userId, apiService: apiService);
-    final raw = response?['getUserClubsWithRole'] ?? [];
+
+    if (handleGraphQLErrors(context, response, fallbackMessage: 'Не удалось загрузить группы')) {
+      return [];
+    }
+
+    final raw = response?['data']?['getUserClubsWithRole'] ?? [];
     return List<Map<String, dynamic>>.from(raw);
   }
 
@@ -23,12 +30,17 @@ class GetClubsUseCase {
     required final int size,
   }) async {
     final response = await searchClubs(
-    queryText: query, 
-      page: page, 
-      size: size,
-      apiService: apiService,
-    );
-    final raw = response?['searchClubs'] ?? [];
+      queryText: query, 
+        page: page, 
+        size: size,
+        apiService: apiService,
+      );
+
+    if (handleGraphQLErrors(context, response, fallbackMessage: 'Не удалось выполнить поиск групп')) {
+      return [];
+    }
+
+    final raw = response?['data']?['searchClubs'] ?? [];
     return List<Map<String, dynamic>>.from(raw);
   }
 }

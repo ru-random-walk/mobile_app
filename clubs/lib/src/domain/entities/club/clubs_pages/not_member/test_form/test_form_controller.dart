@@ -22,18 +22,23 @@ class TestFormController {
   bool get isLastQuestion => currentIndex == totalQuestions - 1;
 
    Future<void> loadQuestions() async {
-    final data = await getApprovementInfo(clubId: clubId, apiService: clubApiService);
-    final approvements = data?['getClub']?['approvements'] as List<dynamic>?;
+    try {
+      final data = await getApprovementInfo(clubId: clubId, apiService: clubApiService);
+      final approvements = data?['data']?['getClub']?['approvements'] as List<dynamic>?;
 
-    if (approvements != null && approvements.isNotEmpty) {
-      approvementId = approvements.first['id'];
-      final questionsJson = approvements.first['data']['questions'] as List<dynamic>;
-      questions = questionsJson
-          .map((q) => Question.fromJson(q as Map<String, dynamic>))
-          .toList();
+      if (approvements != null && approvements.isNotEmpty) {
+        approvementId = approvements.first['id'];
+        final questionsJson = approvements.first['data']['questions'] as List<dynamic>;
+        questions = questionsJson
+            .map((q) => Question.fromJson(q as Map<String, dynamic>))
+            .toList();
+      }
+    } catch (e) {
+      print('Ошибка при загрузке вопросов: $e');
+    } finally {
+      isLoading = false;
+      onUpdate();
     }
-    isLoading = false;
-    onUpdate();
   }
 
   void onPrevious() {
@@ -106,27 +111,9 @@ class TestFormController {
         apiService: clubApiService,
       );
 
-      if (response == null || response['errors'] != null) {
-        final errors = response!['errors'] as List;
-        
-        final duplicateAnswerError = errors.firstWhere(
-          (e) => (e['message'] as String).contains('You can not have more than one answer for approvement'),
-          orElse: () => null,
-        );
+      if (handleGraphQLErrors(context, response, fallbackMessage: 'Ошибка завершения теста')) return;
 
-        if (duplicateAnswerError != null) {
-          ScaffoldMessenger.maybeOf(context)?.showSnackBar(
-          const SnackBar(content: Text('Вы не можете повторно пройти тест')),
-        );
-          return;
-        }
-        ScaffoldMessenger.maybeOf(context)?.showSnackBar(
-          const SnackBar(content: Text('Ошибка при отправке ответа')),
-        );
-        return;
-      }
-
-      final answerId = response['data']?['createApprovementAnswerForm']?['id'];
+      final answerId = response?['data']?['createApprovementAnswerForm']?['id'];
       String? status;
 
       if (sendForReview && answerId != null) {
@@ -134,14 +121,16 @@ class TestFormController {
           answerId: answerId,
           apiService: clubApiService,
         );
-        status = result?['setAnswerStatusToSent']?['status'];
+        if (handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка отправки ответов')) return;
+       
+        status = result?['data']['setAnswerStatusToSent']?['status'];
       }
 
       if (context.mounted) {
         Navigator.of(context).pop(status == 'PASSED');
       }
     } catch (e) {
-      print('Ошибка отправки: $e');
+      showErrorSnackbar(context, 'Произошла ошибка');
     }
   }
 }

@@ -26,7 +26,13 @@ Future<List<Map<String, dynamic>>> getClubMembers({
   };
 
   final result = await apiService.performPostRequest(query, variables);
+
   if (result == null || result['data'] == null) {
+    final errors = result?['errors'] as List<dynamic>?;
+    if (errors != null && errors.isNotEmpty) {
+      final message = errors.first['message'] as String?;
+      print('[GraphQL Error] $message');
+    }
     return [];
   }
 
