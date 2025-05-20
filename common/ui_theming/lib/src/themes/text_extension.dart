@@ -12,6 +12,7 @@ class TextThemeExtension extends ThemeExtension<TextThemeExtension> {
   final TextStyle bodyXLRegular;
   final TextStyle bodyXLMedium;
   final TextStyle bodyLRegular;
+  final TextStyle bodyLMedium;
   final TextStyle bodyLItalic;
   final TextStyle bodyMMedium;
   final TextStyle bodyMItalic;
@@ -38,6 +39,7 @@ class TextThemeExtension extends ThemeExtension<TextThemeExtension> {
     required this.bodyXLRegular,
     required this.bodyXLMedium,
     required this.bodyLRegular,
+    required this.bodyLMedium,
     required this.bodyLItalic,
     required this.bodyMMedium,
     required this.bodyMItalic,
@@ -66,6 +68,7 @@ class TextThemeExtension extends ThemeExtension<TextThemeExtension> {
     TextStyle? bodyXLRegular,
     TextStyle? bodyXLMedium,
     TextStyle? bodyLRegular,
+    TextStyle? bodyLMedium,
     TextStyle? bodyLItalic,
     TextStyle? bodyMMedium,
     TextStyle? bodyMItalic,
@@ -92,6 +95,7 @@ class TextThemeExtension extends ThemeExtension<TextThemeExtension> {
       bodyXLRegular: bodyXLRegular ?? this.bodyXLRegular,
       bodyXLMedium: bodyXLMedium ?? this.bodyXLMedium,
       bodyLRegular: bodyLRegular ?? this.bodyLRegular,
+      bodyLMedium: bodyLMedium ?? this.bodyLMedium,
       bodyLItalic: bodyLItalic ?? this.bodyLItalic,
       bodyMMedium: bodyMMedium ?? this.bodyMMedium,
       bodyMItalic: bodyMItalic ?? this.bodyMItalic,
@@ -130,6 +134,7 @@ class TextThemeExtension extends ThemeExtension<TextThemeExtension> {
       bodyMRegularMain70:
           TextStyle.lerp(bodyMRegularMain70, other.bodyMRegularMain70, t)!,
       bodyLRegular: TextStyle.lerp(bodyLRegular, other.bodyLRegular, t)!,
+      bodyLMedium: TextStyle.lerp(bodyLMedium, other.bodyLMedium, t)!,
       bodyLItalic: TextStyle.lerp(bodyLItalic, other.bodyLItalic, t)!,
       bodyXLRegular: TextStyle.lerp(bodyXLRegular, other.bodyXLRegular, t)!,
       bodyXLMedium: TextStyle.lerp(bodyXLMedium, other.bodyXLMedium, t)!,

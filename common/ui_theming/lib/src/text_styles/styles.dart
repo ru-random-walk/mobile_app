@@ -119,4 +119,11 @@ abstract class TextStyles {
         fontStyle: FontStyle.italic,
         color: color,
   );
+
+  static TextStyle bodyLMedium(Color color) => TextStyle(
+        fontFamily: _fontFamily,
+        fontSize: 18.toFigmaSize,
+        fontWeight: FontWeight.w500,
+        color: color,
+      );
 }

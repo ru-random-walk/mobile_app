@@ -8,6 +8,15 @@ part 'create_clubs/create_club_confirm.dart';
 part 'create_clubs/create_club_test.dart';
 part 'remove_clubs/remove_club.dart';
 part 'get_clubs/get_id_clubs.dart';
+part 'get_clubs/get_clubs_info.dart';
+part 'get_clubs/get_members_club.dart';
+part 'get_clubs/get_approvement_info.dart';
+part 'change_member_role/change_member_role.dart';
+part 'change_member_role/remove_member_from_club.dart';
+part 'change_member_role/add_member_in_club.dart';
+part 'answers/create_answer_form.dart';
+part 'answers/send_answers_form.dart';
+part 'search_clubs/search_clubs.dart';
 
 class ClubApiService {
   final dioClient = NetworkConfig.instance.dio;
