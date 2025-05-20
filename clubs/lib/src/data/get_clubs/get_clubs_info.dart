@@ -14,6 +14,7 @@ Future<Map<String, dynamic>?> getClubInfo({
           id
           type
         }
+        photoVersion
       }
     }
   ''';

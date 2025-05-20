@@ -16,6 +16,7 @@ class ClubPhotoWidget extends StatelessWidget {
   final Widget Function() loadingBuilder;
   final Widget Function() errorBuilder;
   final Widget Function(Uint8List bytes) dataBuilder;
+  final Widget Function() emptyBuilder;
 
   const ClubPhotoWidget({
     super.key,
@@ -24,6 +25,7 @@ class ClubPhotoWidget extends StatelessWidget {
     required this.loadingBuilder,
     required this.errorBuilder,
     required this.dataBuilder,
+    required this.emptyBuilder,
   });
 
   @override
@@ -63,6 +65,7 @@ class ClubPhotoWidget extends StatelessWidget {
                   ClubPhotoLoading _ => loadingBuilder(),
                   ClubPhotoError _ => errorBuilder(),
                   final ClubPhotoData data => dataBuilder(data.file),
+                  ClubPhotoEmpty _ => emptyBuilder(),
                 };
               },
             );

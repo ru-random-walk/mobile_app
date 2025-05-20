@@ -28,6 +28,14 @@ class ClubPhotoListWidget extends StatelessWidget {
           color: Colors.red,
         ),
       ),
+      emptyBuilder: () => _buildPlaceholder(
+        FittedBox(
+          child: Text(
+            'Нет фото',
+            style: context.textTheme.captionMedium,
+          ),
+        ),
+      ),
       dataBuilder: (bytes) => SizedBox.square(
         dimension: photoSize * 2,
         child: DecoratedBox(

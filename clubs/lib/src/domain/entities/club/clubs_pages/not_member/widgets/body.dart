@@ -7,6 +7,7 @@ class ClubNotMemberBody extends StatelessWidget {
   final List<Map<String, dynamic>> approvements;
   final String clubId;
   final String userId;
+  final int photoVersion;
 
   const ClubNotMemberBody({
     super.key,
@@ -16,29 +17,21 @@ class ClubNotMemberBody extends StatelessWidget {
     required this.approvements,
     required this.clubId,
     required this.userId,
+    required this.photoVersion,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(
-      vertical: 4.toFigmaSize,
-      horizontal: 20.toFigmaSize,
-    ),
+        vertical: 4.toFigmaSize,
+        horizontal: 20.toFigmaSize,
+      ),
       child: ListView(
         children: [
-          Center(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(16.toFigmaSize),
-              child: SizedBox(
-                width: 240.toFigmaSize,
-                height: 240.toFigmaSize,
-                child: Image.asset(
-                  'packages/clubs/assets/images/avatar.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
+          ClubDetailPhotoWidget(
+            clubId: clubId,
+            photoVersion: photoVersion,
           ),
           SizedBox(height: 20.toFigmaSize),
           Center(
@@ -62,28 +55,32 @@ class ClubNotMemberBody extends StatelessWidget {
                 ),
               ),
               SizedBox(width: 4.toFigmaSize),
-              Text(formatMemberCount(membersCount),
+              Text(
+                formatMemberCount(membersCount),
                 style: context.textTheme.bodyLRegular.copyWith(
-                color: context.colors.base_90,
-              ),),
+                  color: context.colors.base_90,
+                ),
+              ),
               const Spacer(),
-              Text('Вы не в группе', 
+              Text(
+                'Вы не в группе',
                 style: context.textTheme.bodyLRegular.copyWith(
-                color: context.colors.base_50,
-              ),),
+                  color: context.colors.base_50,
+                ),
+              ),
             ],
           ),
           SizedBox(height: 16.toFigmaSize),
           Text(
             'Описание:',
             style: context.textTheme.bodyLMedium.copyWith(
-            color: context.colors.base_90,
+              color: context.colors.base_90,
             ),
           ),
           Text(
             description,
             style: context.textTheme.bodyLRegular.copyWith(
-            color: context.colors.base_80,
+              color: context.colors.base_80,
             ),
           ),
           if (approvements.isNotEmpty)

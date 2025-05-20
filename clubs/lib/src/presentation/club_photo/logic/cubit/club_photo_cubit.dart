@@ -29,7 +29,13 @@ class ClubPhotoCubit extends Cubit<ClubPhotoState> {
       ),
     );
     res.fold(
-      (err) => emit(ClubPhotoError()),
+      (err) {
+        if (err is EmptyPhotoError) {
+          emit(ClubPhotoEmpty());
+        } else {
+          emit(ClubPhotoError());
+        }
+      },
       (bytes) => emit(
         ClubPhotoData(bytes),
       ),

@@ -6,6 +6,10 @@ import 'package:clubs/src/data/db/data_source/club_photo.dart';
 import 'package:core/core.dart';
 import 'package:utils/utils.dart';
 
+class EmptyPhotoError extends BaseError {
+  EmptyPhotoError() : super('Empty photo', StackTrace.current);
+}
+
 class GetClubPhotoArgs {
   final String clubId;
   final int photoVersion;
@@ -30,6 +34,9 @@ class GetClubPhotoUseCase
 
   @override
   Future<Either<BaseError, Uint8List>> call(GetClubPhotoArgs params) async {
+    if (params.photoVersion == 0) {
+      return Left(EmptyPhotoError());
+    }
     final info =
         await clubPhotoDatabaseInfoDataSource.getClubPhotoInfo(params.clubId);
     if (info == null || info.photoVersion < params.photoVersion) {
@@ -56,7 +63,8 @@ class GetClubPhotoUseCase
         return Left(err.leftValue);
       case Right<BaseError, String> data:
         final url = data.rightValue;
-        final imageBytes = await cacheImagesDataSource.downloadImage(url, params.clubId);
+        final imageBytes =
+            await cacheImagesDataSource.downloadImage(url, params.clubId);
         if (updateDBInfo) {
           await clubPhotoDatabaseInfoDataSource.addClubPhotoInfo(
             params.clubId,

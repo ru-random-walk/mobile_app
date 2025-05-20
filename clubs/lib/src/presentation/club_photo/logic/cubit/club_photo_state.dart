@@ -12,3 +12,5 @@ final class ClubPhotoData extends ClubPhotoState {
 
   ClubPhotoData(this.file);
 }
+
+final class ClubPhotoEmpty extends ClubPhotoState {}

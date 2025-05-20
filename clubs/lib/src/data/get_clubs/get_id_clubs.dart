@@ -13,8 +13,9 @@ Future<Map<String, dynamic>?> getUserClubs({
           members{
             id
           }
+          photoVersion
         }
-        userRole
+        userRole 
       }
     }
   ''';

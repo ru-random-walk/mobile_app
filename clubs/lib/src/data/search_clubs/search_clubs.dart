@@ -14,6 +14,7 @@ Future<Map<String, dynamic>?> searchClubs({
         members{
           id
         }
+        photoVersion
       }
     }
   ''';

@@ -13,6 +13,8 @@ class ClubItemTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClubWidget(
+      clubId: group.id,
+      photoVersion: group.photoVersion,
       title: group.name,
       subscribers: formatMemberCount(group.membersCount),
       onTap: () async {
