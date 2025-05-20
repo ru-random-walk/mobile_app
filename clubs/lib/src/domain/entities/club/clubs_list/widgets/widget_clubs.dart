@@ -1,7 +1,10 @@
+import 'package:clubs/src/presentation/club_photo/list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:ui_utils/ui_utils.dart';
 
 class ClubWidget extends StatelessWidget {
+  final String clubId;
+  final int photoVersion;
   final String title;
   final String subscribers;
   final String image;
@@ -11,11 +14,13 @@ class ClubWidget extends StatelessWidget {
     super.key,
     required this.title,
     required this.subscribers,
-    this.image =  'packages/clubs/assets/images/avatar.png',
+    this.image = 'packages/clubs/assets/images/avatar.png',
     this.onTap,
+    required this.clubId,
+    required this.photoVersion,
   });
 
-   @override
+  @override
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -31,13 +36,14 @@ class ClubWidget extends StatelessWidget {
           top: 8.toFigmaSize,
           bottom: 12.toFigmaSize,
           left: 4.toFigmaSize,
-          right: 4.toFigmaSize,), 
+          right: 4.toFigmaSize,
+        ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CircleAvatar(
-              radius: 32.toFigmaSize,
-              backgroundImage: AssetImage(image),
+            ClubPhotoListWidget(
+              clubId: clubId,
+              photoVersion: photoVersion,
             ),
             SizedBox(width: 16.toFigmaSize),
             Expanded(
@@ -46,7 +52,8 @@ class ClubWidget extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: context.textTheme.h5.copyWith(color: context.colors.base_90),
+                    style: context.textTheme.h5
+                        .copyWith(color: context.colors.base_90),
                   ),
                   SizedBox(height: 4.toFigmaSize),
                   Text(

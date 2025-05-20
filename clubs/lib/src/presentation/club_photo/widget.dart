@@ -1,58 +1,73 @@
+import 'dart:typed_data';
+
+import 'package:clubs/src/data/club_photo/club_photo.dart';
+import 'package:clubs/src/data/db/data_source/club_photo.dart';
+import 'package:clubs/src/domain/usecase/get_club_photo.dart';
 import 'package:clubs/src/presentation/club_photo/logic/cubit/club_photo_cubit.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ui_utils/ui_utils.dart';
-
-final photoSize = 32.toFigmaSize;
+import 'package:provider/provider.dart';
 
 class ClubPhotoWidget extends StatelessWidget {
   final String clubId;
   final int photoVersion;
 
+  final Widget Function() loadingBuilder;
+  final Widget Function() errorBuilder;
+  final Widget Function(Uint8List bytes) dataBuilder;
+
   const ClubPhotoWidget({
     super.key,
     required this.clubId,
     required this.photoVersion,
+    required this.loadingBuilder,
+    required this.errorBuilder,
+    required this.dataBuilder,
   });
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ClubPhotoCubit(),
-      child: Builder(
-        builder: (context) {
-          return BlocBuilder<ClubPhotoCubit, ClubPhotoState>(
-            builder: (context, state) {
-              return switch (state) {
-                ClubPhotoLoading _ => _buildPlaceholder(
-                    const CircularProgressIndicator.adaptive(),
-                  ),
-                ClubPhotoError _ => _buildPlaceholder(
-                    const Icon(
-                      Icons.error_outline,
-                      color: Colors.red,
-                    ),
-                  ),
-                final ClubPhotoData data => CircleAvatar(
-                    radius: photoSize,
-                    foregroundImage: MemoryImage(data.file),
-                  ),
-              };
-            },
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildPlaceholder(Widget child) {
-    return SizedBox.square(
-      dimension: photoSize,
-      child: DecoratedBox(
-        decoration: const BoxDecoration(
-          shape: BoxShape.circle,
+    return MultiProvider(
+      providers: [
+        Provider(
+          create: (context) => ClubPhotoDataSource(),
         ),
-        child: child,
+        Provider(
+          create: (context) => CacheImagesDataSource(),
+        ),
+        Provider(
+          create: (context) => ClubPhotoDatabaseInfoDataSource(
+            context.read(),
+          ),
+        ),
+        Provider(
+          create: (context) => GetClubPhotoUseCase(
+            clubPhotoDataSource: context.read(),
+            clubPhotoDatabaseInfoDataSource: context.read(),
+            cacheImagesDataSource: context.read(),
+          ),
+        ),
+      ],
+      child: BlocProvider(
+        create: (context) => ClubPhotoCubit(
+          clubId: clubId,
+          photoVersion: photoVersion,
+          getClubPhoto: context.read(),
+        ),
+        child: Builder(
+          builder: (context) {
+            return BlocBuilder<ClubPhotoCubit, ClubPhotoState>(
+              builder: (context, state) {
+                return switch (state) {
+                  ClubPhotoLoading _ => loadingBuilder(),
+                  ClubPhotoError _ => errorBuilder(),
+                  final ClubPhotoData data => dataBuilder(data.file),
+                };
+              },
+            );
+          },
+        ),
       ),
     );
   }

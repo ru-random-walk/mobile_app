@@ -13,14 +13,18 @@ class _ClubsScreenState extends State<ClubsScreen> {
   int _selectedFilterIndex = 0;
 
   List<Map<String, dynamic>> _filtered(List<Map<String, dynamic>> groups) {
-  switch (_selectedFilterIndex) {
-    case 1:
-      return groups.where((g) => ['ADMIN', 'INSPECTOR'].contains(g['userRole'])).toList();
-    case 2:
-      return groups.where((g) => g['userRole'] == 'PENDING_APPROVAL').toList();
-    default:
-      return groups;
-   }
+    switch (_selectedFilterIndex) {
+      case 1:
+        return groups
+            .where((g) => ['ADMIN', 'INSPECTOR'].contains(g['userRole']))
+            .toList();
+      case 2:
+        return groups
+            .where((g) => g['userRole'] == 'PENDING_APPROVAL')
+            .toList();
+      default:
+        return groups;
+    }
   }
 
   String formatMemberCount(int count) {
@@ -40,7 +44,7 @@ class _ClubsScreenState extends State<ClubsScreen> {
 
     return '$count $suffix';
   }
-      
+
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<ClubsListBloc>();
@@ -85,12 +89,11 @@ class _ClubsScreenState extends State<ClubsScreen> {
               builder: (context, state) {
                 return switch (state) {
                   ClubsLoading() => const SliverFillRemaining(
-                    child: Center(
-                      child: CircularProgressIndicator.adaptive(),
+                      child: Center(
+                        child: CircularProgressIndicator.adaptive(),
+                      ),
                     ),
-                  ),
-                  ClubsLoaded(:final groups) => 
-                    _filtered(groups).isEmpty
+                  ClubsLoaded(:final groups) => _filtered(groups).isEmpty
                       ? SliverFillRemaining(
                           child: Center(
                             child: Text(
@@ -105,20 +108,25 @@ class _ClubsScreenState extends State<ClubsScreen> {
                               final group = _filtered(groups)[index];
                               return ClubWidget(
                                 title: group['club']?['name'] ?? '',
-                                subscribers: formatMemberCount((group['club']?['members'] as List?)?.length ?? 0),
+                                subscribers: formatMemberCount(
+                                    (group['club']?['members'] as List?)
+                                            ?.length ??
+                                        0),
+                                clubId: group['club']?['id'] ?? '',
+                                photoVersion: group['club']?['photoVersion'] ?? 0,
                               );
                             },
                             childCount: _filtered(groups).length,
                           ),
                         ),
                   ClubsError() => SliverFillRemaining(
-                    child: Center(
-                      child: Text(
-                        'Ошибка загрузки групп',
-                        style: context.textTheme.h4,
+                      child: Center(
+                        child: Text(
+                          'Ошибка загрузки групп',
+                          style: context.textTheme.h4,
+                        ),
                       ),
                     ),
-                  ),
                   _ => const SliverToBoxAdapter(child: SizedBox.shrink()),
                 };
               },

@@ -12,27 +12,12 @@ class ClubPhotoDatabaseInfoDataSource {
         .getSingleOrNull();
   }
 
-  Future<void> bumpClubPhotoVersion(String clubId) async {
-    final info = await (appDatabase.select(appDatabase.cachedClubsAvatar)
-          ..where((tbl) => tbl.clubId.equals(clubId)))
-        .getSingleOrNull();
-    if (info != null) {
-      await appDatabase.update(appDatabase.cachedClubsAvatar).write(
-            CachedClubsAvatarCompanion.insert(
-              id: Value(info.id),
-              photoVersion: info.photoVersion + 1,
-              clubId: info.clubId,
-            ),
-          );
-    }
-  }
-
   Future<void> addClubPhotoInfo(String clubId, int photoVersion) async {
     await appDatabase.into(appDatabase.cachedClubsAvatar).insert(
-          CachedClubsAvatarCompanion.insert(
-            photoVersion: photoVersion,
-            clubId: clubId,
-          ),
-        );
+        CachedClubsAvatarCompanion.insert(
+          photoVersion: photoVersion,
+          clubId: clubId,
+        ),
+        mode: InsertMode.insertOrReplace);
   }
 }

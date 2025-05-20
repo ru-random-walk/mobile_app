@@ -4,16 +4,16 @@ class ClubListBodyData extends StatelessWidget {
   final List<Map<String, String>> groups;
 
   const ClubListBodyData({
-    super.key, 
+    super.key,
     required this.groups,
-    });
+  });
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: ListView.separated(
         padding: EdgeInsets.symmetric(
-          horizontal: 16.toFigmaSize, 
+          horizontal: 16.toFigmaSize,
           vertical: 8.toFigmaSize,
         ),
         itemBuilder: (_, index) {
@@ -25,6 +25,8 @@ class ClubListBodyData extends StatelessWidget {
             onTap: () {
               // Navigator.push(...);
             },
+            clubId: '',
+            photoVersion: 1,
           );
         },
         separatorBuilder: (_, __) => SizedBox(
