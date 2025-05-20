@@ -1,24 +1,35 @@
 import 'package:auth/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:ui_utils/ui_utils.dart';
+import 'package:ui_components/ui_components.dart';
 
 import 'package:clubs/src/domain/entities/club/clubs_list/get_clubs_use_case.dart';
 import 'package:clubs/src/data/clubs_api_service.dart';
 import 'package:clubs/src/domain/entities/club/clubs_list/bloc/clubs_list_bloc.dart';
-import 'package:clubs/src/domain/entities/club/clubs_list/widgets/widget_clubs.dart';
+import 'package:clubs/src/domain/entities/club/clubs_list/widgets/body/data/widget_clubs.dart';
 import 'package:clubs/src/domain/entities/club/clubs_list/widgets/filters_clubs/filters_button.dart';
-import 'package:clubs/src/domain/entities/club/clubs_list/widgets/add_button.dart';
+import 'package:clubs/src/domain/entities/club/clubs_list/widgets/body/data/add_button.dart';
+import 'package:clubs/src/domain/entities/club/text_format/member_format.dart';
 import 'package:clubs/src/domain/entities/club/create_and_edit/create_club_page.dart';
+import 'package:clubs/src/domain/entities/club/clubs_pages/administrator/admin_page.dart';
+import 'package:clubs/src/domain/entities/club/clubs_pages/not_member/not_member_page.dart';
+import 'package:clubs/src/domain/entities/club/clubs_pages/member/member_page.dart';
 
+part 'clubs_model.dart';
 part 'widgets/app_bar/app_bar.dart';
 part 'widgets/app_bar/search_paint.dart';
 part 'widgets/app_bar/search_button.dart';
 part 'widgets/filters_clubs/clubs_filters.dart';
-part 'widgets/body_data.dart';
+part 'widgets/body/data/body_data.dart';
 part 'widgets/screens.dart';
-
+part 'widgets/body/data/clubs_body_controller.dart';
+part 'widgets/body/data/clubs_filters_section.dart';
+part 'widgets/body/data/club_list_view.dart';
+part 'widgets/body/data/club_item.dart';
+part 'widgets/body/empty/body_empty.dart';
 
 class ClubsListPage extends StatelessWidget {
   const ClubsListPage({super.key});
@@ -34,6 +45,7 @@ class ClubsListPage extends StatelessWidget {
           ProfileData() => Provider(
               create: (context) => GetClubsUseCase(
                 userId: state.user.id,
+                context: context,
                 apiService: ClubApiService(),
               ),
               child: BlocProvider(

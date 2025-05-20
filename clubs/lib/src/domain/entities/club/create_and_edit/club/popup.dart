@@ -1,7 +1,7 @@
 part of '../create_club_page.dart';
 
 class _AddTestDialog extends StatelessWidget {
-  final void Function(String, int, String, List<Map<String, dynamic>>? questions) onConditionAdded;
+  final void Function(String, int, List<Map<String, dynamic>>? questions) onConditionAdded;
   final int infoCount;
   final String conditionName;
 
@@ -63,13 +63,11 @@ class _AddTestDialog extends StatelessWidget {
                         MaterialPageRoute(builder: (context) => const TestForm()),
                       ).then((result) {
                         if (result != null) {
-                          String attempts = result['attempts'];
-                          String testName = result['testName'];
+                          String approvementName = 'Тест';
                           int questionCount = result['questionCount'];
                           List<Map<String, dynamic>> questionInputs = result['questions'];
 
-                          // Обновление состояния на GroupFormScreen
-                          onConditionAdded(attempts, questionCount, testName, questionInputs);
+                          onConditionAdded(approvementName, questionCount, questionInputs);
                         }
                       });
                     },
@@ -87,17 +85,9 @@ class _AddTestDialog extends StatelessWidget {
                         builder: (BuildContext context) {
                           return _InspectorConfDialog(onInspectorConfirmed: (inspectorCount) {
                             Navigator.pop(context);
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return _NumberInputDialog(
-                                  onConditionAdded: (String attempts, int inspectorCountFromDialog) {
-                                    onConditionAdded(attempts, inspectorCountFromDialog, "Запрос на вступление", null);
-                                  },
-                                  inspectorCount: inspectorCount,
-                                );
-                              },
-                            );
+                            String approvementName = "Запрос на вступление";
+                            int count = inspectorCount;
+                            onConditionAdded(approvementName, count, null);
                           });
                         },
                       );
@@ -240,72 +230,6 @@ class _InspectorConfDialogState extends State<_InspectorConfDialog> {
                   widget.onInspectorConfirmed(inspectorCount);
                 },
               ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-
-class _NumberInputDialog extends StatelessWidget {
-  final TextEditingController controller = TextEditingController(text: '1');
-  final void Function(String, int) onConditionAdded;
-  final int inspectorCount;
-
-  _NumberInputDialog({
-    required this.onConditionAdded,
-    required this.inspectorCount,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(6.toFigmaSize),
-      ),
-      contentPadding: EdgeInsets.all(12.toFigmaSize),
-      content: SizedBox(
-        width: 360.toFigmaSize,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: Icon(Icons.close, color: context.colors.base_30),
-                ),
-              ],
-            ),
-            Text('Введите количество попыток', style: context.textTheme.h5),
-            SizedBox(height: 16.toFigmaSize),
-            Align(
-              alignment: Alignment.center,
-              child: SizedBox(
-                width: 48.toFigmaSize,
-                child: CustomTextField(
-                  radius: 6.toFigmaSize,
-                  controller: controller,
-                  height: 20.toFigmaSize,
-                  maxLines: 1,
-                  textStyle: context.textTheme.bodyMRegularBase90,
-                ),
-              ),
-            ),
-            SizedBox(height: 16.toFigmaSize),
-            CustomButton(
-              size: ButtonSize.M,
-              type: ButtonType.primary,
-              color: ButtonColor.green,
-              text: 'Готово',
-              onPressed: () {
-                onConditionAdded(controller.text, inspectorCount);
-                Navigator.pop(context);
-              },
             ),
           ],
         ),

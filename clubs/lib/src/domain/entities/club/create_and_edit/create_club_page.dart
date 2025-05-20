@@ -11,8 +11,9 @@ import 'package:clubs/src/domain/entities/club/create_and_edit/club/button_creat
 import 'package:clubs/src/domain/entities/club/create_and_edit/tests/create_test_page.dart';
 import 'package:clubs/src/domain/entities/club/create_and_edit/app_bar.dart'; 
 import 'package:clubs/src/data/clubs_api_service.dart';
-
-import 'package:clubs/src/data/remove_clubs/club_utils.dart';
+import 'package:clubs/src/domain/entities/club/text_format/question_format.dart';
+import 'package:clubs/src/domain/entities/club/text_format/inspector_format.dart';
+import 'package:clubs/utils/qraphql_error_utils.dart';
 
 part 'club/popup.dart';
 part 'club/condition_string.dart';
@@ -20,25 +21,49 @@ part 'club/body.dart';
 part 'get_id_user.dart';
 
 class ClubFormScreen extends StatefulWidget {
-  const ClubFormScreen({super.key});
+  final String? initialName;
+  final String? initialDescription;
+  final bool initialIsConditionAdded;
+  final String? initialConditionName;
+  final int initialInfoCount;
+  final List<Map<String, dynamic>>? initialQuestions;
+
+  const ClubFormScreen({
+    super.key,
+    this.initialName,
+    this.initialDescription,
+    this.initialIsConditionAdded = false,
+    this.initialConditionName,
+    this.initialInfoCount = 1,
+    this.initialQuestions,
+  });
 
   @override
   State<ClubFormScreen> createState() => _ClubFormScreenState();
 }
 
 class _ClubFormScreenState extends State<ClubFormScreen> {
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController descriptionController = TextEditingController();
-  String? attempts;
-  bool isConditionAdded = false;
-  int infoCount = 1; 
-  String conditionName = "";
-  final ClubApiService clubApiService = ClubApiService();
+  late TextEditingController nameController;
+  late TextEditingController descriptionController;
+  late bool isConditionAdded;
+  late String conditionName;
+  late int infoCount;
   List<Map<String, dynamic>>? questions;
+  final ClubApiService clubApiService = ClubApiService();
 
-  void onConditionAdded(String condition, int count, String name, List<Map<String, dynamic>>? questionInputs) {
+  @override
+  void initState() {
+    super.initState();
+    nameController = TextEditingController(text: widget.initialName ?? '');
+    descriptionController = TextEditingController(text: widget.initialDescription ?? '');
+    isConditionAdded = widget.initialIsConditionAdded;
+    conditionName = widget.initialConditionName ?? '';
+    infoCount = widget.initialInfoCount;
+    questions = widget.initialQuestions;
+  }
+
+  void onConditionAdded(String name, int count, List<Map<String, dynamic>>? questionInputs) {
   setState(() {
-    attempts = condition;
     infoCount = count;
     isConditionAdded = true;
     conditionName = name;
@@ -56,43 +81,40 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return UserIdProvider(
-    builder: (context, userId) {
-      
-      return ColoredBox(
-        color: context.colors.base_0,
-        child: SafeArea(
-          child: Scaffold(
-            appBar: const CreateAndEditPageAppBar(),
-            body: GroupFormBody(
-              nameController: nameController,
-              descriptionController: descriptionController,
-              isConditionAdded: isConditionAdded,
-              conditionName: conditionName,
-              infoCount: infoCount,
-              onConditionAdded: onConditionAdded,
-              removeCondition: removeCondition,
-            ),
-            bottomNavigationBar: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.toFigmaSize, vertical: 4.toFigmaSize),
-              child: SizedBox(
-                width: double.infinity,
-                child: CustomButton(
-                  size: ButtonSize.M,
-                  type: ButtonType.primary,
-                  color: ButtonColor.green,
-                  text: 'Готово',
-                  onPressed: () async {
-                    final name = nameController.text.trim();
-                    final description = descriptionController.text.trim();
-                    if (name.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Введите название группы')));
-                      return;
-                    }
+    return ColoredBox(
+      color: context.colors.base_0,
+      child: SafeArea(
+        child: Scaffold(
+          appBar: const CreateAndEditPageAppBar(),
+          body: ClubFormBody(
+            nameController: nameController,
+            descriptionController: descriptionController,
+            isConditionAdded: isConditionAdded,
+            conditionName: conditionName,
+            infoCount: infoCount,
+            onConditionAdded: onConditionAdded,
+            removeCondition: removeCondition,
+          ),
+          bottomNavigationBar: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.toFigmaSize, vertical: 4.toFigmaSize),
+            child: SizedBox(
+              width: double.infinity,
+              child: CustomButton(
+                size: ButtonSize.M,
+                type: ButtonType.primary,
+                color: ButtonColor.green,
+                text: 'Готово',
+                onPressed: () async {
+                  final name = nameController.text.trim();
+                  final description = descriptionController.text.trim();
+                  if (name.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Введите название группы')));
+                    return;
+                  }
 
-                    Map<String, dynamic>? result;      
-                    //await deleteAllUserClubs(userId: userId, apiService: ClubApiService());
+                  Map<String, dynamic>? result;
 
+                  try {      
                     if (!isConditionAdded) {
                       result = await createClub(
                         name: name, 
@@ -114,46 +136,26 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
                       );
                     }
 
-                    if (result != null) {
-                      final data = result['data'];
-                      final errors = result['errors'];
+                    if (handleGraphQLErrors(context, result, fallbackMessage: 'Не удалось создать группу')) return;
 
-                      if (data != null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Группа создана', style: TextStyle(color: context.colors.base_0),),
-                            backgroundColor: context.colors.main_50, 
-                          ),
-                        );
-                        Navigator.pop(context, true);
-                      } else {
-                        String errorMessage = 'Не удалось создать группу';
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: context.colors.main_50,
+                        content: Text('Группа создана', style: context.textTheme.bodySMediumBase0),
+                      ),
+                    );
 
-                        if (errors != null) {
-                          if (errors.any((e) =>
-                              e.toString().contains('maximum count of clubs') ||
-                              e.toString().contains('You are reached maximum count of clubs'))) {
-                            errorMessage = 'Вы не можете создать больше 3 групп';
-                          }
-                        }
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(errorMessage)),
-                        );
-                      }
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Произошла ошибка при отправке запроса')),
-                      );
-                    }
+                    Navigator.pop(context, true);
+                  } catch (e) {
+                    showErrorSnackbar(context, 'Произошла ошибка');
                   }
-                ),
+                }
               ),
             ),
           ),
         ),
-      );
-    },);
+      ),
+    );
   }
 }
 

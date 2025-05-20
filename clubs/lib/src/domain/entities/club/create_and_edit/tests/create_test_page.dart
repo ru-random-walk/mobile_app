@@ -19,8 +19,6 @@ class TestForm extends StatefulWidget {
 }
 
 class TestFormState extends State<TestForm> {
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController attemptController = TextEditingController(text: '1');
   bool multipleAnswers = false;  
   String? selectedOption;  
   List<String> selectedOptions = [];
@@ -79,8 +77,6 @@ void _deleteOption(int questionIndex, int optionIndex) {
   
   @override
   void dispose() {
-    nameController.dispose();
-    attemptController.dispose();
     for (var question in questions) {
       question.questionController.dispose();
       for (var optionController in question.optionControllers) {
@@ -107,14 +103,7 @@ void _deleteOption(int questionIndex, int optionIndex) {
     }).toList();
   }
 
-  bool validateTestForm(BuildContext context, String testName, List<QuestionModel> questions) {
-  if (testName.trim().isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Введите название теста')),
-    );
-    return false;
-  }
-
+  bool validateTestForm(BuildContext context, List<QuestionModel> questions) {
   for (var i = 0; i < questions.length; i++) {
     final question = questions[i];
     final questionText = question.questionController.text.trim();
@@ -177,32 +166,10 @@ void _deleteOption(int questionIndex, int optionIndex) {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Название теста', style: context.textTheme.bodyXLMedium),
-                SizedBox(height: 8.toFigmaSize),
-                CustomTextField(
-                  height: 36.toFigmaSize,
-                  maxLines: 1,
-                  controller: nameController,
-                  hint: 'Название',
-                  radius: 6.toFigmaSize,
-                  textStyle: context.textTheme.bodyMRegularBase90,
-                ),
-                SizedBox(height: 16.toFigmaSize),
-
-                Text('Количество попыток', style: context.textTheme.bodyXLMedium),
-                SizedBox(height: 8.toFigmaSize),
-                CustomTextField(
-                  height: 36.toFigmaSize,
-                  maxLines: 1,
-                  controller: attemptController,
-                  radius: 6.toFigmaSize,
-                  textStyle: context.textTheme.bodyMRegularBase90,
-                ),
-                SizedBox(height: 16.toFigmaSize),
-
+                Text('Создайте свой тест', style: context.textTheme.h4.copyWith(color: context.colors.base_90)),
+                SizedBox(height: 12.toFigmaSize),
                 Text('Вопросы', style: context.textTheme.bodyXLMedium),
                 SizedBox(height: 12.toFigmaSize),
-
                 ...questions.asMap().entries.map((entry) {
                   final index = entry.key;
                   final question = entry.value;
@@ -249,7 +216,7 @@ void _deleteOption(int questionIndex, int optionIndex) {
 
                 CustomButton(
                   type: ButtonType.tertiary,
-                  customWidth: 250.toFigmaSize,
+                  customWidth: 200.toFigmaSize,
                   text: "Добавить вопрос",
                   onPressed: _addQuestion,
                   leftIcon: SvgPicture.asset(
@@ -274,14 +241,12 @@ void _deleteOption(int questionIndex, int optionIndex) {
                 color: ButtonColor.green,
                 text: 'Готово',
                 onPressed: () {
-                  final isValid = validateTestForm(context, nameController.text, questions);
+                  final isValid = validateTestForm(context, questions);
                   if (!isValid) return;
 
                   final questionInputs = buildQuestionInputs();
                   
                   Map<String, dynamic> result = {
-                    'attempts': attemptController.text,
-                    'testName': nameController.text,
                     'questionCount': questions.length,
                     'questions': questionInputs,
                   };

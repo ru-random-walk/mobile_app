@@ -10,6 +10,7 @@ class CustomTextField extends StatelessWidget {
   final bool showDifferentBorders;
   final int? maxLines;
   final TextStyle? textStyle;
+  final void Function(String)? onSubmitted;
 
   CustomTextField({
     super.key,
@@ -21,6 +22,7 @@ class CustomTextField extends StatelessWidget {
     this.showDifferentBorders = true,
     this.maxLines,
     this.textStyle,
+    this.onSubmitted,
   }) : radius = radius ?? 16.toFigmaSize;
 
   @override
@@ -53,6 +55,7 @@ class CustomTextField extends StatelessWidget {
         onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
         controller: controller,
         maxLines: maxLines,
+        onSubmitted: onSubmitted,
         decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(horizontal: 4.toFigmaSize),
           floatingLabelBehavior: FloatingLabelBehavior.never,

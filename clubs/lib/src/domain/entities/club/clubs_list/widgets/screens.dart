@@ -10,122 +10,43 @@ class ClubsScreen extends StatefulWidget {
 }
 
 class _ClubsScreenState extends State<ClubsScreen> {
-  int _selectedFilterIndex = 0;
+  void Function()? _toggleSearchExternal;
+  bool _isSearching = false;
+  String _searchQuery = '';
 
-  List<Map<String, dynamic>> _filtered(List<Map<String, dynamic>> groups) {
-  switch (_selectedFilterIndex) {
-    case 1:
-      return groups.where((g) => ['ADMIN', 'INSPECTOR'].contains(g['userRole'])).toList();
-    case 2:
-      return groups.where((g) => g['userRole'] == 'PENDING_APPROVAL').toList();
-    default:
-      return groups;
-   }
+  void _onSearchChanged(bool isSearching, String query) {
+    setState(() {
+      _isSearching = isSearching;
+      _searchQuery = query;
+    });
   }
 
-  String formatMemberCount(int count) {
-    final mod10 = count % 10;
-    final mod100 = count % 100;
-
-    String suffix;
-    if (mod100 >= 11 && mod100 <= 14) {
-      suffix = 'участников';
-    } else if (mod10 == 1) {
-      suffix = 'участник';
-    } else if (mod10 >= 2 && mod10 <= 4) {
-      suffix = 'участника';
-    } else {
-      suffix = 'участников';
-    }
-
-    return '$count $suffix';
-  }
-      
   @override
   Widget build(BuildContext context) {
-    final bloc = context.read<ClubsListBloc>();
-
     return Scaffold(
-      appBar: _ClubsListAppBar(),
+      appBar: _ClubsListAppBar(
+        onSearchChanged: _onSearchChanged,
+        onToggleSearchInit: (callback) {
+          _toggleSearchExternal = callback;
+        },
+      ),
       floatingActionButton: AddClubButton(
         onPressed: () async {
           final result = await Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => ClubFormScreen(),
-            ),
+            MaterialPageRoute(builder: (_) => const ClubFormScreen()),
           );
           if (result == true) {
             context.read<ClubsListBloc>().add(LoadClubsEvent());
           }
         },
       ),
-      body: RefreshIndicator.adaptive(
-        onRefresh: () async => bloc.add(LoadClubsEvent()),
-        child: CustomScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          slivers: [
-            SliverToBoxAdapter(
-              child: Column(
-                children: [
-                  SizedBox(height: 8.toFigmaSize),
-                  GroupFilters(
-                    selectedIndex: _selectedFilterIndex,
-                    onFilterChanged: (index) {
-                      setState(() {
-                        _selectedFilterIndex = index;
-                      });
-                    },
-                  ),
-                  SizedBox(height: 8.toFigmaSize),
-                ],
-              ),
-            ),
-            BlocBuilder<ClubsListBloc, ClubsState>(
-              builder: (context, state) {
-                return switch (state) {
-                  ClubsLoading() => const SliverFillRemaining(
-                    child: Center(
-                      child: CircularProgressIndicator.adaptive(),
-                    ),
-                  ),
-                  ClubsLoaded(:final groups) => 
-                    _filtered(groups).isEmpty
-                      ? SliverFillRemaining(
-                          child: Center(
-                            child: Text(
-                              'Пусто',
-                              style: context.textTheme.h4,
-                            ),
-                          ),
-                        )
-                      : SliverList(
-                          delegate: SliverChildBuilderDelegate(
-                            (context, index) {
-                              final group = _filtered(groups)[index];
-                              return ClubWidget(
-                                title: group['club']?['name'] ?? '',
-                                subscribers: formatMemberCount((group['club']?['members'] as List?)?.length ?? 0),
-                              );
-                            },
-                            childCount: _filtered(groups).length,
-                          ),
-                        ),
-                  ClubsError() => SliverFillRemaining(
-                    child: Center(
-                      child: Text(
-                        'Ошибка загрузки групп',
-                        style: context.textTheme.h4,
-                      ),
-                    ),
-                  ),
-                  _ => const SliverToBoxAdapter(child: SizedBox.shrink()),
-                };
-              },
-            ),
-            SliverToBoxAdapter(child: SizedBox(height: 8.toFigmaSize)),
-          ],
-        ),
+      body: ClubsBody(
+        currentUserId: widget.currentUserId,
+        isSearching: _isSearching,
+        onFindGroup: () {
+          _toggleSearchExternal?.call();
+        }
       ),
     );
   }

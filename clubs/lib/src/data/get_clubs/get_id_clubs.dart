@@ -10,16 +10,9 @@ Future<Map<String, dynamic>?> getUserClubs({
         club {
           id
           name
-          description
           members{
             id
-            role
           }
-          approvements{
-            id
-            type
-          }
-          photoVersion
         }
         userRole
       }
@@ -30,6 +23,5 @@ Future<Map<String, dynamic>?> getUserClubs({
     'userId': userId,
   };
 
-  final result = await apiService.performPostRequest(query, variables);
-  return result!['data'];
+  return await apiService.performPostRequest(query, variables);
 }
