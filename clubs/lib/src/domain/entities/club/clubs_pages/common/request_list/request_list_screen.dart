@@ -2,19 +2,12 @@ import 'package:clubs/src/data/clubs_api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:ui_components/ui_components.dart';
 import 'package:ui_utils/ui_utils.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:auth/auth.dart';
 import 'package:core/src/network/page_query/page_query.dart';
-import 'package:clubs/src/domain/entities/club/create_and_edit/create_club_page.dart';
-import 'package:clubs/src/domain/entities/club/text_format/member_format.dart';
-import 'package:clubs/src/domain/entities/club/clubs_pages/common/row_menu.dart';
-import 'package:clubs/src/domain/entities/club/clubs_pages/common/overlay_menu_position.dart';
-import 'package:clubs/src/domain/entities/club/clubs_pages/common/alert_dialogs.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/common/app_bar.dart';
 import 'package:clubs/utils/qraphql_error_utils.dart';
-import 'package:clubs/src/data/clubs_api_service.dart';
-import 'package:clubs/src/domain/entities/club/clubs_pages/administrator/request_list/request_model.dart';
+import 'package:clubs/src/domain/entities/club/clubs_pages/common/request_list/request_model.dart';
 
 part 'request_widget.dart';
 part 'request_list_empty.dart';
@@ -80,7 +73,7 @@ class _RequestListScreenState extends State<RequestListScreen> {
             .toList();
           
         if (filtered.isNotEmpty){
-          final ids = filtered.map((e) => e['userId'] as String).toList() ?? [];
+          final ids = filtered.map((e) => e['userId'] as String).toList();
           final result = await UsersDataSource().getUsers(
             PageQueryModel(page: 0, size: ids.length),
             ids,

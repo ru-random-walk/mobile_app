@@ -1,4 +1,7 @@
-part of '../admin_page.dart';
+import 'package:clubs/src/data/clubs_api_service.dart';
+import 'package:flutter/material.dart';
+import 'package:ui_utils/ui_utils.dart';
+import 'package:clubs/src/domain/entities/club/clubs_pages/common/request_list/request_list_screen.dart';
 
 class ConfirmationRequestRow extends StatelessWidget {
   final ClubApiService apiService;

@@ -12,12 +12,11 @@ import 'package:clubs/src/domain/entities/club/clubs_pages/common/overlay_menu_p
 import 'package:clubs/src/domain/entities/club/clubs_pages/common/alert_dialogs.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/common/app_bar.dart';
 import 'package:clubs/utils/qraphql_error_utils.dart';
-import 'package:clubs/src/domain/entities/club/clubs_pages/administrator/request_list/request_list_screen.dart';
+import 'package:clubs/src/domain/entities/club/clubs_pages/common/request_list/confirmation_request_row.dart';
 
 part 'widgets/body.dart';
 part 'widgets/member_tile.dart';
 part 'widgets/header.dart';
-part 'widgets/confirmation_request_row.dart';
 part 'overlay_menu/admin_club_menu.dart';
 part 'overlay_menu/change_role_member_menu.dart';
 part 'logic/club_admin_controller.dart';

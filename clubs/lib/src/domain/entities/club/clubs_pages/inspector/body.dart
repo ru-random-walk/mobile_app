@@ -1,15 +1,23 @@
-part of '../member_page.dart';
+part of 'inspector_page.dart';
 
-class ClubMemberBody extends StatelessWidget {
+class ClubInspectorBody extends StatelessWidget {
   final String clubName;
   final String description;
   final int membersCount;
+  final List<Map<String, dynamic>> approvements;
+  final String clubId;
+  final String userId;
+  final ClubApiService apiService;
 
-  const ClubMemberBody({
+  const ClubInspectorBody({
     super.key,
     required this.clubName,
     required this.description,
     required this.membersCount,
+    required this.approvements,
+    required this.clubId,
+    required this.userId,
+    required this.apiService,
   });
 
   @override
@@ -81,6 +89,13 @@ class ClubMemberBody extends StatelessWidget {
             color: context.colors.base_80,
             ),
           ),
+          if (approvements.isNotEmpty)
+            JoinRequirementsInspector(
+              approvements: approvements,
+              clubId: clubId,
+              userId: userId,
+              apiService: apiService,
+            ),
         ],
       ),
     );

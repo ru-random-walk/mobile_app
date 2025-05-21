@@ -7,26 +7,28 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:clubs/src/domain/entities/club/text_format/member_format.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/common/app_bar.dart';
 import 'package:clubs/utils/qraphql_error_utils.dart';
+import 'package:clubs/src/domain/entities/club/clubs_pages/common/request_list/confirmation_request_row.dart';
 
-part 'widgets/body.dart';
+part 'body.dart';
+part 'join_requirements.dart';
 
-class MemberPage extends StatefulWidget {
+class ClubInspectorScreen extends StatefulWidget {
   final String clubId;
   final String currentId;
   final int membersCount;
 
-  const MemberPage({
-    super.key,
+  const ClubInspectorScreen({
+    super.key, 
     required this.clubId,
     required this.currentId,
     required this.membersCount,
   });
 
   @override
-  State<MemberPage> createState() => _MemberPageState();
+  State<ClubInspectorScreen> createState() => _ClubInspectorScreenState();
 }
 
-class _MemberPageState extends State<MemberPage> {
+class _ClubInspectorScreenState extends State<ClubInspectorScreen> {
   final ClubApiService _clubApiService = ClubApiService();
   Map<String, dynamic>? clubData;
   bool isLoading = true;
@@ -54,7 +56,7 @@ class _MemberPageState extends State<MemberPage> {
       if (handleGraphQLErrors(
         context,
         data,
-        fallbackMessage: 'Не удалось загрузить данные клуба',
+        fallbackMessage: 'Не удалось загрузить данные группы',
       )) return;
 
       setState(() {
@@ -62,6 +64,7 @@ class _MemberPageState extends State<MemberPage> {
         isLoading = false;
       });
     } catch (e) {
+      print('Ошибка при загрузке групп: $e');
       showErrorSnackbar(context, 'Произошла ошибка');
       setState(() {
         isLoading = false;
@@ -76,6 +79,11 @@ class _MemberPageState extends State<MemberPage> {
         body: Center(child: CircularProgressIndicator.adaptive()),
       );
     }
+
+    final clubName = clubData?['name'];
+    final description = clubData?['description'] ?? 'Описание отсутствует';
+    final List<Map<String, dynamic>> approvements = List<Map<String, dynamic>>.from(clubData?['approvements'] ?? []);
+
     return ColoredBox(
       color: context.colors.base_0,
       child: SafeArea(
@@ -84,15 +92,15 @@ class _MemberPageState extends State<MemberPage> {
             showMenu: true,
             onMenuPressed: _menuController.showMenu,
           ),
-          body: isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : clubData == null
-                ? const Center(child: Text('Клуб не найден'))
-                : ClubMemberBody(
-                    clubName: clubData?['name'],
-                    description: clubData?['description'] ?? 'Описание отсутствует',
-                    membersCount: widget.membersCount,
-                ),
+          body: ClubInspectorBody(
+            clubName: clubName,
+            description: description,
+            membersCount: widget.membersCount,
+            clubId: widget.clubId,
+            userId: widget.currentId,
+            apiService: _clubApiService,
+            approvements: approvements,
+          ),
         ),
       ),
     );
