@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:clubs/src/data/club_photo/club_photo.dart';
@@ -39,6 +40,7 @@ class GetClubPhotoUseCase
     }
     final info =
         await clubPhotoDatabaseInfoDataSource.getClubPhotoInfo(params.clubId);
+    log('Info for ${params.clubId} is $info');
     if (info == null || info.photoVersion < params.photoVersion) {
       final res = await _loadPhoto(params);
       return res;
