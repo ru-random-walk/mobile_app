@@ -20,6 +20,7 @@ part 'search_clubs/search_clubs.dart';
 part 'approver_confirmations/get_approver_waiting_confirmation.dart';
 part 'approver_confirmations/approve_confirmation.dart';
 part 'approver_confirmations/reject_confirmation.dart';
+part 'join_in_club/join_in_club.dart';
 
 class ClubApiService {
   final dioClient = NetworkConfig.instance.dio;
