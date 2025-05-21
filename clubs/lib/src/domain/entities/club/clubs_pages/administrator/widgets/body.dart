@@ -56,6 +56,9 @@ void initState() {
               description: widget.description,
               approvement: widget.approvement,
               membersCount: widget.membersCount,
+              approverId: widget.currentUserId,
+              clubId: widget.clubId,
+              apiService: widget.apiService,
             );
           }
           if (_controller.isLoadingMore && index == itemCount - 1) {
