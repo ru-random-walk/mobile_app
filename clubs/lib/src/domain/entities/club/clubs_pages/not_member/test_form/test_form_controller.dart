@@ -126,11 +126,25 @@ class TestFormController {
         status = result?['data']['setAnswerStatusToSent']?['status'];
       }
 
+      final result = await tryJoinInClub(
+          userId: answerId,
+          clubId: clubId,
+          apiService: clubApiService,
+        );
+      if (handleGraphQLErrors(context, result, fallbackMessage: 'Не получилось вступить в группу')) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Ответы отправлены'),
+          backgroundColor: context.colors.main_50,
+        ),
+      );
+
       if (context.mounted) {
         Navigator.of(context).pop(status == 'PASSED');
       }
     } catch (e) {
+      print(e);
       showErrorSnackbar(context, 'Произошла ошибка');
-    }
+    } 
   }
 }

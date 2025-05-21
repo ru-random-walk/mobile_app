@@ -27,9 +27,9 @@ class BottomButton extends StatelessWidget {
           text: 'Вступить',
           onPressed: () async {
             try {
-              final result = await addMemberInClub(
+              final result = await tryJoinInClub(
                 clubId: clubId,
-                memberId: userId,
+                userId: userId,
                 apiService: clubApiService,
               );
 

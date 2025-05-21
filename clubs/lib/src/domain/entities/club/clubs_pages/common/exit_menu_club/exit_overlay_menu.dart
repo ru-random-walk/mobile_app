@@ -1,6 +1,6 @@
-part of '../member_page.dart';
+part of 'exit_menu_controller.dart';
 
-class ClubMemberMenu extends StatelessWidget {
+class ExitOverlayMenu extends StatelessWidget {
   final double dY;
   final VoidCallback closeMenu;
   final VoidCallback onLeave;
@@ -8,7 +8,7 @@ class ClubMemberMenu extends StatelessWidget {
   final String clubId;
   final String userId;
 
-  const ClubMemberMenu({
+  const ExitOverlayMenu({
     super.key,
     required this.dY,
     required this.closeMenu,
