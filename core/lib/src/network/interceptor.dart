@@ -70,5 +70,6 @@ class RefreshTokenInterceptor extends QueuedInterceptor {
     if (accessToken == null || tokenType == null) return;
     log('Authorization: $tokenType $accessToken');
     headers['Authorization'] = '$tokenType $accessToken';
+    log('Token: $tokenType $accessToken');
   }
 }
