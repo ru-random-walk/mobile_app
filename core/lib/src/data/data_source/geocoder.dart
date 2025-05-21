@@ -6,7 +6,7 @@ import '../models/query.dart';
 
 part 'geocoder.g.dart';
 
-const _dadataGeoCoderUrl = 'http://suggestions.dadata.ru';
+const _dadataGeoCoderUrl = 'https://suggestions.dadata.ru';
 
 @RestApi(baseUrl: _dadataGeoCoderUrl)
 abstract class GeocoderDataSource {
