@@ -45,7 +45,7 @@ class ClubPhotoListWidget extends StatelessWidget {
               image: MemoryImage(
                 bytes,
               ),
-              fit: BoxFit.contain,
+              fit: BoxFit.cover,
             ),
           ),
         ),

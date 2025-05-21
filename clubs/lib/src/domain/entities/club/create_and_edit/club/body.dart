@@ -6,8 +6,11 @@ class ClubFormBody extends StatelessWidget {
   final bool isConditionAdded;
   final String conditionName;
   final int infoCount;
-  final void Function(String, int, List<Map<String, dynamic>>? questions) onConditionAdded;
+  final void Function(String, int, List<Map<String, dynamic>>? questions)
+      onConditionAdded;
   final void Function() removeCondition;
+  final Uint8List? imageBytes;
+  final void Function() onChooseImage;
 
   const ClubFormBody({
     Key? key,
@@ -18,8 +21,9 @@ class ClubFormBody extends StatelessWidget {
     required this.infoCount,
     required this.onConditionAdded,
     required this.removeCondition,
+    this.imageBytes,
+    required this.onChooseImage,
   }) : super(key: key);
-  
 
   @override
   Widget build(BuildContext context) {
@@ -37,14 +41,30 @@ class ClubFormBody extends StatelessWidget {
               child: SizedBox(
                 width: 120.toFigmaSize,
                 height: 120.toFigmaSize,
-                child: Image.asset(
-                  'packages/clubs/assets/images/avatar.png',
-                  fit: BoxFit.cover,
-                ),
+                child: imageBytes == null
+                    ? Center(
+                        child: Text(
+                          'Нет фото',
+                          style: context.textTheme.captionMedium,
+                        ),
+                      )
+                    : Image.memory(
+                        imageBytes!,
+                        fit: BoxFit.contain,
+                      ),
               ),
             ),
           ),
-          SizedBox(height: 8.toFigmaSize),
+          SizedBox(height: 16.toFigmaSize),
+          Center(
+            child: CustomButton(
+              text: 'Добавить фото',
+              onPressed: onChooseImage,
+              type: ButtonType.secondary,
+              color: ButtonColor.green,
+              isMaxWidth: false,
+            ),
+          ),
           // Button
           SizedBox(height: 12.toFigmaSize),
 
@@ -87,11 +107,11 @@ class ClubFormBody extends StatelessWidget {
                     int questionCount = result['questionCount'];
                     List<Map<String, dynamic>> questions = result['questions'];
 
-                    onConditionAdded(approvementName, questionCount, questions); 
-                    }
-                  });
-                },
-              ),
+                    onConditionAdded(approvementName, questionCount, questions);
+                  }
+                });
+              },
+            ),
           if (isConditionAdded)
             ConditionString(
               infoCount: infoCount,

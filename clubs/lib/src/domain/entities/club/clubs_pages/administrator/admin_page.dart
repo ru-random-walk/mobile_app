@@ -119,7 +119,7 @@ class _ClubAdminScreenState extends State<ClubAdminScreen> {
                       apiService: _clubApiService,
                       currentUserId: widget.currentId,
                       controller: _controller!,
-                      photoVersion: _club!['photoVersion'],
+                      photoVersion: _club?['photoVersion'] ?? 0,
                     ),
         ),
       ),

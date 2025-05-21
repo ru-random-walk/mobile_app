@@ -12,6 +12,10 @@ class CacheImagesDataSource {
     return res.file.readAsBytes();
   }
 
+  Future<void> saveImage(Uint8List bytes, String key) async {
+    await cacheManager.putFile(key, bytes);
+  }
+
   Future<Uint8List?> getImageFromCache(String key) async {
     final res = await cacheManager.getFileFromCache(key);
     log('Photo got from cache for $key is ${res?.file.path}');
