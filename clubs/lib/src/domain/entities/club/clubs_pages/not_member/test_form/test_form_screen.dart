@@ -16,10 +16,12 @@ part 'test_form_controller.dart';
 
 class TestFormScreen extends StatefulWidget {
   final String clubId;
+  final String userId;
 
   const TestFormScreen({
     super.key,
     required this.clubId,
+    required this.userId,
   });
 
   @override
@@ -32,7 +34,10 @@ class _TestFormScreenState extends State<TestFormScreen> {
   @override
   void initState() {
     super.initState();
-    controller = TestFormController(widget.clubId, onUpdate: () => setState(() {}));
+    controller = TestFormController(
+      widget.clubId, 
+      userId: widget.userId,
+      onUpdate: () => setState(() {}));
     controller.loadQuestions();
   }
 

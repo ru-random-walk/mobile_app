@@ -59,7 +59,9 @@ class _ClubAdminBodyState extends State<ClubAdminBody> {
               description: widget.description,
               approvement: widget.approvement,
               membersCount: widget.membersCount,
+              approverId: widget.currentUserId,
               clubId: widget.clubId,
+              apiService: widget.apiService,
               photoVersion: widget.photoVersion,
             );
           }

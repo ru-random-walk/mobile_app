@@ -7,6 +7,8 @@ class ClubHeader extends StatelessWidget {
   final String description;
   final List<Map<String, dynamic>> approvement;
   final int membersCount;
+  final String approverId;
+  final ClubApiService apiService;
 
   const ClubHeader({
     super.key,
@@ -14,7 +16,9 @@ class ClubHeader extends StatelessWidget {
     required this.description,
     required this.approvement,
     required this.membersCount,
+    required this.approverId,
     required this.clubId,
+    required this.apiService,
     required this.photoVersion,
   });
 
@@ -43,6 +47,7 @@ class ClubHeader extends StatelessWidget {
             color: context.colors.base_90,
           ),
         ),
+        SizedBox(height: 4.toFigmaSize),
         Text(
           description,
           style: context.textTheme.bodyLRegular.copyWith(
@@ -57,6 +62,7 @@ class ClubHeader extends StatelessWidget {
               color: context.colors.base_90,
             ),
           ),
+          SizedBox(height: 4.toFigmaSize),
           ...approvement
               .where(
                   (a) => a['type'] == 'FORM' || a['type'] == 'MEMBERS_CONFIRM')
@@ -70,11 +76,10 @@ class ClubHeader extends StatelessWidget {
                 ),
               );
             } else {
-              return Text(
-                'Запрос на подтверждение',
-                style: context.textTheme.bodyLRegular.copyWith(
-                  color: context.colors.base_80,
-                ),
+              return ConfirmationRequestRow(
+                apiService: apiService,
+                clubId: clubId,
+                approverId: approverId,
               );
             }
           }),

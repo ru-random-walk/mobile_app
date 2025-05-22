@@ -11,6 +11,9 @@ class ClubFormBody extends StatelessWidget {
   final void Function() removeCondition;
   final Uint8List? imageBytes;
   final void Function() onChooseImage;
+  final List<Map<String, dynamic>>? questions;
+  final int inspectorAndAdminCount;
+  final bool isEditMode;
 
   const ClubFormBody({
     Key? key,
@@ -19,11 +22,46 @@ class ClubFormBody extends StatelessWidget {
     required this.isConditionAdded,
     required this.conditionName,
     required this.infoCount,
+    required this.questions,
+    required this.inspectorAndAdminCount,
     required this.onConditionAdded,
     required this.removeCondition,
     this.imageBytes,
     required this.onChooseImage,
+    this.isEditMode = false,
   }) : super(key: key);
+
+  Future<void> _handleEditCondition(BuildContext context) async {
+    if (conditionName == 'Запрос на вступление') {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return _InspectorConfDialog(
+            inspectorAndAdminCount: inspectorAndAdminCount,
+            initialCount: infoCount,
+            onInspectorConfirmed: (count) {
+              Navigator.pop(context);
+              onConditionAdded(conditionName, count, null);
+            },
+          );
+        },
+      );
+    } else if (conditionName == 'Тест') {
+      final result = await Navigator.push<Map<String, dynamic>?>(
+        context,
+        MaterialPageRoute(
+          builder: (context) => TestForm(
+            isEditMode: true,
+            initialQuestions: questions,
+          ),
+        ),
+      );
+      if (result != null) {
+        onConditionAdded(
+            conditionName, result['questionCount'], result['questions']);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,20 +116,34 @@ class ClubFormBody extends StatelessWidget {
 
           Text('Название группы', style: context.textTheme.bodyXLMedium),
           SizedBox(height: 8.toFigmaSize),
-          TextFieldGroup(
-            num: 1,
-            controller: nameController,
-            title: 'Название',
-          ),
+          isEditMode
+              ? Text(
+                  nameController.text,
+                  style: context.textTheme.bodyLRegular
+                      .copyWith(color: context.colors.base_80),
+                )
+              : TextFieldGroup(
+                  num: 1,
+                  controller: nameController,
+                  title: 'Название',
+                ),
           SizedBox(height: 20.toFigmaSize),
 
           Text('Описание', style: context.textTheme.bodyXLMedium),
           SizedBox(height: 8.toFigmaSize),
-          TextFieldGroup(
-            num: 3,
-            controller: descriptionController,
-            title: 'Описание',
-          ),
+          isEditMode
+              ? Text(
+                  descriptionController.text.isEmpty
+                      ? 'Описание отсутствует'
+                      : descriptionController.text,
+                  style: context.textTheme.bodyLRegular
+                      .copyWith(color: context.colors.base_80),
+                )
+              : TextFieldGroup(
+                  num: 3,
+                  controller: descriptionController,
+                  title: 'Описание',
+                ),
           SizedBox(height: 20.toFigmaSize),
 
           Text('Условия для вступления', style: context.textTheme.bodyXLMedium),
@@ -107,15 +159,17 @@ class ClubFormBody extends StatelessWidget {
                       onConditionAdded: onConditionAdded,
                       infoCount: infoCount,
                       conditionName: conditionName,
+                      inspectorAndAdminCount: inspectorAndAdminCount,
                     );
                   },
                 ).then((result) {
                   if (result != null) {
                     String approvementName = result['approvementName'];
                     int questionCount = result['questionCount'];
-                    List<Map<String, dynamic>> questions = result['questions'];
-
-                    onConditionAdded(approvementName, questionCount, questions);
+                    List<Map<String, dynamic>> questionsInput =
+                        result['questions'];
+                    onConditionAdded(
+                        approvementName, questionCount, questionsInput);
                   }
                 });
               },
@@ -126,6 +180,7 @@ class ClubFormBody extends StatelessWidget {
               isConditionAdded: isConditionAdded,
               onTap: removeCondition,
               conditionTitle: conditionName,
+              onEdit: () => _handleEditCondition(context),
             ),
         ],
       ),
