@@ -117,7 +117,7 @@ class TestFormController {
       String? status;
 
       if (sendForReview && answerId != null) {
-        final result = await sendAnswersForReview(
+        final result = await sendAnswers(
           answerId: answerId,
           apiService: clubApiService,
         );

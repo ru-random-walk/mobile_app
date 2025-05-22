@@ -1,6 +1,6 @@
 part of "../clubs_api_service.dart";
 
-Future<Map<String, dynamic>?> sendAnswersForReview({
+Future<Map<String, dynamic>?> sendAnswers({
   required String answerId,
   required ClubApiService apiService,
 }) async {

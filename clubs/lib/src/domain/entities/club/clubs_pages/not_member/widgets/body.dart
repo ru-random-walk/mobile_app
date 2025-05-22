@@ -7,6 +7,7 @@ class ClubNotMemberBody extends StatelessWidget {
   final List<Map<String, dynamic>> approvements;
   final String clubId;
   final String userId;
+  final ClubApiService clubApiService;
 
   const ClubNotMemberBody({
     super.key,
@@ -16,6 +17,7 @@ class ClubNotMemberBody extends StatelessWidget {
     required this.approvements,
     required this.clubId,
     required this.userId,
+    required this.clubApiService,
   });
 
   @override
@@ -93,6 +95,7 @@ class ClubNotMemberBody extends StatelessWidget {
               clubId: clubId,
               userId: userId,
               membersCount: membersCount,
+              clubApiService: clubApiService,
             ),
         ],
       ),
