@@ -64,12 +64,12 @@ class _ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    Text(
-                      'Online',
-                      style: context.textTheme.bodyMRegularBase0.copyWith(
-                        color: context.colors.base_40,
-                      ),
-                    ),
+                    // Text(
+                    //   'Online',
+                    //   style: context.textTheme.bodyMRegularBase0.copyWith(
+                    //     color: context.colors.base_40,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

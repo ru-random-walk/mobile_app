@@ -29,6 +29,8 @@ dependencies:
   flutter_bloc: ^8.1.6
   retrofit: ^4.4.0
   dio: ^5.7.0
+  pinput: ^5.0.1
+
 
 dev_dependencies:
   flutter_test:
@@ -43,4 +45,5 @@ flutter:
     - packages/auth/assets/icons/vk.svg
     - packages/auth/assets/icons/google.svg
     - packages/auth/assets/icons/yandex.svg
+    - packages/auth/assets/icons/email.svg
   uses-material-design: true
