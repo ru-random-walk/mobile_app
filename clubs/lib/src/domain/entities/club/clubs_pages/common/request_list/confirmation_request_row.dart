@@ -36,7 +36,7 @@ class ConfirmationRequestRow extends StatelessWidget {
           Row(
             children: [
               Text(
-                'Запрос на подтверждение',
+                'Запрос на вступление',
                 style: context.textTheme.bodyLRegular.copyWith(
                   color: context.colors.base_80,
                 ),

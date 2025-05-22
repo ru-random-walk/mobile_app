@@ -27,6 +27,10 @@ class ClubFormScreen extends StatefulWidget {
   final String? initialConditionName;
   final int initialInfoCount;
   final List<Map<String, dynamic>>? initialQuestions;
+  final String? initialConditionType;
+  final int inspectorAndAdminCount;
+  final bool isEditMode;
+  final String? clubId; 
 
   const ClubFormScreen({
     super.key,
@@ -36,6 +40,10 @@ class ClubFormScreen extends StatefulWidget {
     this.initialConditionName,
     this.initialInfoCount = 1,
     this.initialQuestions,
+    this.initialConditionType,
+    this.inspectorAndAdminCount = 1,
+    this.isEditMode = false,
+    this.clubId,
   });
 
   @override
@@ -50,6 +58,7 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
   late int infoCount;
   List<Map<String, dynamic>>? questions;
   final ClubApiService clubApiService = ClubApiService();
+  late String? conditionType;
 
   @override
   void initState() {
@@ -58,19 +67,20 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
     descriptionController = TextEditingController(text: widget.initialDescription ?? '');
     isConditionAdded = widget.initialIsConditionAdded;
     conditionName = widget.initialConditionName ?? '';
+    conditionType =  widget.initialConditionType ?? '';
     infoCount = widget.initialInfoCount;
     questions = widget.initialQuestions;
   }
 
   void onConditionAdded(String name, int count, List<Map<String, dynamic>>? questionInputs) {
-  setState(() {
-    infoCount = count;
-    isConditionAdded = true;
-    conditionName = name;
-    if (questionInputs != null) {
-      questions = questionInputs;
-    }
-  });
+    setState(() {
+      infoCount = count;
+      isConditionAdded = true;
+      conditionName = name;
+      if (questionInputs != null) {
+        questions = questionInputs;
+      }
+    });
   }
 
   void removeCondition() {
@@ -92,8 +102,11 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
             isConditionAdded: isConditionAdded,
             conditionName: conditionName,
             infoCount: infoCount,
+            questions: questions,
+            inspectorAndAdminCount: widget.inspectorAndAdminCount,
             onConditionAdded: onConditionAdded,
             removeCondition: removeCondition,
+            isEditMode: widget.isEditMode,
           ),
           bottomNavigationBar: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.toFigmaSize, vertical: 4.toFigmaSize),
@@ -112,39 +125,59 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
                     return;
                   }
 
-                  Map<String, dynamic>? result;
+                  try {
 
-                  try {      
-                    if (!isConditionAdded) {
-                      result = await createClub(
-                        name: name, 
-                        description: description.isEmpty ? null : description,
-                        apiService: ClubApiService());
-                    } else if (conditionName == "Запрос на вступление") {
-                      result = await createClubWithConfirmApprovement(
-                        name: name,
-                        description: description.isEmpty ? null : description,
-                        infoCount: infoCount,
-                        apiService: ClubApiService(),
+                    Map<String, dynamic>? result;
+
+                    if (widget.isEditMode && widget.clubId != null) {
+                      // result = await updateClub(
+                      //   clubId: widget.clubId!,
+                      //   name: name,
+                      //   description: description.isEmpty ? null : description,
+                      //   apiService: clubApiService,
+                      // );
+
+                      // await updateClubApprovement(
+
+                      if (handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка при обновлении группы')) return;
+                    
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: context.colors.main_50,
+                          content: Text('Группа обновлена', style: context.textTheme.bodySMediumBase0),
+                        ),
                       );
-                    } else {
-                      result = await createClubWithFormApprovement(
-                        name: name,
-                        description: description.isEmpty ? null : description,
-                        questions: questions ?? [],
-                        apiService: ClubApiService(),
+                    } else {  
+                      if (!isConditionAdded) {
+                        result = await createClub(
+                          name: name, 
+                          description: description.isEmpty ? null : description,
+                          apiService: ClubApiService());
+                      } else if (conditionName == "Запрос на вступление") {
+                        result = await createClubWithConfirmApprovement(
+                          name: name,
+                          description: description.isEmpty ? null : description,
+                          infoCount: infoCount,
+                          apiService: ClubApiService(),
+                        );
+                      } else {
+                        result = await createClubWithFormApprovement(
+                          name: name,
+                          description: description.isEmpty ? null : description,
+                          questions: questions ?? [],
+                          apiService: ClubApiService(),
+                        );
+                      }
+
+                      if (handleGraphQLErrors(context, result, fallbackMessage: 'Не удалось создать группу')) return;
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: context.colors.main_50,
+                          content: Text('Группа создана', style: context.textTheme.bodySMediumBase0),
+                        ),
                       );
                     }
-
-                    if (handleGraphQLErrors(context, result, fallbackMessage: 'Не удалось создать группу')) return;
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        backgroundColor: context.colors.main_50,
-                        content: Text('Группа создана', style: context.textTheme.bodySMediumBase0),
-                      ),
-                    );
-
                     Navigator.pop(context, true);
                   } catch (e) {
                     showErrorSnackbar(context, 'Произошла ошибка');

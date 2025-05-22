@@ -13,6 +13,7 @@ class ClubFilters extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<String> labels = ["Все", "Управляемые", "В ожидании"];
+    double width;
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.toFigmaSize),
@@ -21,9 +22,13 @@ class ClubFilters extends StatelessWidget {
           final bool isSelected = selectedIndex == index;
           final String label = labels[index];
 
-          final double width = (label == "Управляемые")
-              ? 130.toFigmaSize
-              : 120.toFigmaSize;
+          if (label == "Управляемые") {
+            width = 135.toFigmaSize;
+          } else if (label == "В ожидании") {
+            width = 120.toFigmaSize;
+          } else {
+            width = 115.toFigmaSize;
+          }
 
           final button = FilterButton(
             label: label,

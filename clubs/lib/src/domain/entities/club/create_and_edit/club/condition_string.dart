@@ -5,6 +5,7 @@ class ConditionString extends StatelessWidget {
   final bool isConditionAdded;
   final VoidCallback onTap;
   final String conditionTitle;
+  final VoidCallback onEdit;
 
   const ConditionString({
     super.key,
@@ -12,42 +13,46 @@ class ConditionString extends StatelessWidget {
     required this.isConditionAdded,
     required this.onTap,
     required this.conditionTitle,
+    required this.onEdit,
   });
   
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Expanded(
-          child: SizedBox(
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(conditionTitle,
-              style: context.textTheme.bodyLRegular.copyWith(color: context.colors.base_70),
+    return GestureDetector(
+      onTap: onEdit,
+        child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: SizedBox(
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(conditionTitle,
+                style: context.textTheme.bodyLRegular.copyWith(color: context.colors.base_70),
+              ),
+            ),
+          ),),
+          SizedBox(
+            height: 22.toFigmaSize, 
+            child: Align(
+              alignment: Alignment.bottomCenter, 
+              child: Text(
+                "$infoCount ${conditionTitle == 'Запрос на вступление' ? inspectorWord(infoCount) : questionWord(infoCount)}",
+                style: context.textTheme.bodySRegular.copyWith(color: context.colors.base_50),
+              ),
             ),
           ),
-        ),),
-        SizedBox(
-          height: 22.toFigmaSize, 
-          child: Align(
-            alignment: Alignment.bottomCenter, 
-            child: Text(
-              "$infoCount ${conditionTitle == 'Запрос на вступление' ? inspectorWord(infoCount) : questionWord(infoCount)}",
-              style: context.textTheme.bodySRegular.copyWith(color: context.colors.base_50),
+          SizedBox(width: 16.toFigmaSize),
+          GestureDetector(
+            onTap: onTap,
+            child: Icon(
+              Icons.close,
+              color: context.colors.base_30,
+              size: 28.toFigmaSize,
             ),
           ),
-        ),
-        SizedBox(width: 16.toFigmaSize),
-        GestureDetector(
-          onTap: onTap,
-          child: Icon(
-            Icons.close,
-            color: context.colors.base_30,
-            size: 28.toFigmaSize,
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

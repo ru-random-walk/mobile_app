@@ -53,7 +53,7 @@ class JoinRequirements extends StatelessWidget {
                       if (isTest) {
                         final result = await Navigator.of(context).push<bool>(
                           MaterialPageRoute(
-                            builder: (_) => TestFormScreen(clubId: clubId),
+                            builder: (_) => TestFormScreen(clubId: clubId, userId: userId),
                           ),
                         );
 

@@ -9,6 +9,8 @@ class ClubAdminController {
   final String description;
   final List<Map<String, dynamic>> approvement;
 
+  int inspectorAndAdminCount = 0;
+
   final ScrollController scrollController = ScrollController();
   final int _pageSize = 30;
 
@@ -86,6 +88,7 @@ class ClubAdminController {
         users.addAll(newUsers);
         isLoadingMore = false;
       }
+      _countRoles();
       _currentPage = page;
       hasMore = newMembers.length == _pageSize;
       onUpdate();      
@@ -94,6 +97,12 @@ class ClubAdminController {
       isLoading = false;
       isLoadingMore = false;
     }
+  }
+
+  void _countRoles() {
+    inspectorAndAdminCount = members
+      .where((m) => m['role'] == 'ADMIN' || m['role'] == 'INSPECTOR')
+      .length;
   }
 
   void showMenuClub(BuildContext context, double dy) {
@@ -113,8 +122,74 @@ class ClubAdminController {
             closeMenu: () {
               _hideMenu();
             },
-            onEdit: () {
-              debugPrint('Edit tapped');
+            onEdit: () async {
+              try {
+                final clubData = await getApprovementInfo(clubId: clubId, apiService: apiService,);
+
+                if (handleGraphQLErrors(
+                  context,
+                  clubData,
+                  fallbackMessage: 'Ошибка при загрузке редактирования',
+                )) return;
+
+                final approvements = clubData?['data']?['getClub']?['approvements'] as List<dynamic>?;
+
+                if (approvements == null || approvements.isEmpty) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ClubFormScreen(
+                        initialName: clubName,
+                        initialDescription: description,
+                        inspectorAndAdminCount: inspectorAndAdminCount,
+                        initialIsConditionAdded: false,
+                        isEditMode: true,
+                        clubId: clubId,
+                      ),
+                    ),
+                  );
+                  return;
+                }
+
+                final data = approvements.first['data'];
+                final typename = data['__typename'];
+
+                String conditionName = '';
+                String conditionType = '';
+                int infoCount = 0;
+                List<Map<String, dynamic>>? questions; 
+
+                if (typename == 'FormApprovementData') {
+                  conditionName = 'Тест';
+                  conditionType = 'FORM';
+                  questions = (data['questions'] as List<dynamic>?)
+                    ?.map((q) => Map<String, dynamic>.from(q))
+                    .toList();
+                  infoCount = questions?.length ?? 0;
+                } else if (typename == 'MembersConfirmApprovementData') {
+                  conditionName = 'Запрос на вступление';
+                  conditionType = 'MEMBERS_CONFIRM';
+                  infoCount = data['requiredConfirmationNumber'];
+                }                         
+
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => ClubFormScreen(
+                      initialName: clubName,
+                      initialDescription: description,
+                      initialIsConditionAdded: true,
+                      initialConditionName: conditionName,
+                      initialConditionType:conditionType,
+                      initialInfoCount: infoCount,
+                      initialQuestions: questions,
+                      inspectorAndAdminCount: inspectorAndAdminCount,
+                      isEditMode: true,
+                      clubId: clubId,
+                    ),
+                  ),
+                );
+              }catch (e) {
+                showErrorSnackbar(context, 'Произошла ошибка');
+              }
               _hideMenu();
             },
             onDelete: () async {
@@ -147,11 +222,6 @@ class ClubAdminController {
                 Navigator.of(context).pop(true); 
               }
             },
-            clubId: clubId,
-            apiService: apiService,
-            title:clubName,
-            description: description,
-            approvement: approvement,
           ),
         ),
       );

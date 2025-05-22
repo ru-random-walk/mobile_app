@@ -2,6 +2,7 @@ part of 'test_form_screen.dart';
 
 class TestFormController {
   final String clubId;
+  final String userId;
   final VoidCallback onUpdate;
   final ClubApiService clubApiService = ClubApiService();
 
@@ -13,7 +14,7 @@ class TestFormController {
   bool isLoading = true;
   String? approvementId;
 
-  TestFormController(this.clubId, {required this.onUpdate});
+  TestFormController(this.clubId, {required this.userId,required this.onUpdate});
 
   Question get currentQuestion => questions[currentIndex];
   int get totalQuestions => questions.length;
@@ -106,9 +107,9 @@ class TestFormController {
 
     try {
       final response = await createAnswerForm(
-        approvementId: approvementId!,
-        questionAnswers: questionAnswers,
-        apiService: clubApiService,
+      approvementId: approvementId!,
+      questionAnswers: questionAnswers,
+      apiService: clubApiService,
       );
 
       if (handleGraphQLErrors(context, response, fallbackMessage: 'Ошибка завершения теста')) return;
@@ -117,17 +118,17 @@ class TestFormController {
       String? status;
 
       if (sendForReview && answerId != null) {
-        final result = await sendAnswers(
-          answerId: answerId,
-          apiService: clubApiService,
-        );
-        if (handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка отправки ответов')) return;
+      final result = await sendAnswers(
+      answerId: answerId,
+      apiService: clubApiService,
+      );
+      if (handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка отправки ответов')) return;
        
-        status = result?['data']['setAnswerStatusToSent']?['status'];
+      status = result?['data']['setAnswerStatusToSent']?['status'];
       }
 
       final result = await tryJoinInClub(
-          userId: answerId,
+          userId: userId,
           clubId: clubId,
           apiService: clubApiService,
         );

@@ -4,11 +4,13 @@ class _AddTestDialog extends StatelessWidget {
   final void Function(String, int, List<Map<String, dynamic>>? questions) onConditionAdded;
   final int infoCount;
   final String conditionName;
+  final int inspectorAndAdminCount;
 
   const _AddTestDialog({
     required this.onConditionAdded,
     required this.infoCount,
     required this.conditionName,
+    required this.inspectorAndAdminCount,
   });
 
   @override
@@ -83,12 +85,15 @@ class _AddTestDialog extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return _InspectorConfDialog(onInspectorConfirmed: (inspectorCount) {
-                            Navigator.pop(context);
-                            String approvementName = "Запрос на вступление";
-                            int count = inspectorCount;
-                            onConditionAdded(approvementName, count, null);
-                          });
+                          return _InspectorConfDialog(
+                            inspectorAndAdminCount: inspectorAndAdminCount,
+                            initialCount: 1,
+                            onInspectorConfirmed: (inspectorCount) {
+                              Navigator.pop(context);
+                              String approvementName = "Запрос на вступление";
+                              int count = inspectorCount;
+                              onConditionAdded(approvementName, count, null);
+                            });
                         },
                       );
                     },
@@ -106,20 +111,34 @@ class _AddTestDialog extends StatelessWidget {
 
 class _InspectorConfDialog extends StatefulWidget {
   final ValueChanged<int> onInspectorConfirmed;
+  final int inspectorAndAdminCount;
+  final int initialCount;
 
-  const _InspectorConfDialog({required this.onInspectorConfirmed});
+  const _InspectorConfDialog({
+    required this.onInspectorConfirmed,
+    required this.inspectorAndAdminCount,
+    required this.initialCount,
+  });
 
   @override
   State<_InspectorConfDialog> createState() => _InspectorConfDialogState();
 }
 
 class _InspectorConfDialogState extends State<_InspectorConfDialog> {
-  int inspectorCount = 1;
+  late int inspectorCount;
+
+  @override
+  void initState() {
+    super.initState();
+    inspectorCount = widget.initialCount;
+  }
 
   void _increment() {
-    setState(() {
-      inspectorCount++;
-    });
+    if (inspectorCount < widget.inspectorAndAdminCount) {
+      setState(() {
+        inspectorCount++;
+      });
+    }
   }
 
   void _decrement() {
@@ -198,7 +217,9 @@ class _InspectorConfDialogState extends State<_InspectorConfDialog> {
                   leftIcon: SvgPicture.asset(
                     'packages/clubs/assets/icons/plus.svg',
                     colorFilter: ColorFilter.mode(
-                      inspectorCount == 10 ? context.colors.base_30 : context.colors.main_50,
+                      inspectorCount == widget.inspectorAndAdminCount 
+                        ? context.colors.base_30 
+                        : context.colors.main_50,
                       BlendMode.srcIn,
                     ),
                     width: 24.toFigmaSize,
@@ -207,7 +228,7 @@ class _InspectorConfDialogState extends State<_InspectorConfDialog> {
                   text: null,
                   customWidth: 48.toFigmaSize,
                   customHeight: 48.toFigmaSize,
-                  onPressed: inspectorCount < 10 ? _increment : null,
+                  onPressed: inspectorCount < widget.inspectorAndAdminCount ? _increment : null,
                 ),
               ],
             ),

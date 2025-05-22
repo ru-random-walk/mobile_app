@@ -5,12 +5,6 @@ class ClubAdminMenu extends StatelessWidget {
   final VoidCallback closeMenu;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
-  final String title;
-  final String description;
-  final List<Map<String, dynamic>> approvement;
-  final String clubId;
-  final ClubApiService apiService;
-
 
   const ClubAdminMenu({
     super.key, 
@@ -18,11 +12,6 @@ class ClubAdminMenu extends StatelessWidget {
     required this.closeMenu,
     required this.onEdit,
     required this.onDelete,
-    required this.title,
-    required this.description,
-    required this.approvement,
-    required this.clubId,
-    required this.apiService,
   });
 
   @override
@@ -50,65 +39,8 @@ class ClubAdminMenu extends StatelessWidget {
                       text: 'Изменить',
                       imagePath: 'assets/icons/edit.svg',
                       onTap: () async {
-                        try {
-                          final clubData = await getApprovementInfo(clubId: clubId, apiService: apiService,);
-
-                          if (handleGraphQLErrors(
-                            context,
-                            clubData,
-                            fallbackMessage: 'Ошибка при загрузке группы',
-                          )) return;
-
-                          final approvements = clubData?['data']?['getClub']?['approvements'] as List<dynamic>?;
-
-                          if (approvements == null || approvements.isEmpty) {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => ClubFormScreen(
-                                  initialName: title,
-                                  initialDescription: description,
-                                  initialIsConditionAdded: false,
-                                ),
-                              ),
-                            );
-                            closeMenu();
-                            return;
-                          }
-
-                          final data = approvements.first['data'];
-                          final typename = data['__typename'];
-
-                          String conditionName = '';
-                          int infoCount = 0;
-                          List<Map<String, dynamic>>? questions; 
-
-                          if (typename == 'FormApprovementData') {
-                            conditionName = 'Тест';
-                            questions = (data['questions'] as List<dynamic>?)
-                              ?.map((q) => Map<String, dynamic>.from(q))
-                              .toList();
-                            infoCount = questions?.length ?? 0;
-                          } else if (typename == 'MembersConfirmApprovementData') {
-                            conditionName = 'Запрос на подтверждение';
-                            infoCount = data['requiredConfirmationNumber'];
-                          }                         
-
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => ClubFormScreen(
-                                initialName: title,
-                                initialDescription: description,
-                                initialIsConditionAdded: true,
-                                initialConditionName: conditionName,
-                                initialInfoCount: infoCount,
-                                initialQuestions: questions,
-                              ),
-                            ),
-                          );
-                          closeMenu();
-                        }catch (e) {
-                          showErrorSnackbar(context, 'Произошла ошибка');
-                        }
+                        closeMenu();
+                        onEdit();
                       },
                     ),
                     SizedBox(
