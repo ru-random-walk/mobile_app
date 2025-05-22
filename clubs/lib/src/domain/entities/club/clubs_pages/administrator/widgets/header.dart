@@ -1,12 +1,13 @@
 part of '../admin_page.dart';
 
 class ClubHeader extends StatelessWidget {
+  final String clubId;
+  final int photoVersion;
   final String title;
   final String description;
   final List<Map<String, dynamic>> approvement;
   final int membersCount;
   final String approverId;
-  final String clubId;
   final ClubApiService apiService;
 
   const ClubHeader({
@@ -18,6 +19,7 @@ class ClubHeader extends StatelessWidget {
     required this.approverId,
     required this.clubId,
     required this.apiService,
+    required this.photoVersion,
   });
 
   @override
@@ -25,26 +27,17 @@ class ClubHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Center(
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(16.toFigmaSize),
-            child: SizedBox(
-              width: 240.toFigmaSize,
-              height: 240.toFigmaSize,
-              child: Image.asset(
-                'packages/clubs/assets/images/avatar.png',
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
+        ClubDetailPhotoWidget(
+          clubId: clubId,
+          photoVersion: photoVersion,
         ),
         SizedBox(height: 20.toFigmaSize),
         Center(
           child: Text(
             title,
             style: context.textTheme.h4.copyWith(
-                  color: context.colors.base_90,
-                ),
+              color: context.colors.base_90,
+            ),
           ),
         ),
         SizedBox(height: 20.toFigmaSize),
@@ -52,7 +45,7 @@ class ClubHeader extends StatelessWidget {
           'Описание:',
           style: context.textTheme.bodyLMedium.copyWith(
             color: context.colors.base_90,
-              ),
+          ),
         ),
         SizedBox(height: 4.toFigmaSize),
         Text(
@@ -71,7 +64,8 @@ class ClubHeader extends StatelessWidget {
           ),
           SizedBox(height: 4.toFigmaSize),
           ...approvement
-              .where((a) => a['type'] == 'FORM' || a['type'] == 'MEMBERS_CONFIRM')
+              .where(
+                  (a) => a['type'] == 'FORM' || a['type'] == 'MEMBERS_CONFIRM')
               .map((a) {
             final type = a['type'];
             if (type == 'FORM') {
@@ -111,9 +105,8 @@ class ClubHeader extends StatelessWidget {
             ),
           ],
         ),
-    SizedBox(height: 8.toFigmaSize),
+        SizedBox(height: 8.toFigmaSize),
       ],
     );
-  } 
+  }
 }
-

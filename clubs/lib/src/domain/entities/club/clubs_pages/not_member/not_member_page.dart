@@ -1,4 +1,5 @@
 import 'package:clubs/src/data/clubs_api_service.dart';
+import 'package:clubs/src/domain/entities/club/clubs_pages/common/photo_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:ui_components/ui_components.dart';
 import 'package:ui_utils/ui_utils.dart';
@@ -46,7 +47,8 @@ class _NotMemberPageState extends State<NotMemberPage> {
     try {
       final data = await getClubInfo(
         clubId: widget.clubId,
-        apiService: _clubApiService,);
+        apiService: _clubApiService,
+      );
 
       if (handleGraphQLErrors(
         context,
@@ -78,8 +80,9 @@ class _NotMemberPageState extends State<NotMemberPage> {
     final clubName = clubData?['name'];
     final description = clubData?['description'] ?? 'Описание отсутствует';
     final membersCount = widget.membersCount;
-    final List<Map<String, dynamic>> approvements = List<Map<String, dynamic>>.from(clubData?['approvements'] ?? []);
-
+    final List<Map<String, dynamic>> approvements =
+        List<Map<String, dynamic>>.from(clubData?['approvements'] ?? []);
+    final photoVersion = clubData?['photoVersion'] ?? 0;
 
     return ColoredBox(
       color: context.colors.base_0,
@@ -93,16 +96,17 @@ class _NotMemberPageState extends State<NotMemberPage> {
             approvements: approvements,
             clubId: widget.clubId,
             userId: widget.currentId,
+            photoVersion: photoVersion,
             clubApiService: _clubApiService,
           ),
           bottomNavigationBar: approvements.isEmpty
-            ? BottomButton(
-              clubId: widget.clubId,
-              userId: widget.currentId,
-              membersCount: membersCount,
-              clubApiService: _clubApiService,
-            )
-          : null,
+              ? BottomButton(
+                  clubId: widget.clubId,
+                  userId: widget.currentId,
+                  membersCount: membersCount,
+                  clubApiService: _clubApiService,
+                )
+              : null,
         ),
       ),
     );

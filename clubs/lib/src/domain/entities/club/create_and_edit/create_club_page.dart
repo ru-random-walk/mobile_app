@@ -1,3 +1,10 @@
+import 'dart:typed_data';
+
+import 'package:clubs/src/data/db/data_source/club_photo.dart';
+import 'package:clubs/src/data/image/repository/get_image.dart';
+import 'package:clubs/src/data/image/repository/sender.dart';
+import 'package:clubs/src/domain/usecase/update_club_photo.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:ui_components/ui_components.dart';
 import 'package:ui_utils/ui_utils.dart';
@@ -9,7 +16,7 @@ import 'package:collection/collection.dart';
 import 'package:clubs/src/domain/entities/club/create_and_edit/club/input_field_group.dart';
 import 'package:clubs/src/domain/entities/club/create_and_edit/club/button_create_group.dart';
 import 'package:clubs/src/domain/entities/club/create_and_edit/tests/create_test_page.dart';
-import 'package:clubs/src/domain/entities/club/create_and_edit/app_bar.dart'; 
+import 'package:clubs/src/domain/entities/club/create_and_edit/app_bar.dart';
 import 'package:clubs/src/data/clubs_api_service.dart';
 import 'package:clubs/src/domain/entities/club/text_format/question_format.dart';
 import 'package:clubs/src/domain/entities/club/text_format/inspector_format.dart';
@@ -30,8 +37,8 @@ class ClubFormScreen extends StatefulWidget {
   final List<Map<String, dynamic>>? initialQuestions;
   final int inspectorAndAdminCount;
   final bool isEditMode;
-  final String? clubId; 
-  final String? approvementId; 
+  final String? clubId;
+  final String? approvementId;
 
   const ClubFormScreen({
     super.key,
@@ -57,21 +64,33 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
   late bool isConditionAdded;
   late String conditionName;
   late int infoCount;
+  Uint8List? imageBytes;
   List<Map<String, dynamic>>? questions;
   final ClubApiService clubApiService = ClubApiService();
+  final _imagePicker = ImageRepository();
+  late final SetClubPhotoWhenCreatingUseCase _imageSetter;
 
   @override
   void initState() {
     super.initState();
+    _imageSetter = SetClubPhotoWhenCreatingUseCase(
+      sender: ImageClubSenderRepostory(),
+      dbInfo: ClubPhotoDatabaseInfoDataSource(
+        context.read(),
+      ),
+      cache: CacheImagesDataSource(),
+    );
     nameController = TextEditingController(text: widget.initialName ?? '');
-    descriptionController = TextEditingController(text: widget.initialDescription ?? '');
+    descriptionController =
+        TextEditingController(text: widget.initialDescription ?? '');
     isConditionAdded = widget.initialIsConditionAdded;
     conditionName = widget.initialConditionName ?? '';
     infoCount = widget.initialInfoCount;
     questions = widget.initialQuestions;
   }
 
-  void onConditionAdded(String name, int count, List<Map<String, dynamic>>? questionInputs) {
+  void onConditionAdded(
+      String name, int count, List<Map<String, dynamic>>? questionInputs) {
     setState(() {
       infoCount = count;
       isConditionAdded = true;
@@ -85,6 +104,28 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
   void removeCondition() {
     setState(() {
       isConditionAdded = false;
+    });
+  }
+
+  Future<void> _pickImage() async {
+    final res = await _imagePicker.getImage();
+    res.fold((err) {
+      String errorMessage;
+      if (err is TooBigImageError) {
+        errorMessage = 'Размер файла не должен превышать 5МБ';
+      } else {
+        errorMessage = 'Что-то пошло не так';
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage),
+        ),
+      );
+    }, (imageBytes) {
+      setState(() {
+        this.imageBytes = imageBytes;
+      });
     });
   }
 
@@ -106,87 +147,126 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
             onConditionAdded: onConditionAdded,
             removeCondition: removeCondition,
             isEditMode: widget.isEditMode,
+            onChooseImage: _pickImage,
+            imageBytes: imageBytes,
           ),
           bottomNavigationBar: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.toFigmaSize, vertical: 4.toFigmaSize),
+            padding: EdgeInsets.symmetric(
+                horizontal: 20.toFigmaSize, vertical: 4.toFigmaSize),
             child: SizedBox(
               width: double.infinity,
               child: CustomButton(
-                size: ButtonSize.M,
-                type: ButtonType.primary,
-                color: ButtonColor.green,
-                text: 'Готово',
-                onPressed: () async {
-                  final name = nameController.text.trim();
-                  final description = descriptionController.text.trim();
-                  if (name.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Введите название группы')));
-                    return;
-                  }
+                  size: ButtonSize.M,
+                  type: ButtonType.primary,
+                  color: ButtonColor.green,
+                  text: 'Готово',
+                  onPressed: () async {
+                    final name = nameController.text.trim();
+                    final description = descriptionController.text.trim();
+                    if (name.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text('Введите название группы')));
+                      return;
+                    }
+                    if (imageBytes == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text('Добавьте фото группы')));
+                      return;
+                    }
 
-                  try {
-                    Map<String, dynamic>? result;
+                    try {
+                      Map<String, dynamic>? result;
+                      String? clubId;
 
-                    if (widget.isEditMode && widget.clubId != null) {
-                      await ApprovementUpdater.handleConditionUpdate(
-                        context: context,
-                        apiService: clubApiService,
-                        clubId: widget.clubId!,
-                        initialIsConditionAdded: widget.initialIsConditionAdded,
-                        isConditionAdded: isConditionAdded,
-                        initialConditionName: widget.initialConditionName,
-                        conditionName: conditionName,
-                        initialInfoCount: widget.initialInfoCount,
-                        infoCount: infoCount,
-                        initialQuestions: widget.initialQuestions,
-                        questions: questions,
-                        approvementId: widget.approvementId,
-                      );
-                      
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor: context.colors.main_50,
-                          content: Text('Группа обновлена', style: context.textTheme.bodySMediumBase0),
-                        ),
-                      );
-                    } else {  
-                      if (!isConditionAdded) {
-                        result = await createClub(
-                          name: name, 
-                          description: description.isEmpty ? null : description,
-                          apiService: ClubApiService());
-                      } else if (conditionName == "Запрос на вступление") {
-                        result = await createClubWithConfirmApprovement(
-                          name: name,
-                          description: description.isEmpty ? null : description,
+                      if (widget.isEditMode && widget.clubId != null) {
+                        await ApprovementUpdater.handleConditionUpdate(
+                          context: context,
+                          apiService: clubApiService,
+                          clubId: widget.clubId!,
+                          initialIsConditionAdded:
+                              widget.initialIsConditionAdded,
+                          isConditionAdded: isConditionAdded,
+                          initialConditionName: widget.initialConditionName,
+                          conditionName: conditionName,
+                          initialInfoCount: widget.initialInfoCount,
                           infoCount: infoCount,
-                          apiService: ClubApiService(),
+                          initialQuestions: widget.initialQuestions,
+                          questions: questions,
+                          approvementId: widget.approvementId,
+                        );
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: context.colors.main_50,
+                            content: Text('Группа обновлена',
+                                style: context.textTheme.bodySMediumBase0),
+                          ),
                         );
                       } else {
-                        result = await createClubWithFormApprovement(
-                          name: name,
-                          description: description.isEmpty ? null : description,
-                          questions: questions ?? [],
-                          apiService: ClubApiService(),
+                        if (!isConditionAdded) {
+                          result = await createClub(
+                              name: name,
+                              description:
+                                  description.isEmpty ? null : description,
+                              apiService: ClubApiService());
+                          clubId = result?['data']?['createClub']?['id'];
+                        } else if (conditionName == "Запрос на вступление") {
+                          result = await createClubWithConfirmApprovement(
+                            name: name,
+                            description:
+                                description.isEmpty ? null : description,
+                            infoCount: infoCount,
+                            apiService: ClubApiService(),
+                          );
+                          clubId = result?['data']
+                              ?['createClubWithConfirmApprovement']?['id'];
+                        } else {
+                          result = await createClubWithFormApprovement(
+                            name: name,
+                            description:
+                                description.isEmpty ? null : description,
+                            questions: questions ?? [],
+                            apiService: ClubApiService(),
+                          );
+                          clubId = result?['data']
+                              ?['createClubWithFormApprovement']?['id'];
+                        }
+
+                        if (handleGraphQLErrors(context, result,
+                            fallbackMessage: 'Не удалось создать группу')) {
+                          return;
+                        }
+                        if (imageBytes != null) {
+                          try {
+                            await _imageSetter(
+                              SetClubPhotoWhenCreatingArgs(
+                                imageBytes: imageBytes!,
+                                clubId: clubId!,
+                              ),
+                            );
+                          } catch (e) {
+                            if (context.mounted) {
+                              showErrorSnackbar(
+                                context,
+                                'Произошла ошибка при загрузке фото',
+                              );
+                            }
+                          }
+                        }
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: context.colors.main_50,
+                            content: Text('Группа создана',
+                                style: context.textTheme.bodySMediumBase0),
+                          ),
                         );
                       }
-
-                      if (handleGraphQLErrors(context, result, fallbackMessage: 'Не удалось создать группу')) return;
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor: context.colors.main_50,
-                          content: Text('Группа создана', style: context.textTheme.bodySMediumBase0),
-                        ),
-                      );
+                      Navigator.pop(context, true);
+                    } catch (e) {
+                      print(e);
+                      showErrorSnackbar(context, 'Произошла ошибка');
                     }
-                    Navigator.pop(context, true);
-                  } catch (e) {
-                    print(e);
-                    showErrorSnackbar(context, 'Произошла ошибка');
-                  }
-                }
-              ),
+                  }),
             ),
           ),
         ),
@@ -194,4 +274,3 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
     );
   }
 }
-

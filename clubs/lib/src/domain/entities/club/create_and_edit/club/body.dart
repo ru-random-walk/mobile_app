@@ -6,10 +6,13 @@ class ClubFormBody extends StatelessWidget {
   final bool isConditionAdded;
   final String conditionName;
   final int infoCount;
+  final void Function(String, int, List<Map<String, dynamic>>? questions)
+      onConditionAdded;
+  final void Function() removeCondition;
+  final Uint8List? imageBytes;
+  final void Function() onChooseImage;
   final List<Map<String, dynamic>>? questions;
   final int inspectorAndAdminCount;
-  final void Function(String, int, List<Map<String, dynamic>>? questions) onConditionAdded;
-  final void Function() removeCondition;
   final bool isEditMode;
 
   const ClubFormBody({
@@ -23,6 +26,8 @@ class ClubFormBody extends StatelessWidget {
     required this.inspectorAndAdminCount,
     required this.onConditionAdded,
     required this.removeCondition,
+    this.imageBytes,
+    required this.onChooseImage,
     this.isEditMode = false,
   }) : super(key: key);
 
@@ -41,7 +46,7 @@ class ClubFormBody extends StatelessWidget {
           );
         },
       );
-    } else if (conditionName == 'Тест'){
+    } else if (conditionName == 'Тест') {
       final result = await Navigator.push<Map<String, dynamic>?>(
         context,
         MaterialPageRoute(
@@ -52,11 +57,12 @@ class ClubFormBody extends StatelessWidget {
         ),
       );
       if (result != null) {
-        onConditionAdded(conditionName, result['questionCount'], result['questions']);
+        onConditionAdded(
+            conditionName, result['questionCount'], result['questions']);
       }
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -73,45 +79,71 @@ class ClubFormBody extends StatelessWidget {
               child: SizedBox(
                 width: 120.toFigmaSize,
                 height: 120.toFigmaSize,
-                child: Image.asset(
-                  'packages/clubs/assets/images/avatar.png',
-                  fit: BoxFit.cover,
-                ),
+                child: imageBytes == null
+                    ? Center(
+                        child: Text(
+                          'Нет фото',
+                          style: context.textTheme.captionMedium,
+                        ),
+                      )
+                    : Image.memory(
+                        imageBytes!,
+                        fit: BoxFit.contain,
+                      ),
               ),
             ),
           ),
-          SizedBox(height: 8.toFigmaSize),
+          SizedBox(height: 16.toFigmaSize),
+          Center(
+            child: CustomButton(
+              leftIcon: Padding(
+                padding: EdgeInsets.only(right: 8.toFigmaSize),
+                child: SvgPicture.asset(
+                  'packages/clubs/assets/icons/image.svg',
+                  width: 24.toFigmaSize,
+                  height: 24.toFigmaSize,
+                ),
+              ),
+              text: 'Добавить фото',
+              onPressed: onChooseImage,
+              type: ButtonType.secondary,
+              color: ButtonColor.green,
+              isMaxWidth: false,
+            ),
+          ),
           // Button
           SizedBox(height: 12.toFigmaSize),
 
           Text('Название группы', style: context.textTheme.bodyXLMedium),
           SizedBox(height: 8.toFigmaSize),
           isEditMode
-            ? Text(
-                nameController.text,
-                style: context.textTheme.bodyLRegular.copyWith(color: context.colors.base_80),
-              )
-            : TextFieldGroup(
-                num: 1,
-                controller: nameController,
-                title: 'Название',
-              ),
+              ? Text(
+                  nameController.text,
+                  style: context.textTheme.bodyLRegular
+                      .copyWith(color: context.colors.base_80),
+                )
+              : TextFieldGroup(
+                  num: 1,
+                  controller: nameController,
+                  title: 'Название',
+                ),
           SizedBox(height: 20.toFigmaSize),
 
           Text('Описание', style: context.textTheme.bodyXLMedium),
           SizedBox(height: 8.toFigmaSize),
           isEditMode
-            ? Text(
-                descriptionController.text.isEmpty 
-                  ? 'Описание отсутствует' 
-                  : descriptionController.text,
-                style: context.textTheme.bodyLRegular.copyWith(color: context.colors.base_80),
-              )
-            : TextFieldGroup(
-                num: 3,
-                controller: descriptionController,
-                title: 'Описание',
-              ),
+              ? Text(
+                  descriptionController.text.isEmpty
+                      ? 'Описание отсутствует'
+                      : descriptionController.text,
+                  style: context.textTheme.bodyLRegular
+                      .copyWith(color: context.colors.base_80),
+                )
+              : TextFieldGroup(
+                  num: 3,
+                  controller: descriptionController,
+                  title: 'Описание',
+                ),
           SizedBox(height: 20.toFigmaSize),
 
           Text('Условия для вступления', style: context.textTheme.bodyXLMedium),
@@ -134,12 +166,14 @@ class ClubFormBody extends StatelessWidget {
                   if (result != null) {
                     String approvementName = result['approvementName'];
                     int questionCount = result['questionCount'];
-                    List<Map<String, dynamic>> questionsInput = result['questions'];
-                    onConditionAdded(approvementName, questionCount, questionsInput); 
-                    }
-                  });
-                },
-              ),
+                    List<Map<String, dynamic>> questionsInput =
+                        result['questions'];
+                    onConditionAdded(
+                        approvementName, questionCount, questionsInput);
+                  }
+                });
+              },
+            ),
           if (isConditionAdded)
             ConditionString(
               infoCount: infoCount,

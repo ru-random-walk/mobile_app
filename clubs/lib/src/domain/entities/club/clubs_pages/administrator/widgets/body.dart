@@ -9,6 +9,7 @@ class ClubAdminBody extends StatefulWidget {
   final ClubApiService apiService;
   final String currentUserId;
   final ClubAdminController controller;
+  final int photoVersion;
 
   const ClubAdminBody({
     super.key,
@@ -20,6 +21,7 @@ class ClubAdminBody extends StatefulWidget {
     required this.apiService,
     required this.currentUserId,
     required this.controller,
+    required this.photoVersion,
   });
 
   @override
@@ -29,18 +31,19 @@ class ClubAdminBody extends StatefulWidget {
 class _ClubAdminBodyState extends State<ClubAdminBody> {
   late final ClubAdminController _controller;
 
-@override
-void initState() {
-  super.initState();
-  _controller = widget.controller;
-}
+  @override
+  void initState() {
+    super.initState();
+    _controller = widget.controller;
+  }
 
   @override
   Widget build(BuildContext context) {
     if (_controller.isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
-    final itemCount = _controller.users.length + 1 + (_controller.isLoadingMore ? 1 : 0);
+    final itemCount =
+        _controller.users.length + 1 + (_controller.isLoadingMore ? 1 : 0);
     return Padding(
       padding: EdgeInsets.symmetric(
         vertical: 4.toFigmaSize,
@@ -59,21 +62,24 @@ void initState() {
               approverId: widget.currentUserId,
               clubId: widget.clubId,
               apiService: widget.apiService,
+              photoVersion: widget.photoVersion,
             );
           }
           if (_controller.isLoadingMore && index == itemCount - 1) {
             return const Center(child: CircularProgressIndicator());
           }
-          final user = _controller.users[index-1];
+          final user = _controller.users[index - 1];
           final role = _controller.getUserRole(user.id);
           return MemberTile(
             name: user.fullName,
             role: role,
             avatarPath: user.avatar,
-            onMenuPressed: user.id == widget.currentUserId ? null : (Offset position) {
-            //onMenuPressed: (Offset position) {
-              _controller.showMemberMenu(context, position, user);
-            },
+            onMenuPressed: user.id == widget.currentUserId
+                ? null
+                : (Offset position) {
+                    //onMenuPressed: (Offset position) {
+                    _controller.showMemberMenu(context, position, user);
+                  },
           );
         },
       ),

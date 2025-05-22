@@ -1,4 +1,5 @@
 import 'package:clubs/src/data/clubs_api_service.dart';
+import 'package:clubs/src/domain/entities/club/clubs_pages/common/photo_widget.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/common/exit_menu_club/exit_menu_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:ui_utils/ui_utils.dart';
@@ -49,7 +50,8 @@ class _MemberPageState extends State<MemberPage> {
     try {
       final data = await getClubInfo(
         clubId: widget.clubId,
-        apiService: _clubApiService,);
+        apiService: _clubApiService,
+      );
 
       if (handleGraphQLErrors(
         context,
@@ -85,14 +87,17 @@ class _MemberPageState extends State<MemberPage> {
             onMenuPressed: _menuController.showMenu,
           ),
           body: isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : clubData == null
-                ? const Center(child: Text('Клуб не найден'))
-                : ClubMemberBody(
-                    clubName: clubData?['name'],
-                    description: clubData?['description'] ?? 'Описание отсутствует',
-                    membersCount: widget.membersCount,
-                ),
+              ? const Center(child: CircularProgressIndicator())
+              : clubData == null
+                  ? const Center(child: Text('Клуб не найден'))
+                  : ClubMemberBody(
+                      clubName: clubData?['name'],
+                      description:
+                          clubData?['description'] ?? 'Описание отсутствует',
+                      membersCount: widget.membersCount,
+                      clubId: widget.clubId,
+                      photoVersion: clubData?['photoVersion'] ?? 0,
+                    ),
         ),
       ),
     );
