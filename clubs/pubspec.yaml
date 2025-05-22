@@ -28,6 +28,7 @@ dependencies:
   flutter_bloc: ^8.1.6
   bloc: ^8.1.4
   provider: ^6.1.5
+  collection: ^1.19.1
 
 dev_dependencies:
   flutter_test:

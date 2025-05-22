@@ -1,15 +1,15 @@
-part of '../not_member_page.dart';
+part of 'inspector_page.dart';
 
-class ClubNotMemberBody extends StatelessWidget {
+class ClubInspectorBody extends StatelessWidget {
   final String clubName;
   final String description;
   final int membersCount;
   final List<Map<String, dynamic>> approvements;
   final String clubId;
   final String userId;
-  final ClubApiService clubApiService;
+  final ClubApiService apiService;
 
-  const ClubNotMemberBody({
+  const ClubInspectorBody({
     super.key,
     required this.clubName,
     required this.description,
@@ -17,7 +17,7 @@ class ClubNotMemberBody extends StatelessWidget {
     required this.approvements,
     required this.clubId,
     required this.userId,
-    required this.clubApiService,
+    required this.apiService,
   });
 
   @override
@@ -69,9 +69,9 @@ class ClubNotMemberBody extends StatelessWidget {
                 color: context.colors.base_90,
               ),),
               const Spacer(),
-              Text('Вы не в группе', 
+              Text('Вы в группе', 
                 style: context.textTheme.bodyLRegular.copyWith(
-                color: context.colors.base_50,
+                color: context.colors.main_60,
               ),),
             ],
           ),
@@ -90,12 +90,11 @@ class ClubNotMemberBody extends StatelessWidget {
             ),
           ),
           if (approvements.isNotEmpty)
-            JoinRequirements(
+            JoinRequirementsInspector(
               approvements: approvements,
               clubId: clubId,
               userId: userId,
-              membersCount: membersCount,
-              clubApiService: clubApiService,
+              apiService: apiService,
             ),
         ],
       ),

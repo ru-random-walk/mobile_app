@@ -12,6 +12,7 @@ import 'package:clubs/src/domain/entities/club/clubs_pages/common/overlay_menu_p
 import 'package:clubs/src/domain/entities/club/clubs_pages/common/alert_dialogs.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/common/app_bar.dart';
 import 'package:clubs/utils/qraphql_error_utils.dart';
+import 'package:clubs/src/domain/entities/club/clubs_pages/common/request_list/confirmation_request_row.dart';
 
 part 'widgets/body.dart';
 part 'widgets/member_tile.dart';

@@ -15,7 +15,7 @@ class ClubFiltersSection extends StatelessWidget {
     return Column(
       children: [
         SizedBox(height: 8.toFigmaSize),
-        GroupFilters(
+        ClubFilters(
           selectedIndex: selectedIndex,
           onFilterChanged: onFilterChanged,
         ),

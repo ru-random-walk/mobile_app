@@ -74,6 +74,7 @@ class ClubMemberBody extends StatelessWidget {
             color: context.colors.base_90,
             ),
           ),
+          SizedBox(height: 4.toFigmaSize),
           Text(
             description,
             style: context.textTheme.bodyLRegular.copyWith(

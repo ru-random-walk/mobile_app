@@ -1,6 +1,14 @@
-part of '../member_page.dart';
+import 'package:clubs/src/data/clubs_api_service.dart';
+import 'package:clubs/src/domain/entities/club/clubs_pages/common/overlay_menu_position.dart';
+import 'package:clubs/src/domain/entities/club/clubs_pages/common/row_menu.dart';
+import 'package:flutter/material.dart';
+import 'package:clubs/src/domain/entities/club/clubs_pages/common/alert_dialogs.dart';
+import 'package:clubs/utils/qraphql_error_utils.dart';
+import 'package:ui_utils/ui_utils.dart';
 
-class ClubMemberMenuController {
+part 'exit_overlay_menu.dart';
+
+class ExitMenuController {
   final BuildContext context;
   final String clubId;
   final String userId;
@@ -9,7 +17,7 @@ class ClubMemberMenuController {
 
   OverlayEntry? _menuOverlay;
 
-  ClubMemberMenuController({
+  ExitMenuController({
     required this.context,
     required this.clubId,
     required this.userId,
@@ -29,7 +37,7 @@ class ClubMemberMenuController {
         onTapOutside: (_) {
           _closeMenu();
         },
-        child: ClubMemberMenu(
+        child: ExitOverlayMenu(
           dY: dy,
           closeMenu: _closeMenu,
           onLeave: _onLeaveGroup,
