@@ -8,6 +8,7 @@ class ClubNotMemberBody extends StatelessWidget {
   final String clubId;
   final String userId;
   final int photoVersion;
+  final ClubApiService clubApiService;
 
   const ClubNotMemberBody({
     super.key,
@@ -18,6 +19,7 @@ class ClubNotMemberBody extends StatelessWidget {
     required this.clubId,
     required this.userId,
     required this.photoVersion,
+    required this.clubApiService,
   });
 
   @override
@@ -77,6 +79,7 @@ class ClubNotMemberBody extends StatelessWidget {
               color: context.colors.base_90,
             ),
           ),
+          SizedBox(height: 4.toFigmaSize),
           Text(
             description,
             style: context.textTheme.bodyLRegular.copyWith(
@@ -89,6 +92,7 @@ class ClubNotMemberBody extends StatelessWidget {
               clubId: clubId,
               userId: userId,
               membersCount: membersCount,
+              clubApiService: clubApiService,
             ),
         ],
       ),

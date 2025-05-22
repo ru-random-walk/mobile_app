@@ -1,42 +1,42 @@
 part of '../../page.dart';
 
-class GroupFilters extends StatelessWidget {
+class ClubFilters extends StatelessWidget {
   final int selectedIndex;
   final void Function(int) onFilterChanged;
 
-  const GroupFilters({
+  const ClubFilters({
     super.key,
     required this.selectedIndex,
     required this.onFilterChanged,
   });
-
+ 
   @override
   Widget build(BuildContext context) {
     final List<String> labels = ["Все", "Управляемые", "В ожидании"];
-
-    return Row(
-      children: [ 
-        SizedBox(width: 16.toFigmaSize),
-        ...List.generate(labels.length, (index) {
+    
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.toFigmaSize),
+      child: Row(
+        children: List.generate(labels.length, (index) {
           final bool isSelected = selectedIndex == index;
           final String label = labels[index];
-          final bool isFlexible = label == "Все";
 
-          final button = Padding(
-            padding: EdgeInsets.symmetric(horizontal: 4.toFigmaSize),
-            child: FilterButton(
-              label: label,
-              isSelected: isSelected,
-              onPressed: () => onFilterChanged(index),
-              width: isFlexible ? double.infinity : null,
-              height: 36.toFigmaSize,
-            ),
+          final button = FilterButton(
+            label: label,
+            isSelected: isSelected,
+            onPressed: () => onFilterChanged(index),
+            height: 36.toFigmaSize,
           );
-
-          return isFlexible ? Expanded(child: button) : button;
+          if (label == "Все") {
+            return Expanded(child: button);
+          } else {
+            return Padding(
+              padding: EdgeInsets.only(left: 4.toFigmaSize),
+              child: IntrinsicWidth(child: button),
+            );
+          }
         }),
-        SizedBox(width: 16.toFigmaSize),
-      ],
+      ),
     );
   }
 }

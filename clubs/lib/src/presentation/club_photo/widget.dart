@@ -52,6 +52,7 @@ class ClubPhotoWidget extends StatelessWidget {
         ),
       ],
       child: BlocProvider(
+        key: ValueKey(clubId),
         create: (context) => ClubPhotoCubit(
           clubId: clubId,
           photoVersion: photoVersion,

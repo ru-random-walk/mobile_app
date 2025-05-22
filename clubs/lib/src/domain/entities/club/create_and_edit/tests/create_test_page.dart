@@ -12,7 +12,14 @@ part 'questions/questions_form.dart';
 part 'questions/answer_options.dart';
 
 class TestForm extends StatefulWidget {
-  const TestForm({super.key});
+  final bool isEditMode;
+  final List<Map<String, dynamic>>? initialQuestions;
+
+  const TestForm({
+    super.key,
+    this.isEditMode = false,
+    this.initialQuestions,
+    });
 
   @override
   TestFormState createState() => TestFormState();
@@ -23,15 +30,7 @@ class TestFormState extends State<TestForm> {
   String? selectedOption;  
   List<String> selectedOptions = [];
 
-    List<QuestionModel> questions = [
-    QuestionModel(
-      questionController: TextEditingController(),
-      optionControllers: [
-        TextEditingController(),
-        TextEditingController(),
-      ],
-    ),
-  ];
+  List<QuestionModel> questions = [];
 
   void _addQuestion() {
     setState(() {
@@ -54,26 +53,59 @@ class TestFormState extends State<TestForm> {
     });
   }
 
-void _deleteOption(int questionIndex, int optionIndex) {
-  setState(() {
-    final question = questions[questionIndex];
+  void _deleteOption(int questionIndex, int optionIndex) {
+    setState(() {
+      final question = questions[questionIndex];
 
-    final removedController = question.optionControllers[optionIndex];
-    removedController.dispose();
-    question.optionControllers.removeAt(optionIndex);
+      final removedController = question.optionControllers[optionIndex];
+      removedController.dispose();
+      question.optionControllers.removeAt(optionIndex);
 
-    question.selectedOptionIndexes = question.selectedOptionIndexes
-      .where((i) => i != optionIndex) 
-      .map((i) => i > optionIndex ? i - 1 : i) 
-      .toList();
+      question.selectedOptionIndexes = question.selectedOptionIndexes
+        .where((i) => i != optionIndex) 
+        .map((i) => i > optionIndex ? i - 1 : i) 
+        .toList();
 
-    if (question.selectedOptionIndex == optionIndex) {
-      question.selectedOptionIndex = null;
-    } else if (question.selectedOptionIndex != null && question.selectedOptionIndex! > optionIndex) {
-      question.selectedOptionIndex = question.selectedOptionIndex! - 1;
+      if (question.selectedOptionIndex == optionIndex) {
+        question.selectedOptionIndex = null;
+      } else if (question.selectedOptionIndex != null && question.selectedOptionIndex! > optionIndex) {
+        question.selectedOptionIndex = question.selectedOptionIndex! - 1;
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.isEditMode && widget.initialQuestions != null) {
+      questions = widget.initialQuestions!.map((q) {
+        final questionController = TextEditingController(text: q['text'] ?? '');
+        final options = (q['answerOptions'] as List<dynamic>?)?.map((o) => TextEditingController(text: o.toString())).toList() ?? [];
+
+        final answerType = q['answerType'] ?? 'SINGLE';
+        final correctIndexes = (q['correctOptionNumbers'] as List<dynamic>?)?.cast<int>() ?? [];
+
+        return QuestionModel(
+          questionController: questionController,
+          optionControllers: options,
+          multipleAnswers: answerType == 'MULTIPLE',
+          selectedOptionIndex: answerType == 'SINGLE' && correctIndexes.isNotEmpty ? correctIndexes.first : null,
+          selectedOptionIndexes: answerType == 'MULTIPLE' ? correctIndexes : [],
+        );
+      }).toList();
+    } else {
+      questions = [
+        QuestionModel(
+          questionController: TextEditingController(),
+          optionControllers: [
+            TextEditingController(),
+            TextEditingController(),
+          ],
+        ),
+      ];
     }
-  });
-}
+  }
   
   @override
   void dispose() {

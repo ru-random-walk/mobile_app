@@ -35,17 +35,20 @@ class ClubItemTile extends StatelessWidget {
           if (result == true) {
             context.read<ClubsListBloc>().add(LoadClubsEvent());
           }
-        } else if (role == 'NOT_MEMBER') {
-          Navigator.push(
+        } if (role == 'INSPECTOR') {
+          final result = await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => NotMemberPage(
+              builder: (_) => ClubInspectorScreen(
                 clubId: clubId,
                 currentId: currentUserId,
                 membersCount: group.membersCount,
               ),
             ),
           );
+          if (result == true) {
+            context.read<ClubsListBloc>().add(LoadClubsEvent());
+          }
         } else if (role == 'MEMBER') {
           Navigator.push(
             context,
@@ -57,7 +60,18 @@ class ClubItemTile extends StatelessWidget {
               ),
             ),
           );
-        }
+        } else if (role == 'PENDING_APPROVAL' || role == 'NOT_MEMBER'){
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => NotMemberPage(
+                clubId: clubId,
+                currentId: currentUserId,
+                membersCount: group.membersCount,
+              ),
+            ),
+          );
+        } 
       },
     );
   }

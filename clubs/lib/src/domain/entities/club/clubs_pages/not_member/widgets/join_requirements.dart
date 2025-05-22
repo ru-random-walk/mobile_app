@@ -5,6 +5,7 @@ class JoinRequirements extends StatelessWidget {
   final String clubId;
   final String userId;
   final int membersCount;
+  final ClubApiService clubApiService;
 
   const JoinRequirements({
     super.key,
@@ -12,6 +13,7 @@ class JoinRequirements extends StatelessWidget {
     required this.clubId,
     required this.userId,
     required this.membersCount,
+    required this.clubApiService,
   });
 
   @override
@@ -51,7 +53,7 @@ class JoinRequirements extends StatelessWidget {
                       if (isTest) {
                         final result = await Navigator.of(context).push<bool>(
                           MaterialPageRoute(
-                            builder: (_) => TestFormScreen(clubId: clubId),
+                            builder: (_) => TestFormScreen(clubId: clubId, userId: userId),
                           ),
                         );
 
@@ -74,7 +76,37 @@ class JoinRequirements extends StatelessWidget {
                           }
                         }
                       } else {
-                        // обработка запроса
+                        try {
+                          final response = await createApprovementAnswerMembersConfirm(
+                            approvementId: approvement['id'],
+                            apiService: clubApiService,
+                          );
+                          if (handleGraphQLErrors(context, response, fallbackMessage: 'Ошибка при создании запроса')) return;
+
+                          final answerId = response?['data']?['CreateApprovementAnswerMembersConfirm']?['id'];
+                          String? status;
+
+                          if (answerId != null) {
+                            final result = await sendAnswers(
+                              answerId: answerId,
+                              apiService: clubApiService,
+                            );
+                            if (handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка отправки запроса')) return;
+                          
+                            status = result?['data']['setAnswerStatusToSent']?['status'];
+                            if (status == 'SENT'){
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Запрос отправлен'),
+                                  backgroundColor: context.colors.main_50,
+                                ),
+                              );
+                            }
+                          }
+                        } catch (e) {
+                          print('$e');
+                          showErrorSnackbar(context, 'Произошла ошибка');
+                        }
                       }
                     },
                   ),

@@ -23,7 +23,9 @@ class ClubListView extends StatelessWidget {
               child: Center(child: CircularProgressIndicator.adaptive())),
           ClubsLoaded(:final groups) => _buildClubs(groups, context),
           ClubsError() => SliverFillRemaining(
-              child: Center(child: Text('Ошибка загрузки групп', style: context.textTheme.h4))),
+              child: Center(
+                  child: Text('Ошибка загрузки групп',
+                      style: context.textTheme.h4))),
           _ => const SliverToBoxAdapter(child: SizedBox.shrink()),
         };
       },
@@ -31,9 +33,11 @@ class ClubListView extends StatelessWidget {
   }
 
   Widget _buildClubs(List<dynamic> groups, BuildContext context) {
-    final clubModels = groups.map<ClubModel>((g) => isSearching
-        ? ClubModel.fromSearchResult(g)
-        : ClubModel.fromUserClub(g)).toList();
+    final clubModels = groups
+        .map<ClubModel>((g) => isSearching
+            ? ClubModel.fromSearchResult(g)
+            : ClubModel.fromUserClub(g))
+        .toList();
 
     final filtered = isSearching ? clubModels : filterClubs(clubModels);
 
