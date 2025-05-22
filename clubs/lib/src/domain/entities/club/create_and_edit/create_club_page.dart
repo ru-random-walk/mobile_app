@@ -176,6 +176,7 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
 
                     try {
                       Map<String, dynamic>? result;
+                      String? clubId;
 
                       if (widget.isEditMode && widget.clubId != null) {
                         await ApprovementUpdater.handleConditionUpdate(
@@ -208,6 +209,7 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
                               description:
                                   description.isEmpty ? null : description,
                               apiService: ClubApiService());
+                          clubId = result?['data']?['createClub']?['id'];
                         } else if (conditionName == "Запрос на вступление") {
                           result = await createClubWithConfirmApprovement(
                             name: name,
@@ -216,6 +218,8 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
                             infoCount: infoCount,
                             apiService: ClubApiService(),
                           );
+                          clubId = result?['data']
+                              ?['createClubWithConfirmApprovement']?['id'];
                         } else {
                           result = await createClubWithFormApprovement(
                             name: name,
@@ -224,6 +228,8 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
                             questions: questions ?? [],
                             apiService: ClubApiService(),
                           );
+                          clubId = result?['data']
+                              ?['createClubWithFormApprovement']?['id'];
                         }
 
                         if (handleGraphQLErrors(context, result,
@@ -235,7 +241,7 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
                             await _imageSetter(
                               SetClubPhotoWhenCreatingArgs(
                                 imageBytes: imageBytes!,
-                                clubId: result?['data']['createClub']['id'],
+                                clubId: clubId!,
                               ),
                             );
                           } catch (e) {
