@@ -132,8 +132,8 @@ class ClubAdminController {
                   fallbackMessage: 'Ошибка при загрузке редактирования',
                 )) return;
 
-                final approvements = clubData?['data']?['getClub']?['approvements'] as List<dynamic>?;
-
+                final approvements = clubData?['data']?['getClub']?['approvements'] as List<dynamic>?; 
+                
                 if (approvements == null || approvements.isEmpty) {
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -154,20 +154,18 @@ class ClubAdminController {
                 final typename = data['__typename'];
 
                 String conditionName = '';
-                String conditionType = '';
                 int infoCount = 0;
                 List<Map<String, dynamic>>? questions; 
+                String approvementId = approvements.first['id'];
 
                 if (typename == 'FormApprovementData') {
                   conditionName = 'Тест';
-                  conditionType = 'FORM';
                   questions = (data['questions'] as List<dynamic>?)
                     ?.map((q) => Map<String, dynamic>.from(q))
                     .toList();
                   infoCount = questions?.length ?? 0;
                 } else if (typename == 'MembersConfirmApprovementData') {
                   conditionName = 'Запрос на вступление';
-                  conditionType = 'MEMBERS_CONFIRM';
                   infoCount = data['requiredConfirmationNumber'];
                 }                         
 
@@ -178,16 +176,17 @@ class ClubAdminController {
                       initialDescription: description,
                       initialIsConditionAdded: true,
                       initialConditionName: conditionName,
-                      initialConditionType:conditionType,
                       initialInfoCount: infoCount,
                       initialQuestions: questions,
                       inspectorAndAdminCount: inspectorAndAdminCount,
                       isEditMode: true,
                       clubId: clubId,
+                      approvementId: approvementId,
                     ),
                   ),
                 );
               }catch (e) {
+                print(e);
                 showErrorSnackbar(context, 'Произошла ошибка');
               }
               _hideMenu();

@@ -58,7 +58,7 @@ class ClubItemTile extends StatelessWidget {
               ),
             ),
           );
-        } else {
+        } else if (role == 'PENDING_APPROVAL' || role == 'NOT_MEMBER'){
           Navigator.push(
             context,
             MaterialPageRoute(

@@ -22,6 +22,11 @@ part 'approver_confirmations/approve_confirmation.dart';
 part 'approver_confirmations/reject_confirmation.dart';
 part 'join_in_club/join_in_club.dart';
 part 'answers/create_answer_members_confirm.dart';
+part 'club_approvements/add_members_confirm.dart';
+part 'club_approvements/add_test_form.dart';
+part 'club_approvements/update_members_confirm.dart';
+part 'club_approvements/update_test_form.dart';
+part 'club_approvements/remove_approvement.dart';
 
 class ClubApiService {
   final dioClient = NetworkConfig.instance.dio;

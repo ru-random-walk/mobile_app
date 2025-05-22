@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:ui_components/ui_components.dart';
 import 'package:ui_utils/ui_utils.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auth/auth.dart';
+import 'package:collection/collection.dart';
 
 import 'package:clubs/src/domain/entities/club/create_and_edit/club/input_field_group.dart';
 import 'package:clubs/src/domain/entities/club/create_and_edit/club/button_create_group.dart';
@@ -19,6 +19,7 @@ part 'club/popup.dart';
 part 'club/condition_string.dart';
 part 'club/body.dart';
 part 'get_id_user.dart';
+part 'approvement_updater.dart';
 
 class ClubFormScreen extends StatefulWidget {
   final String? initialName;
@@ -27,10 +28,10 @@ class ClubFormScreen extends StatefulWidget {
   final String? initialConditionName;
   final int initialInfoCount;
   final List<Map<String, dynamic>>? initialQuestions;
-  final String? initialConditionType;
   final int inspectorAndAdminCount;
   final bool isEditMode;
   final String? clubId; 
+  final String? approvementId; 
 
   const ClubFormScreen({
     super.key,
@@ -40,10 +41,10 @@ class ClubFormScreen extends StatefulWidget {
     this.initialConditionName,
     this.initialInfoCount = 1,
     this.initialQuestions,
-    this.initialConditionType,
     this.inspectorAndAdminCount = 1,
     this.isEditMode = false,
     this.clubId,
+    this.approvementId,
   });
 
   @override
@@ -58,7 +59,6 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
   late int infoCount;
   List<Map<String, dynamic>>? questions;
   final ClubApiService clubApiService = ClubApiService();
-  late String? conditionType;
 
   @override
   void initState() {
@@ -67,7 +67,6 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
     descriptionController = TextEditingController(text: widget.initialDescription ?? '');
     isConditionAdded = widget.initialIsConditionAdded;
     conditionName = widget.initialConditionName ?? '';
-    conditionType =  widget.initialConditionType ?? '';
     infoCount = widget.initialInfoCount;
     questions = widget.initialQuestions;
   }
@@ -126,21 +125,24 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
                   }
 
                   try {
-
                     Map<String, dynamic>? result;
 
                     if (widget.isEditMode && widget.clubId != null) {
-                      // result = await updateClub(
-                      //   clubId: widget.clubId!,
-                      //   name: name,
-                      //   description: description.isEmpty ? null : description,
-                      //   apiService: clubApiService,
-                      // );
-
-                      // await updateClubApprovement(
-
-                      if (handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка при обновлении группы')) return;
-                    
+                      await ApprovementUpdater.handleConditionUpdate(
+                        context: context,
+                        apiService: clubApiService,
+                        clubId: widget.clubId!,
+                        initialIsConditionAdded: widget.initialIsConditionAdded,
+                        isConditionAdded: isConditionAdded,
+                        initialConditionName: widget.initialConditionName,
+                        conditionName: conditionName,
+                        initialInfoCount: widget.initialInfoCount,
+                        infoCount: infoCount,
+                        initialQuestions: widget.initialQuestions,
+                        questions: questions,
+                        approvementId: widget.approvementId,
+                      );
+                      
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           backgroundColor: context.colors.main_50,
@@ -180,6 +182,7 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
                     }
                     Navigator.pop(context, true);
                   } catch (e) {
+                    print(e);
                     showErrorSnackbar(context, 'Произошла ошибка');
                   }
                 }
