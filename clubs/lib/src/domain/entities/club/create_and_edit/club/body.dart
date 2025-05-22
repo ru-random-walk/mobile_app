@@ -58,6 +58,14 @@ class ClubFormBody extends StatelessWidget {
           SizedBox(height: 16.toFigmaSize),
           Center(
             child: CustomButton(
+              leftIcon: Padding(
+                padding: EdgeInsets.only(right: 8.toFigmaSize),
+                child: SvgPicture.asset(
+                  'packages/clubs/assets/icons/image.svg',
+                  width: 24.toFigmaSize,
+                  height: 24.toFigmaSize,
+                ),
+              ),
               text: 'Добавить фото',
               onPressed: onChooseImage,
               type: ButtonType.secondary,

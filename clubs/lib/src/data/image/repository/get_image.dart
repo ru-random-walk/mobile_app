@@ -25,7 +25,7 @@ class ImageRepository  {
       }
       final imageSize = await image.length();
       if (imageSize > localImageMaxSize) {
-        return Left(BaseError('Image is too big', StackTrace.current));
+        return Left(TooBigImageError());
       } else if (imageSize > serverImageMaxSize) {
         final ratio = (imageSize / serverImageMaxSize).ceilToDouble();
         final compressedImage = await _compressor.testComporessList(

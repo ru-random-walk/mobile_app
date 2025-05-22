@@ -30,7 +30,7 @@ class ClubDetailPhotoWidget extends StatelessWidget {
       dataBuilder: (bytes) => _wrap(
         child: Image.memory(
           bytes,
-          fit: BoxFit.contain,
+          fit: BoxFit.cover,
         ),
       ),
     );

@@ -100,7 +100,20 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
 
   Future<void> _pickImage() async {
     final res = await _imagePicker.getImage();
-    res.fold((err) {}, (imageBytes) {
+    res.fold((err) {
+      String errorMessage;
+      if (err is TooBigImageError) {
+        errorMessage = 'Размер файла не должен превышать 5МБ';
+      } else {
+        errorMessage = 'Что-то пошло не так';
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage),
+        ),
+      );
+    }, (imageBytes) {
       setState(() {
         this.imageBytes = imageBytes;
       });
