@@ -35,7 +35,7 @@ class ClubModel {
         (json['club']['members'] as List).map((m) => m['id']),
       ).length,
       userRole: json['memberRole'] ?? 'NOT_MEMBER',
-      photoVersion: json['photoVersion'] ?? 0,
+      photoVersion: json['club']['photoVersion'] ?? 0,
     );
   }
 }
