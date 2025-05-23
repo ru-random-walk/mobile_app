@@ -3,6 +3,8 @@ part of 'available_time_bloc.dart';
 @immutable
 sealed class AvailableTimeState {}
 
+// final class AvailableTime 
+
 final class AvailableTimeCreatingLoading extends AvailableTimeState {}
 
 final class AvailableTimeCreatingSuccess extends AvailableTimeState {}

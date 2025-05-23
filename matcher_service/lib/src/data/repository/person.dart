@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:clubs/clubs.dart';
+import 'package:clubs/src/domain/entities/club/short.dart';
 import 'package:core/core.dart';
 import 'package:matcher_service/src/data/data_source/matcher.dart';
 import 'package:matcher_service/src/data/mapper/person/schedule.dart';
@@ -27,6 +29,23 @@ class PersonRepository implements PersonRepositoryI {
       _controller.add(Right(entities));
     } catch (e, s) {
       _controller.add(Left(BaseError(e.toString(), s)));
+    }
+  }
+
+  @override
+  Future<Either<BaseError, List<ShortClubEntity>>> getCurrentUserClubs(
+      String userId) async {
+    try {
+      final res = await getUserClubs(
+        userId: userId,
+        apiService: ClubApiService(),
+      );
+      final clubsMapsList = res?['data']?['getUserClubsWithRole'] ?? [];
+      return Right(
+        clubsMapsList.map((e) => ShortClubEntity()).toList(),
+      );
+    } catch (e, s) {
+      return Left(BaseError(e.toString(), s));
     }
   }
 }
