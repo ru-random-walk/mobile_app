@@ -1,9 +1,9 @@
 import 'dart:typed_data';
 
 import 'package:clubs/src/data/db/data_source/club_photo.dart';
+import 'package:clubs/src/data/image/repository/cache.dart';
 import 'package:clubs/src/data/image/repository/get_image.dart';
 import 'package:clubs/src/data/image/repository/sender.dart';
-import 'package:clubs/src/domain/usecase/update_club_photo.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:ui_components/ui_components.dart';
@@ -68,17 +68,17 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
   List<Map<String, dynamic>>? questions;
   final ClubApiService clubApiService = ClubApiService();
   final _imagePicker = ImageRepository();
-  late final SetClubPhotoWhenCreatingUseCase _imageSetter;
+  late final SetPhotoForObjectWithId _imageSetter;
 
   @override
   void initState() {
     super.initState();
-    _imageSetter = SetClubPhotoWhenCreatingUseCase(
-      sender: ImageClubSenderRepostory(),
+    _imageSetter = SetPhotoForObjectWithId(
+      sender: RemoteImageClubRepostory(),
       dbInfo: ClubPhotoDatabaseInfoDataSource(
         context.read(),
       ),
-      cache: CacheImagesDataSource(),
+      cache: CacheClubImageRepository(),
     );
     nameController = TextEditingController(text: widget.initialName ?? '');
     descriptionController =
@@ -239,9 +239,9 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
                         if (imageBytes != null) {
                           try {
                             await _imageSetter(
-                              SetClubPhotoWhenCreatingArgs(
+                              SetObjectPhotoArgs(
                                 imageBytes: imageBytes!,
-                                clubId: clubId!,
+                                objectId: clubId!,
                               ),
                             );
                           } catch (e) {

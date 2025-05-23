@@ -20,4 +20,11 @@ export 'src/data/remote/data_source/geocoder.dart';
 export 'src/data/remote/models/query.dart';
 export 'src/data/local/cache/images.dart';
 export 'src/data/local/db/database.dart';
-
+export 'src/domain/enitites/image_info.dart';
+export 'src/domain/enitites/remote_image_info.dart';
+export 'src/domain/repository/cache_image.dart';
+export 'src/domain/repository/image_info.dart';
+export 'src/domain/repository/image_sender.dart';
+export 'src/domain/usecase/get_photo_for.dart';
+export 'src/domain/usecase/update_photo_for.dart';
+export 'src/widgets/cached_image/widget.dart';
