@@ -9,12 +9,15 @@ Future<Map<String, dynamic>?> searchClubs({
   const query = '''
     query searchClubs(\$query: String!, \$pagination: PaginationInput) {
       searchClubs(query: \$query, pagination: \$pagination) {
-        id
-        name
-        members{
+        club {
           id
+          name
+          members{
+            id
+          }
+          photoVersion
         }
-        photoVersion
+        memberRole 
       }
     }
   ''';
