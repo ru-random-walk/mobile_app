@@ -49,7 +49,7 @@ class ClubItemTile extends StatelessWidget {
           if (result == true) {
             context.read<ClubsListBloc>().add(LoadClubsEvent());
           }
-        } else if (role == 'MEMBER') {
+        } else if (role == 'MEMBER' || role == 'USER') {
           Navigator.push(
             context,
             MaterialPageRoute(

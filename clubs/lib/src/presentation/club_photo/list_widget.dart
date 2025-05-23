@@ -19,15 +19,6 @@ class ClubPhotoListWidget extends StatelessWidget {
     return ClubPhotoWidget(
       clubId: clubId,
       photoVersion: photoVersion,
-      loadingBuilder: () => _buildPlaceholder(
-        const CircularProgressIndicator.adaptive(),
-      ),
-      errorBuilder: () => _buildPlaceholder(
-        const Icon(
-          Icons.error_outline,
-          color: Colors.red,
-        ),
-      ),
       emptyBuilder: () => _buildPlaceholder(
         FittedBox(
           child: Text(
@@ -50,6 +41,7 @@ class ClubPhotoListWidget extends StatelessWidget {
           ),
         ),
       ),
+      size: photoSize * 2,
     );
   }
 

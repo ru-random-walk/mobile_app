@@ -29,13 +29,13 @@ class ClubModel {
 
   factory ClubModel.fromSearchResult(dynamic json) {
     return ClubModel(
-      id: json['id'],
-      name: json['name'],
+      id: json['club']['id'],
+      name: json['club']['name'],
       membersCount: List<String>.from(
-        (json['members'] as List).map((m) => m['id']),
+        (json['club']['members'] as List).map((m) => m['id']),
       ).length,
-      userRole: 'NOT_MEMBER',
-      photoVersion: json['photoVersion'] ?? 0,
+      userRole: json['memberRole'] ?? 'NOT_MEMBER',
+      photoVersion: json['club']['photoVersion'] ?? 0,
     );
   }
 }
