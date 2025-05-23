@@ -7,5 +7,6 @@ extension DetailedUserMapper on DetailedUserModel {
         email: email,
         avatar: avatar,
         fullName: fullName,
+        description: description,
       );
 }

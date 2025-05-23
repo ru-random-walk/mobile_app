@@ -6,7 +6,7 @@ part 'user.g.dart';
 class UserModel {
   final String id;
   final String fullName;
-  final String avatar;
+  final String? avatar;
 
   UserModel({
     required this.id,

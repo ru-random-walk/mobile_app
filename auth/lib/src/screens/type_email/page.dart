@@ -33,7 +33,7 @@ class _EmailInputPageState extends State<EmailInputPage> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is SendOTPSuccess) {
-          Navigator.of(context).push(
+          Navigator.of(context).pushReplacement(
             MaterialPageRoute(
               builder: (_) => BlocProvider.value(
                 value: context.read<AuthBloc>(),

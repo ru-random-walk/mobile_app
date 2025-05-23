@@ -41,6 +41,12 @@ class _EmailOTPInputPageState extends State<EmailOTPInputPage> {
   void tryToAuth(String otp) {
     log('Try to auth with $otp');
     final bloc = context.read<AuthBloc>();
+    bloc.add(
+      LoginWithEmailOtp(
+        email: widget.email,
+        otp: otp,
+      ),
+    );
   }
 
   @override
@@ -128,7 +134,9 @@ class _EmailOTPInputPageState extends State<EmailOTPInputPage> {
                             horizontal: 16.toFigmaSize,
                           ),
                           onPressed: () {
+                            final bloc = context.read<AuthBloc>();
                             setTimerToResend();
+                            bloc.add(SendEmailOtp(widget.email));
                           },
                         );
                         final timer = value > 0
