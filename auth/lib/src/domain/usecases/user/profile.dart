@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:auth/src/data/data_source/user.dart';
+import 'package:auth/src/data/data_source/remote/user.dart';
 import 'package:auth/src/data/repositories/user.dart';
 import 'package:auth/src/domain/entities/user/detailed.dart';
 import 'package:core/core.dart';

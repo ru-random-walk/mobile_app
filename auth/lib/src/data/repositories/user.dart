@@ -1,4 +1,6 @@
-import 'package:auth/src/data/data_source/user.dart';
+import 'dart:typed_data';
+
+import 'package:auth/src/data/data_source/remote/user.dart';
 import 'package:auth/src/data/mappers/detailed_user.dart';
 import 'package:auth/src/data/mappers/pageable_users.dart';
 import 'package:auth/src/domain/entities/user/detailed.dart';
@@ -7,7 +9,7 @@ import 'package:auth/src/domain/repositories/user.dart';
 import 'package:core/core.dart';
 import 'package:utils/utils.dart';
 
-class UserRepository implements UserRepositoryI {
+class UserRepository implements UserRepositoryI, RemoteImageInfoRepository {
   final UsersDataSource _usersDataSource;
 
   UserRepository(this._usersDataSource);
@@ -32,5 +34,26 @@ class UserRepository implements UserRepositoryI {
     } catch (e, s) {
       return Left(BaseError(e.toString(), s));
     }
+  }
+
+  @override
+  Future<Either<BaseError, String>> getObjectPhotoUrl(String objectId) async {
+    try {
+      final res = await _usersDataSource.getUserAvatar(objectId);
+      final url = res.avatarUrl;
+      if (url == null) return Left(BaseError('Avatar not found', null));
+      return Right(url);
+    } catch (e, s) {
+      return Left(BaseError(e.toString(), s));
+    }
+  }
+
+  @override
+  Future<Either<BaseError, RemoteImageInfo>> uploadPhotoForObject({
+    required String objectId,
+    required Uint8List imageBytes,
+  }) {
+    // TODO: implement uploadPhotoForObject
+    throw UnimplementedError();
   }
 }

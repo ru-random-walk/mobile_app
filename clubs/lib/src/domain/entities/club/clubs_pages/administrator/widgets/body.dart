@@ -73,7 +73,8 @@ class _ClubAdminBodyState extends State<ClubAdminBody> {
           return MemberTile(
             name: user.fullName,
             role: role,
-            avatarPath: user.avatar,
+            userId: user.id,
+            photoVersion: user.photoVersion,
             onMenuPressed: user.id == widget.currentUserId
                 ? null
                 : (Offset position) {

@@ -36,12 +36,10 @@ class _ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
             SizedBox(
               width: 16.toFigmaSize,
             ),
-            UserAvatarWidget(
-              avatar: Image.network(
-                companion.avatar,
-                fit: BoxFit.cover,
-              ),
+            AvatarUserWidget(
+              userId: companion.id,
               size: 52.toFigmaSize,
+              photoVersion: companion.photoVersion,
             ),
             SizedBox(
               width: 20.toFigmaSize,

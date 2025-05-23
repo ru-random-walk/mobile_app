@@ -9,5 +9,4 @@ export 'src/logo/logo_with_title.dart';
 export 'src/dialog/type.dart';
 export 'src/dialog/widget.dart';
 export 'src/input/widget.dart';
-export 'src/dialog/avatar.dart';
 export 'src/input/text_field.dart';

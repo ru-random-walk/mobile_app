@@ -4,6 +4,7 @@ import 'package:core/core.dart';
 import 'package:core/src/widgets/cached_image/logic/cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ui_utils/ui_utils.dart';
 
 class CachedImageWidget extends StatelessWidget {
   final String objectId;
@@ -11,20 +12,16 @@ class CachedImageWidget extends StatelessWidget {
 
   final GetPhotoForObjectWithId getPhotoUseCase;
 
-  final Widget Function() loadingBuilder;
-  final Widget Function() errorBuilder;
   final Widget Function(Uint8List bytes) dataBuilder;
-  final Widget Function() emptyBuilder;
+  final Widget Function()? emptyBuilder;
 
   const CachedImageWidget({
     super.key,
     required this.objectId,
     required this.photoVersion,
-    required this.loadingBuilder,
-    required this.errorBuilder,
     required this.dataBuilder,
-    required this.emptyBuilder,
     required this.getPhotoUseCase,
+    this.emptyBuilder,
   });
 
   @override
@@ -41,10 +38,25 @@ class CachedImageWidget extends StatelessWidget {
           return BlocBuilder<CachedImageCubit, CachedImageState>(
             builder: (context, state) {
               return switch (state) {
-                ClubPhotoLoading _ => loadingBuilder(),
-                ClubPhotoError _ => errorBuilder(),
+                ClubPhotoLoading _ => const Center(
+                    child: CircularProgressIndicator.adaptive(),
+                  ),
+                ClubPhotoError _ => const Center(
+                    child: Icon(
+                      Icons.error_outline,
+                      color: Colors.red,
+                    ),
+                  ),
                 final ClubPhotoData data => dataBuilder(data.file),
-                ClubPhotoEmpty _ => emptyBuilder(),
+                ClubPhotoEmpty _ => emptyBuilder?.call() ??
+                    Center(
+                      child: FittedBox(
+                        child: Text(
+                          'Нет фото',
+                          style: context.textTheme.captionMedium,
+                        ),
+                      ),
+                    ),
               };
             },
           );

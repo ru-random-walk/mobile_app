@@ -12,7 +12,7 @@ import 'package:clubs/src/domain/entities/club/clubs_pages/common/request_list/r
 part 'request_widget.dart';
 part 'request_list_empty.dart';
 
-class RequestListScreen extends StatefulWidget  {
+class RequestListScreen extends StatefulWidget {
   final String approverId;
   final String clubId;
   final ClubApiService apiService;
@@ -62,17 +62,21 @@ class _RequestListScreenState extends State<RequestListScreen> {
         size: size,
         apiService: widget.apiService,
       );
-      if (handleGraphQLErrors(context, response, fallbackMessage: 'Ошибка при загрузке списка заявок на вступление')) return;
+      if (handleGraphQLErrors(context, response,
+          fallbackMessage: 'Ошибка при загрузке списка заявок на вступление'))
+        return;
 
-      final items = response?['data']?['getApproverWaitingConfirmations'] as List<dynamic>?;
-      if (items == null || items.isEmpty){
-          hasMore = false;
+      final items = response?['data']?['getApproverWaitingConfirmations']
+          as List<dynamic>?;
+      if (items == null || items.isEmpty) {
+        hasMore = false;
       } else {
-        final filtered = items.where((e) =>
+        final filtered = items
+            .where((e) =>
                 e['answer']?['approvement']?['club']?['id'] == widget.clubId)
             .toList();
-          
-        if (filtered.isNotEmpty){
+
+        if (filtered.isNotEmpty) {
           final ids = filtered.map((e) => e['userId'] as String).toList();
           final result = await UsersDataSource().getUsers(
             PageQueryModel(page: 0, size: ids.length),
@@ -83,9 +87,9 @@ class _RequestListScreenState extends State<RequestListScreen> {
           };
 
           final newRequests = filtered.map((e) => RequestUser(
-            user: usersMap[e['userId']]!,
-            confirmationId: e['id'],
-          ));
+                user: usersMap[e['userId']]!,
+                confirmationId: e['id'],
+              ));
 
           setState(() {
             requestUsers.addAll(newRequests);
@@ -116,45 +120,45 @@ class _RequestListScreenState extends State<RequestListScreen> {
         child: Scaffold(
           appBar: const ClubPageAppBar(
             title: 'Запросы на вступление',
-            ),
-          body: RefreshIndicator(
-            onRefresh: () => _loadUsers(isRefresh: true),
-            child: NotificationListener<ScrollNotification>(
-              onNotification: (ScrollNotification scrollInfo) {
-                if (!isLoadingMore &&
-                    scrollInfo.metrics.pixels >=
-                        scrollInfo.metrics.maxScrollExtent - 200) {
-                  _loadUsers();
-                }
-                return false;
-              },
-              child: isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : requestUsers.isEmpty
-                    ? const RequestListEmpty()
-                    : ListView.separated(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 20.toFigmaSize,
-                          vertical: 4.toFigmaSize,
-                        ),
-                        itemCount: requestUsers.length + (hasMore ? 1 : 0),
-                        itemBuilder: (context, index) {
-                          final requestUser = requestUsers[index];
-                          return RequestWidget(
-                            name: requestUser.user.fullName,
-                            avatarPath: requestUser.user.avatar,
-                            confirmationId: requestUser.confirmationId,
-                            apiService: widget.apiService,
-                          );
-                        },
-                        separatorBuilder: (context, index) => Divider(
-                          height: 4.toFigmaSize,
-                          thickness: 1.toFigmaSize,
-                          color: context.colors.base_20,
-                        ),
-                      ),
-            )
           ),
+          body: RefreshIndicator(
+              onRefresh: () => _loadUsers(isRefresh: true),
+              child: NotificationListener<ScrollNotification>(
+                onNotification: (ScrollNotification scrollInfo) {
+                  if (!isLoadingMore &&
+                      scrollInfo.metrics.pixels >=
+                          scrollInfo.metrics.maxScrollExtent - 200) {
+                    _loadUsers();
+                  }
+                  return false;
+                },
+                child: isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : requestUsers.isEmpty
+                        ? const RequestListEmpty()
+                        : ListView.separated(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 20.toFigmaSize,
+                              vertical: 4.toFigmaSize,
+                            ),
+                            itemCount: requestUsers.length + (hasMore ? 1 : 0),
+                            itemBuilder: (context, index) {
+                              final requestUser = requestUsers[index];
+                              return RequestWidget(
+                                name: requestUser.user.fullName,
+                                confirmationId: requestUser.confirmationId,
+                                apiService: widget.apiService,
+                                userId: requestUser.user.id,
+                                photoVersion: requestUser.user.photoVersion,
+                              );
+                            },
+                            separatorBuilder: (context, index) => Divider(
+                              height: 4.toFigmaSize,
+                              thickness: 1.toFigmaSize,
+                              color: context.colors.base_20,
+                            ),
+                          ),
+              )),
         ),
       ),
     );

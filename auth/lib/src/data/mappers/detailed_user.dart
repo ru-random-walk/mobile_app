@@ -8,5 +8,6 @@ extension DetailedUserMapper on DetailedUserModel {
         avatar: avatar,
         fullName: fullName,
         description: description,
+        photoVersion: 1,
       );
 }

@@ -14,6 +14,8 @@ dependencies:
   ui_theming:
     path: ../ui_theming
   flutter_svg: ^2.0.10+1
+  auth:
+    path: ../../auth
 
 dev_dependencies:
   flutter_test:
