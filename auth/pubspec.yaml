@@ -29,6 +29,10 @@ dependencies:
   flutter_bloc: ^8.1.6
   retrofit: ^4.4.0
   dio: ^5.7.0
+  drift: ^2.26.1
+  drift_flutter: ^0.2.4
+  provider: ^6.1.5
+
 
 dev_dependencies:
   flutter_test:

@@ -53,10 +53,7 @@ class ClubPhotoWidget extends StatelessWidget {
         return CachedImageWidget(
           objectId: clubId,
           photoVersion: photoVersion,
-          loadingBuilder: loadingBuilder,
-          errorBuilder: errorBuilder,
           dataBuilder: dataBuilder,
-          emptyBuilder: emptyBuilder,
           getPhotoUseCase: context.read(),
         );
       }),

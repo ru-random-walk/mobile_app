@@ -111,6 +111,9 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
     final res = await _imagePicker.getImage();
     res.fold((err) {
       String errorMessage;
+      if (err is ImageNotPickedError) {
+        return;
+      }
       if (err is TooBigImageError) {
         errorMessage = 'Размер файла не должен превышать 5МБ';
       } else {

@@ -5,5 +5,6 @@ extension UserMapper on UserModel {
         id: id,
         fullName: fullName,
         avatar: avatar,
+        photoVersion: 1,
       );
 }
