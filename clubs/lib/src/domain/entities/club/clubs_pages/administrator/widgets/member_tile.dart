@@ -2,26 +2,19 @@ part of '../admin_page.dart';
 
 class MemberTile extends StatelessWidget {
   final String name;
+  final String userId;
+  final int photoVersion;
   final String role;
-  final String avatarPath;
   final void Function(Offset position)? onMenuPressed;
 
   const MemberTile({
     super.key,
     required this.name,
     required this.role,
-    required this.avatarPath,
     this.onMenuPressed,
+    required this.userId,
+    required this.photoVersion,
   });
-
-  Widget _defaultAvatar() {
-    return Image.asset(
-      'packages/clubs/assets/images/avatar.png',
-      width: 48.toFigmaSize,
-      height: 48.toFigmaSize,
-      fit: BoxFit.cover,
-    );
-  }
 
   String getRoleLabel(String role) {
     switch (role) {
@@ -46,18 +39,10 @@ class MemberTile extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              ClipOval(
-                child: avatarPath.isNotEmpty
-                  ? Image.network(
-                      avatarPath,
-                      width: 48.toFigmaSize,
-                      height: 48.toFigmaSize,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return _defaultAvatar(); 
-                      },
-                    )
-                  : _defaultAvatar(),
+              AvatarUserWidget(
+                userId: userId,
+                photoVersion: photoVersion,
+                size: 48.toFigmaSize,
               ),
               SizedBox(width: 16.toFigmaSize),
               Expanded(
@@ -79,27 +64,30 @@ class MemberTile extends StatelessWidget {
                   ],
                 ),
               ),
-              if (onMenuPressed != null)...[
+              if (onMenuPressed != null) ...[
                 IconButton(
                   icon: Icon(
                     Icons.more_vert,
-                    size: 28.toFigmaSize, 
+                    size: 28.toFigmaSize,
                     color: context.colors.base_60,
                   ),
                   onPressed: () {
                     final renderBox = context.findRenderObject();
                     final overlay = Overlay.of(context);
 
-                    if (renderBox is RenderBox && overlay.context.findRenderObject() is RenderBox) {
-                      final overlayBox = overlay.context.findRenderObject() as RenderBox;
-                      final position = renderBox.localToGlobal(Offset.zero, ancestor: overlayBox);
+                    if (renderBox is RenderBox &&
+                        overlay.context.findRenderObject() is RenderBox) {
+                      final overlayBox =
+                          overlay.context.findRenderObject() as RenderBox;
+                      final position = renderBox.localToGlobal(Offset.zero,
+                          ancestor: overlayBox);
                       onMenuPressed?.call(position);
                     } else {
                       debugPrint('RenderBox not ready yet');
                     }
                   },
-                  constraints: const BoxConstraints(), 
-                  padding: EdgeInsets.zero, 
+                  constraints: const BoxConstraints(),
+                  padding: EdgeInsets.zero,
                   visualDensity: VisualDensity.compact,
                 ),
               ],

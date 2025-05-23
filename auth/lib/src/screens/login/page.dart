@@ -1,4 +1,4 @@
-import 'package:auth/src/data/data_source/token.dart';
+import 'package:auth/src/data/data_source/remote/token.dart';
 import 'package:auth/src/data/repositories/auth.dart';
 import 'package:auth/src/data/repositories/google_sign_in.dart';
 import 'package:auth/src/domain/usecases/auth.dart';

@@ -1,18 +1,19 @@
+import 'package:auth/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ui_utils/ui_utils.dart';
 
-import 'avatar.dart';
 import 'dialog_text.dart';
 import 'status.dart';
 import 'type.dart';
 
 class DialogWidget extends StatelessWidget {
+  final String userId;
+  final int photoVersion;
   final bool isInvitation;
   final DialogType type;
   final String? text;
   final DateTime? date;
   final String name;
-  final Widget avatar;
 
   const DialogWidget({
     super.key,
@@ -20,8 +21,11 @@ class DialogWidget extends StatelessWidget {
     required this.type,
     this.text,
     Widget? avatar,
-    required this.name, this.date,
-  }) : avatar = avatar ?? const SizedBox.shrink();
+    required this.name,
+    this.date,
+    required this.userId,
+    required this.photoVersion,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +44,10 @@ class DialogWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(width: 4.toFigmaSize),
-            UserAvatarWidget(
-              avatar: avatar,
+            AvatarUserWidget(
+              userId: userId,
               size: 60.toFigmaSize,
+              photoVersion: photoVersion,
             ),
             SizedBox(width: 16.toFigmaSize),
             Expanded(

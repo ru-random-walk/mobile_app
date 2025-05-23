@@ -7,5 +7,6 @@ class DetailedUserEntity extends UserEntity {
     required super.fullName,
     required super.avatar,
     required this.email,
+    required super.photoVersion,
   });
 }

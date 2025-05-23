@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:auth/auth.dart';
-import 'package:auth/src/data/data_source/token.dart';
+import 'package:auth/src/data/data_source/remote/token.dart';
 import 'package:auth/src/data/models/token/request/base.dart';
 import 'package:auth/src/domain/entities/token/exchange/request.dart';
 import 'package:auth/src/domain/repositories/auth.dart';

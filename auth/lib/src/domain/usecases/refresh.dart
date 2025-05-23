@@ -1,4 +1,4 @@
-import 'package:auth/src/data/data_source/token.dart';
+import 'package:auth/src/data/data_source/remote/token.dart';
 import 'package:auth/src/data/repositories/auth.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';

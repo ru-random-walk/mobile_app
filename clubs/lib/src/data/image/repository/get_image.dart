@@ -13,7 +13,11 @@ class TooBigImageError extends BaseError {
   TooBigImageError() : super('Image is too big', StackTrace.current);
 }
 
-class ImageRepository  {
+class ImageNotPickedError extends BaseError {
+  ImageNotPickedError() : super('No image picked', StackTrace.current);
+}
+
+class ImageRepository {
   final _compressor = ImageCompressor();
   final _picker = ImagePickerDataSource();
 
@@ -21,7 +25,7 @@ class ImageRepository  {
     try {
       final image = await _picker.pickImage();
       if (image == null) {
-        return Left(TooBigImageError());
+        return Left(ImageNotPickedError());
       }
       final imageSize = await image.length();
       if (imageSize > localImageMaxSize) {

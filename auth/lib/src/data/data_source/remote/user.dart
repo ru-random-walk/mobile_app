@@ -1,3 +1,4 @@
+import 'package:auth/src/data/models/user/avatar_info.dart';
 import 'package:auth/src/data/models/user/detailed_user.dart';
 import 'package:auth/src/data/models/user/page_user.dart';
 import 'package:core/core.dart';
@@ -19,5 +20,10 @@ abstract class UsersDataSource {
   Future<PageableUsersModel> getUsers(
     @Queries() PageQueryModel queryModel,
     @Query('ids') List<String> ids,
+  );
+
+  @GET('$_prefix/userinfo/{userId}/avatar')
+  Future<UserAvatarInfoModel> getUserAvatar(
+    @Path() String userId,
   );
 }
