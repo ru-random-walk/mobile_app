@@ -17,10 +17,6 @@ class ClubDetailPhotoWidget extends StatelessWidget {
     return ClubPhotoWidget(
       clubId: clubId,
       photoVersion: photoVersion,
-      loadingBuilder: () => _wrap(
-        child: const Center(child: CircularProgressIndicator.adaptive()),
-      ),
-      errorBuilder: () => _wrap(child: const Center(child: Icon(Icons.error))),
       emptyBuilder: () => _wrap(
           child: Center(
               child: Text(
@@ -33,6 +29,7 @@ class ClubDetailPhotoWidget extends StatelessWidget {
           fit: BoxFit.cover,
         ),
       ),
+      size: 240.toFigmaSize,
     );
   }
 
