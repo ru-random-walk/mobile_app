@@ -1,12 +1,10 @@
 import 'dart:typed_data';
 
-import 'package:clubs/src/data/club_photo/club_photo.dart';
 import 'package:clubs/src/data/db/data_source/club_photo.dart';
-import 'package:clubs/src/domain/usecase/get_club_photo.dart';
-import 'package:clubs/src/presentation/club_photo/logic/cubit/club_photo_cubit.dart';
+import 'package:clubs/src/data/image/repository/cache.dart';
+import 'package:clubs/src/data/image/repository/sender.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 class ClubPhotoWidget extends StatelessWidget {
@@ -33,10 +31,10 @@ class ClubPhotoWidget extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider(
-          create: (context) => ClubPhotoDataSource(),
+          create: (context) => RemoteImageClubRepostory(),
         ),
         Provider(
-          create: (context) => CacheImagesDataSource(),
+          create: (context) => CacheClubImageRepository(),
         ),
         Provider(
           create: (context) => ClubPhotoDatabaseInfoDataSource(
@@ -44,35 +42,24 @@ class ClubPhotoWidget extends StatelessWidget {
           ),
         ),
         Provider(
-          create: (context) => GetClubPhotoUseCase(
-            clubPhotoDataSource: context.read(),
-            clubPhotoDatabaseInfoDataSource: context.read(),
-            cacheImagesDataSource: context.read(),
+          create: (context) => GetPhotoForObjectWithId(
+            getImageRepository: context.read<RemoteImageClubRepostory>(),
+            dbInfo: context.read<ClubPhotoDatabaseInfoDataSource>(),
+            cache: context.read<CacheClubImageRepository>(),
           ),
         ),
       ],
-      child: BlocProvider(
-        key: ValueKey(clubId),
-        create: (context) => ClubPhotoCubit(
-          clubId: clubId,
+      child: Builder(builder: (context) {
+        return CachedImageWidget(
+          objectId: clubId,
           photoVersion: photoVersion,
-          getClubPhoto: context.read(),
-        ),
-        child: Builder(
-          builder: (context) {
-            return BlocBuilder<ClubPhotoCubit, ClubPhotoState>(
-              builder: (context, state) {
-                return switch (state) {
-                  ClubPhotoLoading _ => loadingBuilder(),
-                  ClubPhotoError _ => errorBuilder(),
-                  final ClubPhotoData data => dataBuilder(data.file),
-                  ClubPhotoEmpty _ => emptyBuilder(),
-                };
-              },
-            );
-          },
-        ),
-      ),
+          loadingBuilder: loadingBuilder,
+          errorBuilder: errorBuilder,
+          dataBuilder: dataBuilder,
+          emptyBuilder: emptyBuilder,
+          getPhotoUseCase: context.read(),
+        );
+      }),
     );
   }
 }

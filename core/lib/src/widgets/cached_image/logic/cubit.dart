@@ -1,21 +1,21 @@
 import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
-import 'package:clubs/src/domain/usecase/get_club_photo.dart';
+import 'package:core/core.dart';
 import 'package:meta/meta.dart';
 
-part 'club_photo_state.dart';
+part 'state.dart';
 
-class ClubPhotoCubit extends Cubit<ClubPhotoState> {
-  final String clubId;
+class CachedImageCubit extends Cubit<CachedImageState> {
+  final String objectId;
   final int photoVersion;
 
-  final GetClubPhotoUseCase _getClubPhoto;
+  final GetPhotoForObjectWithId _getClubPhoto;
 
-  ClubPhotoCubit({
-    required this.clubId,
+  CachedImageCubit({
+    required this.objectId,
     required this.photoVersion,
-    required GetClubPhotoUseCase getClubPhoto,
+    required GetPhotoForObjectWithId getClubPhoto,
   })  : _getClubPhoto = getClubPhoto,
         super(ClubPhotoLoading()) {
     _loadPhoto();
@@ -23,8 +23,8 @@ class ClubPhotoCubit extends Cubit<ClubPhotoState> {
 
   void _loadPhoto() async {
     final res = await _getClubPhoto(
-      GetClubPhotoArgs(
-        clubId: clubId,
+      GetObjectPhotoArgs(
+        objectId: objectId,
         photoVersion: photoVersion,
       ),
     );

@@ -1,22 +1,29 @@
 import 'package:core/core.dart';
 import 'package:drift/drift.dart';
 
-class ClubPhotoDatabaseInfoDataSource {
+class ClubPhotoDatabaseInfoDataSource implements LocalImageInfoRepository {
   final AppDatabase appDatabase;
 
   ClubPhotoDatabaseInfoDataSource(this.appDatabase);
 
-  Future<CachedClubsAvatarData?> getClubPhotoInfo(String clubId) async {
-    return (appDatabase.select(appDatabase.cachedClubsAvatar)
-          ..where((tbl) => tbl.clubId.equals(clubId)))
+  @override
+  Future<LocalImageInfo?> getImageInfo(String objectId) async {
+    final res = await (appDatabase.select(appDatabase.cachedClubsAvatar)
+          ..where((tbl) => tbl.clubId.equals(objectId)))
         .getSingleOrNull();
+    if (res == null) return null;
+    return LocalImageInfo(
+      objectId: objectId,
+      version: res.photoVersion,
+    );
   }
 
-  Future<void> addClubPhotoInfo(String clubId, int photoVersion) async {
+  @override
+  Future<void> saveImageInfo(LocalImageInfo imageInfo) async {
     await appDatabase.into(appDatabase.cachedClubsAvatar).insert(
         CachedClubsAvatarCompanion.insert(
-          photoVersion: photoVersion,
-          clubId: clubId,
+          photoVersion: imageInfo.version,
+          clubId: imageInfo.objectId,
         ),
         mode: InsertMode.insertOrReplace);
   }
