@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 
 import 'package:clubs/clubs.dart';
 import 'package:clubs/src/domain/entities/club/short.dart';
@@ -34,16 +35,27 @@ class PersonRepository implements PersonRepositoryI {
 
   @override
   Future<Either<BaseError, List<ShortClubEntity>>> getCurrentUserClubs(
-      String userId) async {
+    String userId,
+  ) async {
     try {
       final res = await getUserClubs(
         userId: userId,
         apiService: ClubApiService(),
       );
-      final clubsMapsList = res?['data']?['getUserClubsWithRole'] ?? [];
-      return Right(
-        clubsMapsList.map((e) => ShortClubEntity()).toList(),
-      );
+      final clubsMapsList = (res!['data']['getUserClubsWithRole'] as List)
+          .cast<Map<String, dynamic>>();
+      final clubs = clubsMapsList
+          .map(
+            (e) => ShortClubEntity(
+              id: e!['club']['id'] as String,
+              name: e['club']['name'] as String,
+            ),
+          )
+          .toList();
+      return Right(clubs);
+      // return Right(
+      //   clubsMapsList.map((e) => ShortClubEntity()).toList(),
+      // );
     } catch (e, s) {
       return Left(BaseError(e.toString(), s));
     }

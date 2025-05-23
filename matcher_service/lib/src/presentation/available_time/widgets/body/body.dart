@@ -19,6 +19,8 @@ class _AvailableTimeBodyWidgetState extends State<_AvailableTimeBodyWidget> {
 
   Geolocation? selectedGeolocation;
 
+  final selectedClubIds = ValueNotifier<List<ShortClubEntity>>([]);
+
   @override
   void initState() {
     super.initState();
@@ -53,25 +55,39 @@ class _AvailableTimeBodyWidgetState extends State<_AvailableTimeBodyWidget> {
             );
           case Idle():
           case AvailableTimeCreatingLoading _:
+          case AvailableTimeStateLoadingClubs():
         }
       },
-      child: Column(
-        children: [
-          Expanded(
-            child: Column(
-              children: [
-                _AvailableTimeDatePicker(),
-                spacer,
-                const _AvailableTimePicker(),
-                spacer,
-                _AvailableTimeGeolocationPicker(),
-              ],
-            ),
-          ),
-          _AddAvailableTimeButton(
-            onTap: () => _addAvailableTime(context),
-          ),
-        ],
+      child: BlocBuilder<AvailableTimeBloc, AvailableTimeState>(
+        builder: (context, state) {
+          return switch (state) {
+            AvailableTimeStateLoadingClubs() => const Center(
+                child: CircularProgressIndicator.adaptive(),
+              ),
+            AvailableTimeStateClubsResult clubsResult => Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          _AvailableTimeDatePicker(),
+                          spacer,
+                          const _AvailableTimePicker(),
+                          spacer,
+                          const _AvailableTimeGeolocationPicker(),
+                          spacer,
+                          _AvailableTimeClubsPicker(clubsResult.clubs),
+                        ],
+                      ),
+                    ),
+                  ),
+                  _AddAvailableTimeButton(
+                    onTap: () => _addAvailableTime(context),
+                  ),
+                ],
+              ),
+          };
+        },
       ),
     );
   }

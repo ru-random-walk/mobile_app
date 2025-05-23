@@ -5,11 +5,8 @@ sealed class AvailableTimePageMode {
 }
 
 class AvailableTimePageModeAdd extends AvailableTimePageMode {
-  // final bool canUseClubsFiltering;
 
-  const AvailableTimePageModeAdd(
-    // {required this.canUseClubsFiltering,}
-    );
+  const AvailableTimePageModeAdd();
 }
 
 class AvailableTimePageModeUpdate extends AvailableTimePageMode {
