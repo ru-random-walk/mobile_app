@@ -13,6 +13,7 @@ class _EditUserInfoBodyWidget extends StatefulWidget {
 class _EditUserInfoBodyWidgetState extends State<_EditUserInfoBodyWidget> {
   final nameEditingController = TextEditingController();
   final aboutEditingController = TextEditingController();
+  Uint8List? newImage;
 
   @override
   void initState() {
@@ -56,5 +57,12 @@ class _EditUserInfoBodyWidgetState extends State<_EditUserInfoBodyWidget> {
         ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    nameEditingController.dispose();
+    aboutEditingController.dispose();
   }
 }

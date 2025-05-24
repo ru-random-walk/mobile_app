@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:auth/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ui_components/ui_components.dart';
