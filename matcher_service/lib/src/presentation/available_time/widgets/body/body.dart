@@ -19,7 +19,7 @@ class _AvailableTimeBodyWidgetState extends State<_AvailableTimeBodyWidget> {
 
   Geolocation? selectedGeolocation;
 
-  final selectedClubIds = ValueNotifier<List<ShortClubEntity>>([]);
+  final selectedClubs = ValueNotifier<List<ShortClubEntity>>([]);
 
   @override
   void initState() {
@@ -112,7 +112,7 @@ class _AvailableTimeBodyWidgetState extends State<_AvailableTimeBodyWidget> {
               timeStart: selectedTimeFrom!,
               timeEnd: selectedTimeUntil!,
               location: selectedGeolocation!,
-              clubs: [],
+              clubs: selectedClubs.value,
             ),
           ),
         );

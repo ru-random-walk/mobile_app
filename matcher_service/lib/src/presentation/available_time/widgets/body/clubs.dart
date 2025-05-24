@@ -17,7 +17,7 @@ class _AvailableTimeClubsPickerState extends State<_AvailableTimeClubsPicker> {
   Widget build(BuildContext context) {
     final parentState =
         context.findAncestorStateOfType<_AvailableTimeBodyWidgetState>();
-    final clubsListNotifier = parentState!.selectedClubIds;
+    final clubsListNotifier = parentState!.selectedClubs;
     return Visibility(
       visible: widget.clubs.isNotEmpty,
       child: Padding(
