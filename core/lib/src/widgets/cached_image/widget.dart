@@ -6,10 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui_utils/ui_utils.dart';
 
-class CachedImageWidget extends StatelessWidget {
-  final String objectId;
-  final int photoVersion;
-
+class CachedImageWidget<Arg extends GetObjectPhotoArgs>
+    extends StatelessWidget {
+  final Arg getPhotoArgs;
   final GetPhotoForObjectWithId getPhotoUseCase;
 
   final Widget Function(Uint8List bytes) dataBuilder;
@@ -17,8 +16,7 @@ class CachedImageWidget extends StatelessWidget {
 
   const CachedImageWidget({
     super.key,
-    required this.objectId,
-    required this.photoVersion,
+    required this.getPhotoArgs,
     required this.dataBuilder,
     required this.getPhotoUseCase,
     this.emptyBuilder,
@@ -27,15 +25,14 @@ class CachedImageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      key: ValueKey(objectId),
+      key: ValueKey(getPhotoArgs.objectId),
       create: (context) => CachedImageCubit(
-        objectId: objectId,
-        photoVersion: photoVersion,
+        getPhotoArg: getPhotoArgs,
         getClubPhoto: getPhotoUseCase,
       ),
       child: Builder(
         builder: (context) {
-          return BlocBuilder<CachedImageCubit, CachedImageState>(
+          return BlocBuilder<CachedImageCubit<Arg>, CachedImageState>(
             builder: (context, state) {
               return switch (state) {
                 ClubPhotoLoading _ => const Center(

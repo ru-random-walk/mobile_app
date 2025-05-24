@@ -2,18 +2,14 @@ part of 'request_list_screen.dart';
 
 class RequestWidget extends StatefulWidget {
   final String confirmationId;
-  final String name;
-  final String userId;
-  final int photoVersion;
+  final UserEntity user;
   final ClubApiService apiService;
 
   const RequestWidget({
     super.key,
     required this.confirmationId,
-    required this.name,
+    required this.user,
     required this.apiService,
-    required this.userId,
-    required this.photoVersion,
   });
 
   @override
@@ -30,8 +26,7 @@ class _RequestWidgetState extends State<RequestWidget> {
       child: Row(
         children: [
           AvatarUserWidget(
-            userId: widget.userId,
-            photoVersion: widget.photoVersion,
+            user: widget.user,
             size: 80.toFigmaSize,
           ),
           SizedBox(width: 16.toFigmaSize),
@@ -43,7 +38,7 @@ class _RequestWidgetState extends State<RequestWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.name,
+                      widget.user.fullName,
                       style: context.textTheme.bodyXLMedium.copyWith(
                         color: context.colors.base_90,
                       ),

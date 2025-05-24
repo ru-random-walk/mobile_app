@@ -53,8 +53,10 @@ class ClubPhotoWidget extends StatelessWidget {
           child: SizedBox.square(
             dimension: size,
             child: CachedImageWidget(
-              objectId: clubId,
-              photoVersion: photoVersion,
+              getPhotoArgs: GetObjectPhotoArgs(
+                objectId: clubId,
+                photoVersion: photoVersion,
+              ),
               dataBuilder: dataBuilder,
               getPhotoUseCase: context.read(),
               emptyBuilder: emptyBuilder,

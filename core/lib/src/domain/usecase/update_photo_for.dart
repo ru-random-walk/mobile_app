@@ -2,10 +2,6 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:core/core.dart';
-import 'package:core/src/domain/enitites/image_info.dart';
-import 'package:core/src/domain/repository/cache_image.dart';
-import 'package:core/src/domain/repository/image_info.dart';
-import 'package:core/src/domain/repository/image_sender.dart';
 import 'package:utils/utils.dart';
 
 class SetObjectPhotoArgs {

@@ -7,13 +7,11 @@ import 'status.dart';
 import 'type.dart';
 
 class DialogWidget extends StatelessWidget {
-  final String userId;
-  final int photoVersion;
+  final UserEntity user;
   final bool isInvitation;
   final DialogType type;
   final String? text;
   final DateTime? date;
-  final String name;
 
   const DialogWidget({
     super.key,
@@ -21,10 +19,8 @@ class DialogWidget extends StatelessWidget {
     required this.type,
     this.text,
     Widget? avatar,
-    required this.name,
     this.date,
-    required this.userId,
-    required this.photoVersion,
+    required this.user,
   });
 
   @override
@@ -45,15 +41,14 @@ class DialogWidget extends StatelessWidget {
           children: [
             SizedBox(width: 4.toFigmaSize),
             AvatarUserWidget(
-              userId: userId,
               size: 60.toFigmaSize,
-              photoVersion: photoVersion,
+              user: user,
             ),
             SizedBox(width: 16.toFigmaSize),
             Expanded(
               child: DialogTextColumnWigdet(
                 isInvitation: isInvitation,
-                name: name,
+                name: user.fullName,
                 text: text ?? '',
               ),
             ),

@@ -2,19 +2,18 @@ import 'package:auth/auth.dart';
 import 'package:auth/src/data/repositories/avatar_cache.dart';
 import 'package:auth/src/data/repositories/avatars_info.dart';
 import 'package:auth/src/data/repositories/user.dart';
+import 'package:auth/src/domain/usecases/user/get_avatar.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AvatarUserWidget extends StatelessWidget {
-  final String userId;
-  final int photoVersion;
+  final UserEntity user;
   final double size;
 
   const AvatarUserWidget({
     super.key,
-    required this.userId,
-    required this.photoVersion,
+    required this.user,
     required this.size,
   });
 
@@ -36,7 +35,7 @@ class AvatarUserWidget extends StatelessWidget {
           ),
         ),
         Provider(
-          create: (context) => GetPhotoForObjectWithId(
+          create: (context) => GetUserAvatarUseCase(
             getImageRepository: context.read<UserRepository>(),
             dbInfo: context.read<UserAvatarsDatabaseInfoRepository>(),
             cache: context.read<AvatarCacheRepository>(),
@@ -45,8 +44,7 @@ class AvatarUserWidget extends StatelessWidget {
       ],
       child: Builder(builder: (context) {
         return CachedImageWidget(
-          objectId: userId,
-          photoVersion: photoVersion,
+          getPhotoArgs: user,
           emptyBuilder: () => _wrap(
             Image.asset(
               'packages/clubs/assets/images/avatar.png',
@@ -61,7 +59,7 @@ class AvatarUserWidget extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-          getPhotoUseCase: context.read(),
+          getPhotoUseCase: context.read<GetUserAvatarUseCase>(),
         );
       }),
     );

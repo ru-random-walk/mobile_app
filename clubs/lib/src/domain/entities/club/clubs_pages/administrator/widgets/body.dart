@@ -71,10 +71,8 @@ class _ClubAdminBodyState extends State<ClubAdminBody> {
           final user = _controller.users[index - 1];
           final role = _controller.getUserRole(user.id);
           return MemberTile(
-            name: user.fullName,
             role: role,
-            userId: user.id,
-            photoVersion: user.photoVersion,
+            user: user,
             onMenuPressed: user.id == widget.currentUserId
                 ? null
                 : (Offset position) {

@@ -12,3 +12,4 @@ export 'src/data/data_source/remote/user.dart';
 export 'src/data/models/user/user.dart';
 export 'src/data/mappers/user.dart';
 export 'src/screens/avatar/widget.dart';
+export 'src/screens/settings/page.dart';
