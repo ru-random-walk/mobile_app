@@ -1,17 +1,16 @@
 import 'package:auth/src/domain/entities/auth_type/base.dart';
 import 'package:auth/src/domain/entities/auth_type/enum.dart';
-import 'package:auth/src/domain/entities/token/exchange/request.dart';
 import 'package:auth/src/domain/repositories/auth.dart';
 import 'package:auth/src/domain/usecases/google_sign_in.dart';
 import 'package:core/core.dart';
 import 'package:utils/utils.dart';
 
-class AuthUseCase implements BaseUseCase<BaseError, void, AuthProvider> {
+class GoogleAuthUseCase implements BaseUseCase<BaseError, void, AuthProvider> {
   final GetGoogleAccessTokenUseCase _getGoogleAccessTokenUseCase;
   final AuthRepository _authRepository;
   final TokenStorage _tokenStorage;
 
-  AuthUseCase(
+  GoogleAuthUseCase(
     this._getGoogleAccessTokenUseCase,
     this._authRepository,
     this._tokenStorage,
@@ -26,8 +25,7 @@ class AuthUseCase implements BaseUseCase<BaseError, void, AuthProvider> {
     final authType = switch (type) {
       AuthProvider.google => AuthViaGoogle(accessTokenResponse.rightValue),
     };
-    final response =
-        await _authRepository.authVia(TokenExchangeRequestEntity(authType));
+    final response = await _authRepository.authVia(authType);
     if (response.isRight) {
       await _tokenStorage.updateData(response.rightValue);
     }

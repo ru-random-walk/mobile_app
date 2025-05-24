@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:ui_theming/ui_theming.dart';
 import 'package:ui_utils/ui_utils.dart';
 
@@ -22,6 +23,7 @@ class CustomButton extends StatelessWidget {
   final Color? secondaryStyleFillColor;
   final Color? customColor;
   final double? customCornerRadius;
+  final bool disabled;
 
   const CustomButton({
     super.key,
@@ -40,18 +42,22 @@ class CustomButton extends StatelessWidget {
     this.secondaryStyleFillColor,
     this.customColor,
     this.customCornerRadius,
+    this.disabled = false,
   });
 
   @override
   Widget build(BuildContext context) {
     final style = _getStyle(context);
-    return SizedBox(
-      height: _height,
-      width: _width,
-      child: OutlinedButton(
-        style: style,
-        onPressed: onPressed,
-        child: child(context.textTheme),
+    return IgnorePointer(
+      ignoring: disabled,
+      child: SizedBox(
+        height: _height,
+        width: _width,
+        child: OutlinedButton(
+          style: style,
+          onPressed: onPressed,
+          child: child(context.textTheme),
+        ),
       ),
     );
   }
@@ -94,6 +100,7 @@ class CustomButton extends StatelessWidget {
       };
 
   Color _getColor(ExtendedTheme theme) {
+    if (disabled) return theme.base_20;
     if (customColor != null) return customColor!;
     switch (color) {
       case ButtonColor.green:
@@ -161,7 +168,7 @@ class CustomButton extends StatelessWidget {
       side: const WidgetStatePropertyAll(BorderSide.none),
       shape: WidgetStateProperty.all(_border),
       foregroundColor: WidgetStateProperty.resolveWith<Color>(
-        (_) => context.colors.base_40,
+        (_) => context.colors.base_60,
       ),
       backgroundColor: WidgetStateProperty.resolveWith<Color?>((states) {
         if (states.contains(WidgetState.pressed)) {

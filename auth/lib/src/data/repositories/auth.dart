@@ -4,7 +4,8 @@ import 'dart:developer';
 import 'package:auth/auth.dart';
 import 'package:auth/src/data/data_source/remote/token.dart';
 import 'package:auth/src/data/models/token/request/base.dart';
-import 'package:auth/src/domain/entities/token/exchange/request.dart';
+import 'package:auth/src/data/models/token/request/email/email.dart';
+import 'package:auth/src/domain/entities/auth_type/base.dart';
 import 'package:auth/src/domain/repositories/auth.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
@@ -27,10 +28,10 @@ class AuthRepositoryI implements AuthRepository {
 
   @override
   Future<Either<BaseError, TokenResponseEntity>> authVia(
-    TokenExchangeRequestEntity entity,
+    AuthType authType,
   ) async {
     try {
-      final model = TokenRequestModel.via(entity.authType);
+      final model = TokenRequestModel.via(authType);
       final basicAuthCredentials = await _authCredentials;
       final result =
           await _authDataSource.auth(model, 'Basic $basicAuthCredentials');
@@ -59,6 +60,25 @@ class AuthRepositoryI implements AuthRepository {
       } else {
         return Left(BaseError(e.toString(), s));
       }
+    } catch (e, s) {
+      return Left(BaseError(e.toString(), s));
+    }
+  }
+
+  @override
+  Future<Either<BaseError, void>> sendEmailOTP(String email) async {
+    try {
+      final model = RequestEmailOTPModel(email: email);
+      final basicAuthCredentials = await _authCredentials;
+      final result = await _authDataSource.sendCodeToEmail(
+        model,
+        'Basic $basicAuthCredentials',
+      );
+      final code = result.response.statusCode;
+      return switch (code) {
+        200 => Right(null),
+        _ => Left(BaseError(result.response.data, StackTrace.current)),
+      };
     } catch (e, s) {
       return Left(BaseError(e.toString(), s));
     }

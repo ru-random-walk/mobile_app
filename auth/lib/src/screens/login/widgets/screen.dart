@@ -23,10 +23,11 @@ class AuthScreen extends StatelessWidget {
           case ProfileLoading():
           // TODO: Handle this case.
           case ProfileData():
-            Navigator.of(context).pushReplacement(
+            Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
                 builder: (_) => const MainPage(),
               ),
+              (_) => false,
             );
           case ProfileError():
           // TODO: Handle this case.
@@ -68,7 +69,9 @@ class AuthScreen extends StatelessWidget {
                     const Expanded(
                       child: LoginButtonGroup(),
                     ),
-                    dividerBig,
+                    SizedBox(
+                      height: 100.toFigmaSize,
+                    ),
                   ],
                 ),
               ),
