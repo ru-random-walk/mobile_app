@@ -42,8 +42,7 @@ class _MeetingInfoUserWidget extends StatelessWidget {
             width: 24.toFigmaSize,
           ),
           AvatarUserWidget(
-            userId: partner.id,
-            photoVersion: partner.photoVersion,
+            user: partner,
             size: 40.toFigmaSize,
           ),
           SizedBox(

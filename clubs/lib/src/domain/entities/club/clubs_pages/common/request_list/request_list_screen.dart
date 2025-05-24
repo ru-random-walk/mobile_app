@@ -145,11 +145,9 @@ class _RequestListScreenState extends State<RequestListScreen> {
                             itemBuilder: (context, index) {
                               final requestUser = requestUsers[index];
                               return RequestWidget(
-                                name: requestUser.user.fullName,
+                                user: requestUser.user,
                                 confirmationId: requestUser.confirmationId,
                                 apiService: widget.apiService,
-                                userId: requestUser.user.id,
-                                photoVersion: requestUser.user.photoVersion,
                               );
                             },
                             separatorBuilder: (context, index) => Divider(

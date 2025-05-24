@@ -11,8 +11,7 @@ class _UserAvatarAndNameWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         AvatarUserWidget(
-          userId: profile.id,
-          photoVersion: profile.photoVersion,
+          user: profile,
           size: 100.toFigmaSize,
         ),
         SizedBox(width: 20.toFigmaSize),
