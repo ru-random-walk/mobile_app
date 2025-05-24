@@ -3,16 +3,17 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'detailed_user.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class DetailedUserModel extends UserModel {
   final String email;
   final String? description;
   DetailedUserModel({
     required super.id,
     required super.fullName,
-    required super.avatar,
     required this.email,
-    this.description,
+    required super.avatarVersion,
+    required super.description,
+    required super.avatar,
   });
 
   factory DetailedUserModel.fromJson(Map<String, dynamic> json) =>
