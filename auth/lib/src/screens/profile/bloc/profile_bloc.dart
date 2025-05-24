@@ -15,6 +15,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     NetworkConfig.instance.init(() => add(_UnauthorizeEvent()));
     on<ProfileLoadEvent>(_onProfileLoad);
     on<_UnauthorizeEvent>(_onUnauthorize);
+    on<ProfileUpdatedEvent>(
+      (event, emit) => emit(
+        ProfileData(user: event.user),
+      ),
+    );
   }
 
   void _onProfileLoad(ProfileLoadEvent event, Emitter emit) async {

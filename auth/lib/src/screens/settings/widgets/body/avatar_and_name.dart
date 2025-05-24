@@ -28,6 +28,15 @@ class _UserAvatarAndNameWidget extends StatelessWidget {
         ),
         SizedBox(width: 20.toFigmaSize),
         GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => EditUserInfoPage(
+                  profile: profile,
+                ),
+              ),
+            );
+          },
           child: Icon(
             Icons.edit_outlined,
             color: context.colors.base_50,

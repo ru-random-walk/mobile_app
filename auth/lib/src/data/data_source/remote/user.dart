@@ -1,6 +1,8 @@
 import 'package:auth/src/data/models/user/avatar_info.dart';
 import 'package:auth/src/data/models/user/detailed_user.dart';
 import 'package:auth/src/data/models/user/page_user.dart';
+import 'package:auth/src/data/models/user/update_info.dart';
+import 'package:auth/src/data/models/user/upload_image.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart' hide Headers;
 import 'package:retrofit/retrofit.dart';
@@ -26,4 +28,20 @@ abstract class UsersDataSource {
   Future<UserAvatarInfoModel> getUserAvatar(
     @Path() String userId,
   );
+
+  @PUT('$_prefix/userinfo/change')
+  Future<DetailedUserModel> changeUserInfo(
+    @Body() UpdateInfoUserModel updateInfoUserModel,
+  );
+
+  @PUT('$_prefix/userinfo/avatar/upload')
+  Future<UserAvatarInfoModel> changeUserAvatar(
+    @Body() UploadUserAvatarModel uploadAvatarModel,
+  );
+
+  @POST('$_prefix/userinfo/logout')
+  Future<HttpResponse> logout();
+
+  @DELETE('$_prefix/userinfo/avatar/remove')
+  Future<HttpResponse> sendCodeToEmail();
 }

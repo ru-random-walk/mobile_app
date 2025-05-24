@@ -1,10 +1,14 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:auth/src/data/data_source/remote/user.dart';
 import 'package:auth/src/data/mappers/detailed_user.dart';
 import 'package:auth/src/data/mappers/pageable_users.dart';
+import 'package:auth/src/data/mappers/update_user_info.dart';
+import 'package:auth/src/data/models/user/upload_image.dart';
 import 'package:auth/src/domain/entities/user/detailed.dart';
 import 'package:auth/src/domain/entities/user/pageable_users.dart';
+import 'package:auth/src/domain/entities/user/update_user_info.dart';
 import 'package:auth/src/domain/repositories/user.dart';
 import 'package:core/core.dart';
 import 'package:utils/utils.dart';
@@ -52,8 +56,35 @@ class UserRepository implements UserRepositoryI, RemoteImageInfoRepository {
   Future<Either<BaseError, RemoteImageInfo>> uploadPhotoForObject({
     required String objectId,
     required Uint8List imageBytes,
-  }) {
-    // TODO: implement uploadPhotoForObject
-    throw UnimplementedError();
+  }) async {
+    try {
+      final base64 = base64Encode(imageBytes);
+      final res = await _usersDataSource.changeUserAvatar(
+        UploadUserAvatarModel(file: base64),
+      );
+      final avatarUrl = res.avatarUrl;
+      if (avatarUrl == null) return Left(BaseError('Avatar not found', null));
+      final newImageInfo = RemoteImageInfo(
+        url: avatarUrl,
+        version: res.avatarVersion,
+      );
+      return Right(newImageInfo);
+    } catch (e, s) {
+      return Left(BaseError(e.toString(), s));
+    }
+  }
+
+  @override
+  Future<Either<BaseError, DetailedUserEntity>> updateUserInfo(
+    UpdateUserInfoEntity updateUser,
+  ) async {
+    try {
+      final res = await _usersDataSource.changeUserInfo(
+        updateUser.toModel(),
+      );
+      return Right(res.toDomain());
+    } catch (e, s) {
+      return Left(BaseError(e.toString(), s));
+    }
   }
 }
