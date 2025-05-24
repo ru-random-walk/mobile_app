@@ -25,7 +25,7 @@ class CachedImageWidget<Arg extends GetObjectPhotoArgs>
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      key: ValueKey(getPhotoArgs.objectId),
+      key: ValueKey(getPhotoArgs.objectId + getPhotoArgs.photoVersion.toString()),
       create: (context) => CachedImageCubit(
         getPhotoArg: getPhotoArgs,
         getClubPhoto: getPhotoUseCase,

@@ -17,7 +17,7 @@ class ImageNotPickedError extends BaseError {
   ImageNotPickedError() : super('No image picked', StackTrace.current);
 }
 
-class ImageRepository {
+class ImagePickerRepository {
   final _compressor = ImageCompressor();
   final _picker = ImagePickerDataSource();
 

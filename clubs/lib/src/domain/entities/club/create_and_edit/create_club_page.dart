@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:clubs/src/data/db/data_source/club_photo.dart';
 import 'package:clubs/src/data/image/repository/cache.dart';
-import 'package:clubs/src/data/image/repository/get_image.dart';
 import 'package:clubs/src/data/image/repository/sender.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +66,7 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
   Uint8List? imageBytes;
   List<Map<String, dynamic>>? questions;
   final ClubApiService clubApiService = ClubApiService();
-  final _imagePicker = ImageRepository();
+  final _imagePicker = ImagePickerRepository();
   late final SetPhotoForObjectWithId _imageSetter;
 
   @override
