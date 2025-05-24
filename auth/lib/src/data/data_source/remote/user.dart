@@ -43,5 +43,5 @@ abstract class UsersDataSource {
   Future<HttpResponse> logout();
 
   @DELETE('$_prefix/userinfo/avatar/remove')
-  Future<HttpResponse> sendCodeToEmail();
+  Future<HttpResponse> removeAvatar();
 }

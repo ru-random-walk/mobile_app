@@ -87,4 +87,18 @@ class UserRepository implements UserRepositoryI, RemoteImageInfoRepository {
       return Left(BaseError(e.toString(), s));
     }
   }
+
+  @override
+  Future<Either<BaseError, void>> logout() async {
+    try {
+      final res = await _usersDataSource.logout();
+      if (res.response.statusCode == 200) {
+        return Right(null);
+      } else {
+        return Left(BaseError(res.response.data, StackTrace.current));
+      }
+    } catch (e, s) {
+      return Left(BaseError(e.toString(), s));
+    }
+  }
 }

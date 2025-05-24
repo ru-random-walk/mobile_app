@@ -15,4 +15,6 @@ abstract interface class UserRepositoryI {
   Future<Either<BaseError, DetailedUserEntity>> updateUserInfo(
     UpdateUserInfoEntity updateUser,
   );
+
+  Future<Either<BaseError, void>> logout();
 }
