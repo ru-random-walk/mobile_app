@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 bool handleGraphQLErrors(
@@ -14,7 +15,9 @@ bool handleGraphQLErrors(
     } else {
       showErrorSnackbar(context, fallbackMessage ?? message);
     }
-    print('[GraphQL Error] $message');
+    if (kDebugMode) {
+      print('[GraphQL Error] $message');
+    }
     return true;
   }
   return false;

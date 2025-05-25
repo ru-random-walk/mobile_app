@@ -8,8 +8,8 @@ List<ChatEntity> generateChats(int count) {
     companion: UserEntity(
       id: 'companion_$i',
       fullName: 'User $i',
-      avatar: 'test/assets/fake_avatar.png',
-      photoVersion: 1,
+      photoVersion: 1, 
+      description: '',
     ),
     lastMessage: TextMessageEntity(
       id: 'message_$i',
@@ -24,7 +24,7 @@ List<ChatEntity> generateChats(int count) {
 DetailedUserEntity detailedUser = DetailedUserEntity(
   id: 'user_test1',
   fullName: 'Test User',
-  avatar: 'test/assets/fake_avatar.png',
   email: 'testuser@example.com',
-  photoVersion: 1,
+  photoVersion: 1, 
+  description: '',
 );

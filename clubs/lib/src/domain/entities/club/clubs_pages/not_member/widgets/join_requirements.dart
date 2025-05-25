@@ -57,13 +57,13 @@ class JoinRequirements extends StatelessWidget {
                           ),
                         );
 
-                        if (result != null) {
+                        if (context.mounted && result != null ) {
                           final shouldReplace = await Navigator.of(context).push<bool>(
                             MaterialPageRoute(
                               builder: (_) => TestResultScreen(result: result),
                             ),
                           );
-                          if (shouldReplace == true) {
+                          if (context.mounted && shouldReplace == true) {
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
                                 builder: (_) => MemberPage(
@@ -81,7 +81,7 @@ class JoinRequirements extends StatelessWidget {
                             approvementId: approvement['id'],
                             apiService: clubApiService,
                           );
-                          if (handleGraphQLErrors(context, response, fallbackMessage: 'Ошибка при создании запроса')) return;
+                          if (context.mounted && handleGraphQLErrors(context, response, fallbackMessage: 'Ошибка при создании запроса')) return;
 
                           final answerId = response?['data']?['CreateApprovementAnswerMembersConfirm']?['id'];
                           String? status;
@@ -91,21 +91,25 @@ class JoinRequirements extends StatelessWidget {
                               answerId: answerId,
                               apiService: clubApiService,
                             );
-                            if (handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка отправки запроса')) return;
+                            if (context.mounted && handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка отправки запроса')) return;
                           
                             status = result?['data']['setAnswerStatusToSent']?['status'];
-                            if (status == 'SENT'){
+                            if (context.mounted && status == 'SENT'){
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text('Запрос отправлен'),
+                                  content: const Text('Запрос отправлен'),
                                   backgroundColor: context.colors.main_50,
                                 ),
                               );
                             }
                           }
                         } catch (e) {
-                          print('$e');
-                          showErrorSnackbar(context, 'Произошла ошибка');
+                          if (kDebugMode) {
+                            print('$e');
+                          }
+                          if (context.mounted) {
+                            showErrorSnackbar(context, 'Произошла ошибка');
+                          }
                         }
                       }
                     },
@@ -115,7 +119,7 @@ class JoinRequirements extends StatelessWidget {
               SizedBox(height: 8.toFigmaSize),
             ],
           );
-        }).toList(),
+        }),
       ],
     );
   }
