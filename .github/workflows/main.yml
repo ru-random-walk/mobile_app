@@ -21,11 +21,18 @@ jobs:
       - name: Create fake auth.env for CI
         run: echo "FAKE_ENV_FOR_TESTS=true" > auth.env
 
-      - name: Install dependencies
+      - name: Install dependencies in root
         run: flutter pub get
 
       - name: Generate code
-        run: flutter pub run build_runner build --delete-conflicting-outputs
+        run: |
+          for pkg in auth chats core matcher_service; do
+            echo "Processing $pkg"
+            cd $pkg
+            flutter pub get
+            flutter pub run build_runner build --delete-conflicting-outputs
+            cd ..
+          done
 
       - name: Run analyzer
         run: flutter analyze
@@ -48,11 +55,18 @@ jobs:
       - name: Create fake auth.env for CI
         run: echo "FAKE_ENV_FOR_TESTS=true" > auth.env
 
-      - name: Install dependencies
+      - name: Install dependencies in root
         run: flutter pub get
 
       - name: Generate code
-        run: flutter pub run build_runner build --delete-conflicting-outputs
+        run: |
+          for pkg in auth chats core matcher_service; do
+            echo "Processing $pkg"
+            cd $pkg
+            flutter pub get
+            flutter pub run build_runner build --delete-conflicting-outputs
+            cd ..
+          done
 
       - name: Install xvfb for headless display
         run: |
