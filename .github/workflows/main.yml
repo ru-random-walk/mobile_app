@@ -81,5 +81,5 @@ jobs:
         with:
           name: golden-test-artifacts
           path: |
-            **/test/goldens/failures/**
-            **/test/goldens/**
+            test/**/goldens/failures/**
+            test/**/goldens/**
