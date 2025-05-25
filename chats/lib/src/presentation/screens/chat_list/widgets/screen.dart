@@ -1,9 +1,10 @@
 part of '../page.dart';
 
-class _ChatsListScreen extends StatelessWidget {
+@visibleForTesting
+class ChatsListScreen extends StatelessWidget {
   final String currentUserId;
 
-  const _ChatsListScreen({
+  const ChatsListScreen({
     super.key,
     required this.currentUserId,
   });
