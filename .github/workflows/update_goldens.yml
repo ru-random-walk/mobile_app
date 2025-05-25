@@ -39,3 +39,18 @@ jobs:
 
       - name: Run golden tests with update
         run: xvfb-run --auto-servernum flutter test --tags=golden --update-goldens
+
+      - name: Configure Git user
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit updated golden files
+        run: |
+          git add .
+          git diff --quiet && echo "No changes to commit" || git commit -m "Update golden files"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
