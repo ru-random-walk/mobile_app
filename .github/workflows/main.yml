@@ -1,0 +1,51 @@
+name: Flutter Tests
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.3'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run analyzer
+        run: flutter analyze
+
+      - name: Run tests (excluding golden)
+        run: flutter test --exclude-tags=golden
+
+  golden_tests:
+    name: Golden Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.3'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Install xvfb for headless display
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+
+      - name: Run golden tests
+        run: xvfb-run --auto-servernum flutter test --tags=golden
