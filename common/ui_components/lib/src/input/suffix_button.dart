@@ -6,7 +6,6 @@ class _SuffixButton extends StatefulWidget {
   final TextEditingController controller;
 
   const _SuffixButton({
-    super.key,
     this.onSend,
     this.onLogoTap,
     required this.controller,

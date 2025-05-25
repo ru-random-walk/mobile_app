@@ -4,7 +4,6 @@ class _ChatTextMessageWidget extends StatelessWidget {
   final TextMessageEntity message;
 
   const _ChatTextMessageWidget({
-    super.key,
     required this.message,
   });
 

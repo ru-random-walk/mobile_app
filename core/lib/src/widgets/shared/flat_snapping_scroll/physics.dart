@@ -48,6 +48,7 @@ class ItemScrollPhysics extends ScrollPhysics {
 //    if ((velocity <= 0.0 && position.pixels <= position.minScrollExtent) ||
 //        (velocity >= 0.0 && position.pixels >= position.maxScrollExtent))
 //      return super.createBallisticSimulation(position, velocity);
+    // ignore: deprecated_member_use
     Tolerance tolerance = this.tolerance;
     final double target =
         _getTargetPixels(position as ScrollPosition, tolerance, velocity);

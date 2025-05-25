@@ -15,14 +15,15 @@ class DialogStatusIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox.square(dimension: 28.toFigmaSize);
-    return switch (type) {
-      Recieved e => _getRecivedWidget(e, context),
-      Sended e => _getCheckWidget(e),
-      Readed e => _getCheckWidget(e),
-    };
+    // return switch (type) {
+    //   Recieved e => _getRecivedWidget(e, context),
+    //   Sended e => _getCheckWidget(e),
+    //   Readed e => _getCheckWidget(e),
+    // };
   }
 
   // TODO: рефакторинг
+  // ignore: unused_element
   Widget _getRecivedWidget(Recieved type, BuildContext context) {
     return SizedBox.square(
       dimension: 28.toFigmaSize,
@@ -42,6 +43,7 @@ class DialogStatusIndicator extends StatelessWidget {
   }
 
   // TODO: рефакторинг
+  // ignore: unused_element
   Widget _getCheckWidget(DialogType type) {
     final path = switch (type) {
       Sended _ => 'assets/icons/checked.svg',

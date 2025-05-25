@@ -1,12 +1,12 @@
 import 'dart:developer';
 
-import 'package:bloc/bloc.dart';
 import 'package:chats/src/domain/entity/meet_data/invite.dart';
 import 'package:chats/src/domain/entity/message/base.dart';
 import 'package:chats/src/domain/repository/chat_messaging.dart';
 import 'package:chats/src/domain/use_case/get_messages.dart';
 import 'package:chats/src/domain/use_case/send_message.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matcher_service/matcher_service.dart';
 import 'package:meta/meta.dart';
 

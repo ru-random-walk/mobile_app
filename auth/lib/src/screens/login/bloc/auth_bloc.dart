@@ -3,8 +3,8 @@ import 'package:auth/src/domain/entities/auth_type/enum.dart';
 import 'package:auth/src/domain/usecases/email_otp_auth.dart';
 import 'package:auth/src/domain/usecases/google_auth.dart';
 import 'package:auth/src/domain/usecases/send_email_otp.dart';
-import 'package:bloc/bloc.dart';
 import 'package:core/core.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:utils/utils.dart';
 
