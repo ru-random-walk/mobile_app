@@ -37,9 +37,8 @@ class _ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
               width: 16.toFigmaSize,
             ),
             AvatarUserWidget(
-              userId: companion.id,
+              user: companion,
               size: 52.toFigmaSize,
-              photoVersion: companion.photoVersion,
             ),
             SizedBox(
               width: 20.toFigmaSize,

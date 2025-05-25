@@ -6,15 +6,14 @@ import 'package:meta/meta.dart';
 
 part 'state.dart';
 
-class CachedImageCubit extends Cubit<CachedImageState> {
-  final String objectId;
-  final int photoVersion;
+class CachedImageCubit<Arg extends GetObjectPhotoArgs>
+    extends Cubit<CachedImageState> {
+  final Arg getPhotoArg;
 
   final GetPhotoForObjectWithId _getClubPhoto;
 
   CachedImageCubit({
-    required this.objectId,
-    required this.photoVersion,
+    required this.getPhotoArg,
     required GetPhotoForObjectWithId getClubPhoto,
   })  : _getClubPhoto = getClubPhoto,
         super(ClubPhotoLoading()) {
@@ -22,12 +21,7 @@ class CachedImageCubit extends Cubit<CachedImageState> {
   }
 
   void _loadPhoto() async {
-    final res = await _getClubPhoto(
-      GetObjectPhotoArgs(
-        objectId: objectId,
-        photoVersion: photoVersion,
-      ),
-    );
+    final res = await _getClubPhoto(getPhotoArg);
     res.fold(
       (err) {
         if (err is EmptyPhotoError) {

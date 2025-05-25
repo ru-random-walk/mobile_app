@@ -1,19 +1,15 @@
 part of '../admin_page.dart';
 
 class MemberTile extends StatelessWidget {
-  final String name;
-  final String userId;
-  final int photoVersion;
+  final UserEntity user;
   final String role;
   final void Function(Offset position)? onMenuPressed;
 
   const MemberTile({
     super.key,
-    required this.name,
+    required this.user,
     required this.role,
     this.onMenuPressed,
-    required this.userId,
-    required this.photoVersion,
   });
 
   String getRoleLabel(String role) {
@@ -40,8 +36,7 @@ class MemberTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               AvatarUserWidget(
-                userId: userId,
-                photoVersion: photoVersion,
+                user: user,
                 size: 48.toFigmaSize,
               ),
               SizedBox(width: 16.toFigmaSize),
@@ -50,7 +45,7 @@ class MemberTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      name,
+                      user.fullName,
                       style: context.textTheme.bodyLRegular.copyWith(
                         color: context.colors.base_90,
                       ),

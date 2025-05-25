@@ -26,7 +26,9 @@ class ChatsListPage extends StatelessWidget {
     return BlocBuilder<ProfileBloc, ProfileState>(
       builder: (context, state) {
         return switch (state) {
-          ProfileLoading() => throw UnimplementedError(),
+          ProfileLoading() => const Center(
+              child: CircularProgressIndicator.adaptive(),
+            ),
           ProfileData() => Provider(
               create: (context) => GetChatsUseCase(
                 userId: state.user.id,
@@ -41,8 +43,7 @@ class ChatsListPage extends StatelessWidget {
                 ),
               ),
             ),
-          ProfileError() => throw UnimplementedError(),
-          ProfileInvalidRefreshToken() => throw UnimplementedError(),
+          _ => const SizedBox.shrink(),
         };
       },
     );
