@@ -3,7 +3,7 @@ part of '../page.dart';
 class _ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final UserEntity companion;
 
-  const _ChatAppBarWidget({super.key, required this.companion});
+  const _ChatAppBarWidget({required this.companion});
 
   double get appBarHeight => 70.toFigmaSize;
 

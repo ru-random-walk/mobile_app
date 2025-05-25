@@ -1,4 +1,3 @@
-import 'package:core/src/data/remote/models/geolocation.dart';
 import 'package:core/core.dart';
 
 extension GeolocationMapper on GeolocationModel {

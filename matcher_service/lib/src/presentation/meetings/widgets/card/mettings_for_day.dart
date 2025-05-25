@@ -17,7 +17,7 @@ class _MeetingsForDay extends StatelessWidget {
           color: _getBackgroundColor(context),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.2),
+              color: Colors.black.withValues(alpha: 0.2),
               blurRadius: 8.toFigmaSize,
               offset: const Offset(0, 2)
             ),

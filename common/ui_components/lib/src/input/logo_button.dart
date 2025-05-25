@@ -4,7 +4,6 @@ class _LogoButton extends StatelessWidget {
   final VoidCallback? onPressed;
 
   const _LogoButton({
-    super.key,
     this.onPressed,
   });
 

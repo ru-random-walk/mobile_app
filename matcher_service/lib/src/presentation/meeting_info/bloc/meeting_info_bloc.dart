@@ -1,5 +1,5 @@
-import 'package:bloc/bloc.dart';
 import 'package:core/core.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matcher_service/src/domain/entity/available_time/modify.dart';
 import 'package:matcher_service/src/domain/entity/meeting_info/base.dart';
 import 'package:matcher_service/src/domain/usecase/appointment/cancel.dart';

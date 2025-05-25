@@ -4,7 +4,6 @@ class _ChatScreen extends StatelessWidget {
   final UserEntity companion;
 
   const _ChatScreen({
-    super.key,
     required this.companion,
   });
 
