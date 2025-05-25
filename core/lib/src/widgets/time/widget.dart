@@ -4,7 +4,6 @@ class _MeetTimePickerDialog extends StatefulWidget {
   final TimeOfDay? initialTime;
 
   const _MeetTimePickerDialog({
-    super.key,
     this.initialTime,
   });
 
@@ -48,23 +47,23 @@ class _MeetTimePickerDialogState extends State<_MeetTimePickerDialog> {
   }
 
   void pick9Hour() {
-    const _9_00 = TimeOfDay(hour: 9, minute: 0);
-    scrollToTime(_9_00);
+    const time_9_00 = TimeOfDay(hour: 9, minute: 0);
+    scrollToTime(time_9_00);
   }
 
   void pick12Hour() {
-    const _12_00 = TimeOfDay(hour: 12, minute: 0);
-    scrollToTime(_12_00);
+    const time_12_00 = TimeOfDay(hour: 12, minute: 0);
+    scrollToTime(time_12_00);
   }
 
   void pick15Hour() {
-    const _15_00 = TimeOfDay(hour: 15, minute: 0);
-    scrollToTime(_15_00);
+    const time_15_00 = TimeOfDay(hour: 15, minute: 0);
+    scrollToTime(time_15_00);
   }
 
   void pick18Hour() {
-    const _18_00 = TimeOfDay(hour: 18, minute: 0);
-    scrollToTime(_18_00);
+    const time_18_00 = TimeOfDay(hour: 18, minute: 0);
+    scrollToTime(time_18_00);
   }
 
   Future<void> scrollToTime(TimeOfDay time) async {

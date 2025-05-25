@@ -36,6 +36,7 @@ dependencies:
   flutter_cache_manager: ^3.4.1
   image_picker: ^1.1.2
   flutter_image_compress: ^2.4.0
+  meta:
 
 dependency_overrides:
   maplibre_gl:

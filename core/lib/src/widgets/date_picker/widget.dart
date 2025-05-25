@@ -6,7 +6,6 @@ class _MeetDatePickerDialog extends StatefulWidget {
   final DateTime? initialDate;
 
   const _MeetDatePickerDialog({
-    super.key,
     this.initialDate,
   });
 

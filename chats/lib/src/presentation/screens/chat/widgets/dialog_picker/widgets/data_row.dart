@@ -5,7 +5,6 @@ class _MeetDataRowWidget extends StatelessWidget {
   final Widget button;
 
   const _MeetDataRowWidget({
-    super.key,
     required this.title,
     required this.button,
   });

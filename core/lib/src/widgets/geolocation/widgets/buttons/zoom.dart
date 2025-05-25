@@ -5,7 +5,6 @@ class _ZoomMapButtons extends StatelessWidget {
   final VoidCallback? onZoomOut;
 
   const _ZoomMapButtons({
-    super.key,
     this.onZoomIn,
     this.onZoomOut,
   });
@@ -45,7 +44,6 @@ class _PlusPaint extends CustomPainter {
   final Color color;
 
   _PlusPaint({
-    super.repaint,
     Color? color,
   }) : color = color ?? Colors.black;
 
@@ -81,7 +79,6 @@ class _MinusPaint extends CustomPainter {
   final Color color;
 
   _MinusPaint({
-    super.repaint,
     Color? color,
   }) : color = color ?? Colors.black;
 

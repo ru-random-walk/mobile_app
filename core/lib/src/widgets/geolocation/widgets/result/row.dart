@@ -5,7 +5,6 @@ class _PickedAddressRow extends StatelessWidget {
   final TextEditingController controller;
 
   const _PickedAddressRow({
-    super.key,
     required this.title,
     required this.controller,
   });

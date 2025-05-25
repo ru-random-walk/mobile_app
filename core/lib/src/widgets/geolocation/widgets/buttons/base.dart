@@ -6,7 +6,6 @@ class _BaseMapInterfaceButton extends StatelessWidget {
   final EdgeInsets? padding;
 
   const _BaseMapInterfaceButton({
-    super.key,
     this.onPressed,
     required this.child,
     this.padding,

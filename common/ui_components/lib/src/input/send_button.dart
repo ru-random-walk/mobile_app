@@ -4,7 +4,6 @@ class _SendButton extends StatelessWidget {
   final VoidCallback? onPressed;
 
   const _SendButton({
-    super.key,
     this.onPressed,
   });
 

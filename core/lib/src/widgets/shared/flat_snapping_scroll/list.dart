@@ -72,7 +72,7 @@ class _FlatSnappingListState extends State<FlatSnappingList> {
                 final style = isSelected
                     ? textTheme.bodyMRegularBase90
                     : textTheme.bodyMRegularBase70.copyWith(
-                        color: context.colors.base_50.withOpacity(0.5),
+                        color: context.colors.base_50.withValues(alpha: 0.5),
                       );
                 final value = widget.values[index];
                 return Center(
