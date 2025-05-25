@@ -48,10 +48,10 @@ jobs:
       - name: Commit updated golden files
         run: |
           git add .
-          git diff --quiet && echo "No changes to commit" || git commit -m "Update golden files"
+          git diff --quiet || git commit -m "Update golden files"
 
       - name: Push changes
-        uses: ad-m/github-push-action@v0.6.0
-        with:
-          github_token: ${{ secrets.PAT_TOKEN }}
-          branch: main
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/ru-random-walk/mobile_app.git main
