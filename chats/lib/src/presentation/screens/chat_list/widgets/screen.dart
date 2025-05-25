@@ -4,7 +4,6 @@ class _ChatsListScreen extends StatelessWidget {
   final String currentUserId;
 
   const _ChatsListScreen({
-    super.key,
     required this.currentUserId,
   });
 

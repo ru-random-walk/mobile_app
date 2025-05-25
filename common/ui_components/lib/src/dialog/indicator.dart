@@ -15,11 +15,11 @@ class DialogStatusIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox.square(dimension: 28.toFigmaSize);
-    return switch (type) {
-      Recieved e => _getRecivedWidget(e, context),
-      Sended e => _getCheckWidget(e),
-      Readed e => _getCheckWidget(e),
-    };
+    // return switch (type) {
+    //   Recieved e => _getRecivedWidget(e, context),
+    //   Sended e => _getCheckWidget(e),
+    //   Readed e => _getCheckWidget(e),
+    // };
   }
 
   // TODO: рефакторинг

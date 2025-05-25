@@ -1,5 +1,5 @@
-import 'package:bloc/bloc.dart';
 import 'package:core/src/widgets/geolocation/bloc/debouncer.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:meta/meta.dart';
 

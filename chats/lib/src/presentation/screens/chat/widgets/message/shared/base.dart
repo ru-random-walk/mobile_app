@@ -8,7 +8,6 @@ class _BaseChatMessageWidget extends StatelessWidget {
   final bool isTimeUnder;
 
   const _BaseChatMessageWidget({
-    super.key,
     required this.child,
     required this.isMy,
     required this.timestamp,

@@ -4,7 +4,6 @@ class _ZoomToCurrentLocationButton extends StatelessWidget {
   final VoidCallback? onPressed;
 
   const _ZoomToCurrentLocationButton({
-    super.key,
     this.onPressed,
   });
 
