@@ -11,8 +11,8 @@ class ClubPhotoWidget extends StatelessWidget {
   final String clubId;
   final int photoVersion;
 
-  final Widget Function() loadingBuilder;
-  final Widget Function() errorBuilder;
+  final double size;
+
   final Widget Function(Uint8List bytes) dataBuilder;
   final Widget Function() emptyBuilder;
 
@@ -20,10 +20,9 @@ class ClubPhotoWidget extends StatelessWidget {
     super.key,
     required this.clubId,
     required this.photoVersion,
-    required this.loadingBuilder,
-    required this.errorBuilder,
     required this.dataBuilder,
     required this.emptyBuilder,
+    required this.size,
   });
 
   @override
@@ -50,11 +49,17 @@ class ClubPhotoWidget extends StatelessWidget {
         ),
       ],
       child: Builder(builder: (context) {
-        return CachedImageWidget(
-          objectId: clubId,
-          photoVersion: photoVersion,
-          dataBuilder: dataBuilder,
-          getPhotoUseCase: context.read(),
+        return Center(
+          child: SizedBox.square(
+            dimension: size,
+            child: CachedImageWidget(
+              objectId: clubId,
+              photoVersion: photoVersion,
+              dataBuilder: dataBuilder,
+              getPhotoUseCase: context.read(),
+              emptyBuilder: emptyBuilder,
+            ),
+          ),
         );
       }),
     );

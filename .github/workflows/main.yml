@@ -1,0 +1,77 @@
+name: Flutter Tests
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.3'
+
+      - name: Create fake auth.env for CI
+        run: echo "FAKE_ENV_FOR_TESTS=true" > auth.env
+
+      - name: Install dependencies in root
+        run: flutter pub get
+
+      - name: Generate code
+        run: |
+          for pkg in auth chats core matcher_service; do
+            echo "Processing $pkg"
+            cd $pkg
+            flutter pub get
+            flutter pub run build_runner build --delete-conflicting-outputs
+            cd ..
+          done
+
+      - name: Run analyzer
+        run: flutter analyze
+
+      - name: Run tests (excluding golden)
+        run: flutter test --exclude-tags=golden
+
+  golden_tests:
+    name: Golden Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.3'
+
+      - name: Create fake auth.env for CI
+        run: echo "FAKE_ENV_FOR_TESTS=true" > auth.env
+
+      - name: Install dependencies in root
+        run: flutter pub get
+
+      - name: Generate code
+        run: |
+          for pkg in auth chats core matcher_service; do
+            echo "Processing $pkg"
+            cd $pkg
+            flutter pub get
+            flutter pub run build_runner build --delete-conflicting-outputs
+            cd ..
+          done
+
+      - name: Install xvfb for headless display
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+
+      - name: Run golden tests
+        run: xvfb-run --auto-servernum flutter test --tags=golden

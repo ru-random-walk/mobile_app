@@ -17,7 +17,7 @@ class _ChatListAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
         SizedBox(width: 16.toFigmaSize),
-        _SearchButton(),
+        // _SearchButton(),
         SizedBox(width: 20.toFigmaSize),
       ],
     );

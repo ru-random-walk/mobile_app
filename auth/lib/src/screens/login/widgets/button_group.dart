@@ -1,5 +1,6 @@
 import 'package:auth/src/domain/entities/auth_type/enum.dart';
 import 'package:auth/src/screens/login/bloc/auth_bloc.dart';
+import 'package:auth/src/screens/type_email/page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -24,12 +25,19 @@ class LoginButtonGroup extends StatelessWidget {
         children: [
           CustomButton(
             size: ButtonSize.M,
-            type: ButtonType.tertiary,
-            text: 'Демо-режим',
+            leftIcon: Padding(
+              padding: EdgeInsets.only(right: 8.toFigmaSize),
+              child: SvgPicture.asset('packages/auth/assets/icons/email.svg'),
+            ),
+            type: ButtonType.secondary,
+            text: 'Войти через почту',
             textStyle: context.textTheme.bodyMRegularBase90,
-            onPressed: () => Navigator.of(context).pushReplacement(
+            onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (_) => const MainPage(),
+                builder: (_) => BlocProvider.value(
+                  value: bloc,
+                  child: const EmailInputPage(),
+                ),
               ),
             ),
           ),

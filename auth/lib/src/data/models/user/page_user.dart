@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'page_user.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class PageableUsersModel {
   final PageableResponseModel page;
   final List<UserModel> content;

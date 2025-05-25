@@ -14,3 +14,11 @@ final class AuthFailure extends AuthState {
 
   AuthFailure(this.message);
 }
+
+final class SendOTPFailure extends AuthState {
+  final String message;
+
+  SendOTPFailure(this.message);
+}
+
+final class SendOTPSuccess extends AuthState {}
