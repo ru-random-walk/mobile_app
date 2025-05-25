@@ -244,7 +244,7 @@ class TestFormState extends State<TestForm> {
                       },
                     ),
                   );
-                }).toList(),
+                }),
 
                 CustomButton(
                   type: ButtonType.tertiary,

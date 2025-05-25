@@ -1,5 +1,6 @@
 import 'package:clubs/src/data/clubs_api_service.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/common/exit_menu_club/exit_menu_controller.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ui_utils/ui_utils.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -53,19 +54,27 @@ class _ClubInspectorScreenState extends State<ClubInspectorScreen> {
         clubId: widget.clubId,
         apiService: _clubApiService,);
 
+      if (!mounted) return;
+
       if (handleGraphQLErrors(
         context,
         data,
         fallbackMessage: 'Не удалось загрузить данные группы',
-      )) return;
+      )) {
+        return;
+      }
 
       setState(() {
         clubData = data?['data']?['getClub'];
         isLoading = false;
       });
     } catch (e) {
-      print('Ошибка при загрузке групп: $e');
-      showErrorSnackbar(context, 'Произошла ошибка');
+      if (kDebugMode) {
+        print('Ошибка при загрузке групп: $e');
+      }
+      if (context.mounted) {
+        showErrorSnackbar(context, 'Произошла ошибка');
+      }
       setState(() {
         isLoading = false;
       });

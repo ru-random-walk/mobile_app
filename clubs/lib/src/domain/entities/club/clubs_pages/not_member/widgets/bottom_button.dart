@@ -27,13 +27,14 @@ class BottomButton extends StatelessWidget {
           text: 'Вступить',
           onPressed: () async {
             try {
+              final navigator = Navigator.of(context);
               final result = await tryJoinInClub(
                 clubId: clubId,
                 userId: userId,
                 apiService: clubApiService,
               );
 
-              if (handleGraphQLErrors(context, result, fallbackMessage: 'Не удалось вступить в клуб')) return;
+              if (context.mounted && handleGraphQLErrors(context, result, fallbackMessage: 'Не удалось вступить в клуб')) return;
 
               final member = result?['data']?['addMemberInClub'];
 
@@ -41,13 +42,14 @@ class BottomButton extends StatelessWidget {
                   ? 'Вы успешно вступили в клуб'
                   : 'Не удалось вступить в клуб';
 
-              ScaffoldMessenger.of(context).showSnackBar(
+              if (context.mounted ) {
+                ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(message)),
               );
+              }
 
               if (member != null) {
-                Navigator.pushReplacement(
-                  context,
+                navigator.pushReplacement(
                   MaterialPageRoute(
                     builder: (context) => MemberPage(
                       clubId: clubId,
@@ -58,7 +60,9 @@ class BottomButton extends StatelessWidget {
                 );
               }
             } catch (e) {
-              showErrorSnackbar(context, 'Произошла ошибка: $e');
+              if (context.mounted) {
+                showErrorSnackbar(context, 'Произошла ошибка: $e');
+              }
             }
           },
         ),

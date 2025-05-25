@@ -12,12 +12,10 @@ class ClubsScreen extends StatefulWidget {
 class _ClubsScreenState extends State<ClubsScreen> {
   void Function()? _toggleSearchExternal;
   bool _isSearching = false;
-  String _searchQuery = '';
 
   void _onSearchChanged(bool isSearching, String query) {
     setState(() {
       _isSearching = isSearching;
-      _searchQuery = query;
     });
   }
 
@@ -32,12 +30,13 @@ class _ClubsScreenState extends State<ClubsScreen> {
       ),
       floatingActionButton: AddClubButton(
         onPressed: () async {
+          final bloc = context.read<ClubsListBloc>();
           final result = await Navigator.push(
             context,
             MaterialPageRoute(builder: (_) => const ClubFormScreen()),
           );
           if (result == true) {
-            context.read<ClubsListBloc>().add(LoadClubsEvent());
+            bloc.add(LoadClubsEvent());
           }
         },
       ),

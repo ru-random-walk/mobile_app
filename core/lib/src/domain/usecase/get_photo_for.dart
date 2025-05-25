@@ -1,7 +1,7 @@
 import 'dart:developer';
-import 'dart:typed_data';
 
 import 'package:core/core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:utils/utils.dart';
 
 class EmptyPhotoError extends BaseError {
@@ -18,54 +18,64 @@ class GetObjectPhotoArgs {
   });
 }
 
-class GetPhotoForObjectWithId
-    implements BaseUseCase<BaseError, Uint8List, GetObjectPhotoArgs> {
-  final RemoteImageInfoRepository _getImageRepository;
-  final LocalImageInfoRepository _dbInfo;
-  final CacheImageRepository _cache;
+class GetPhotoForObjectWithId<Param extends GetObjectPhotoArgs>
+    implements BaseUseCase<BaseError, Uint8List, Param> {
+  @protected
+  final RemoteImageInfoRepository getImageRepository;
+
+  @protected
+  final LocalImageInfoRepository dbInfo;
+
+  @protected
+  final CacheImageRepository cache;
 
   GetPhotoForObjectWithId({
-    required RemoteImageInfoRepository getImageRepository,
-    required LocalImageInfoRepository dbInfo,
-    required CacheImageRepository cache,
-  })  : _getImageRepository = getImageRepository,
-        _dbInfo = dbInfo,
-        _cache = cache;
+    required this.getImageRepository,
+    required this.dbInfo,
+    required this.cache,
+  });
 
   @override
-  Future<Either<BaseError, Uint8List>> call(GetObjectPhotoArgs params) async {
+  Future<Either<BaseError, Uint8List>> call(Param params) async {
     if (params.photoVersion == 0) {
       return Left(EmptyPhotoError());
     }
-    final info = await _dbInfo.getImageInfo(params.objectId);
+    final info = await dbInfo.getImageInfo(params.objectId);
     log('Info for ${params.objectId} is $info');
     if (info == null || info.version < params.photoVersion) {
-      final res = await _loadPhoto(params);
+      final res = await loadPhoto(params);
       return res;
     }
-    final cachedImageBytes = await _cache.getImageFromCache(
+    final cachedImageBytes = await cache.getImageFromCache(
       params.objectId,
     );
     if (cachedImageBytes != null) {
       return Right(cachedImageBytes);
     } else {
-      return _loadPhoto(params, updateDBInfo: false);
+      return loadPhoto(params, updateDBInfo: false);
     }
   }
 
-  Future<Either<BaseError, Uint8List>> _loadPhoto(
-    GetObjectPhotoArgs params, {
+  @visibleForOverriding
+  Future<Either<BaseError, String>> getUrlForImageDownloading(
+    Param params,
+  ) =>
+      getImageRepository.getObjectPhotoUrl(params.objectId);
+
+  @protected
+  Future<Either<BaseError, Uint8List>> loadPhoto(
+    Param params, {
     bool updateDBInfo = true,
   }) async {
-    final res = await _getImageRepository.getObjectPhotoUrl(params.objectId);
+    final res = await getUrlForImageDownloading(params);
     switch (res) {
       case Left<BaseError, String> err:
         return Left(err.leftValue);
       case Right<BaseError, String> data:
         final url = data.rightValue;
-        final imageBytes = await _cache.downloadImage(url, params.objectId);
+        final imageBytes = await cache.downloadImage(url, params.objectId);
         if (updateDBInfo) {
-          await _dbInfo.saveImageInfo(
+          await dbInfo.saveImageInfo(
             LocalImageInfo(
               objectId: params.objectId,
               version: params.photoVersion,
