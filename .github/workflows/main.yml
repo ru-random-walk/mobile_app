@@ -18,6 +18,9 @@ jobs:
         with:
           flutter-version: '3.29.3'
 
+      - name: Create fake auth.env for CI
+        run: echo "FAKE_ENV_FOR_TESTS=true" > auth.env
+
       - name: Install dependencies
         run: flutter pub get
 
@@ -38,6 +41,9 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.29.3'
+
+      - name: Create fake auth.env for CI
+        run: echo "FAKE_ENV_FOR_TESTS=true" > auth.env
 
       - name: Install dependencies
         run: flutter pub get
