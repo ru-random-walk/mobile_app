@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:auth/auth.dart';
 import 'package:core/core.dart';
-import 'package:utils/src/either/either.dart';
+import 'package:utils/utils.dart';
 
 class GetUserAvatarUseCase extends GetPhotoForObjectWithId<UserEntity> {
   GetUserAvatarUseCase({

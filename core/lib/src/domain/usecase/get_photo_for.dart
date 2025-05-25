@@ -1,9 +1,7 @@
 import 'dart:developer';
-import 'dart:typed_data';
 
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
 import 'package:utils/utils.dart';
 
 class EmptyPhotoError extends BaseError {

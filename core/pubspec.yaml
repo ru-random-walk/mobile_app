@@ -22,6 +22,8 @@ dependencies:
     path: ../common/ui_components
   ui_utils:
     path: ../common/ui_utils
+  clubs:
+    path: ../clubs
   json_annotation: ^4.9.0
   flutter_bloc: ^8.1.6
   retrofit: ^4.4.0
