@@ -9,7 +9,8 @@ List<ChatEntity> generateChats(int count) {
       id: 'companion_$i',
       fullName: 'User $i',
       photoVersion: 1, 
-      description: '',
+      description: '', 
+      avatar: 'test/fake_avatar.png',
     ),
     lastMessage: TextMessageEntity(
       id: 'message_$i',
@@ -26,5 +27,6 @@ DetailedUserEntity detailedUser = DetailedUserEntity(
   fullName: 'Test User',
   email: 'testuser@example.com',
   photoVersion: 1, 
-  description: '',
+  description: '', 
+  avatar: 'test/fake_avatar.png',
 );
