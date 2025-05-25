@@ -120,13 +120,13 @@ class TestFormController {
       String? status;
 
       if (sendForReview && answerId != null) {
-      final result = await sendAnswers(
+      final result = await sendAnswersSync(
       answerId: answerId,
       apiService: clubApiService,
       );
       if (context.mounted && handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка отправки ответов')) return;
        
-      status = result?['data']['setAnswerStatusToSent']?['status'];
+      status = result?['data']['setAnswerStatusToSentSync']?['status'];
       }
 
       final result = await tryJoinInClub(
@@ -136,13 +136,6 @@ class TestFormController {
         );
       if (context.mounted) {  
         if (handleGraphQLErrors(context, result, fallbackMessage: 'Не получилось вступить в группу')) return;
-        
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Ответы отправлены'),
-            backgroundColor: context.colors.main_50,
-          ),
-        );
 
         Navigator.of(context).pop(status == 'PASSED');
       }
