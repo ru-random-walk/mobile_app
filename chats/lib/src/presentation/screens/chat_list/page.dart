@@ -38,7 +38,7 @@ class ChatsListPage extends StatelessWidget {
                 create: (context) => ChatsListBloc(
                   context.read(),
                 )..add(GetChatsEvent(resetPagination: false)),
-                child: _ChatsListScreen(
+                child: ChatsListScreen(
                   currentUserId: state.user.id,
                 ),
               ),

@@ -20,6 +20,8 @@ class ClubItemTile extends StatelessWidget {
       onTap: () async {
         final clubId = group.id;
         final role = group.userRole;
+        final navigator = Navigator.of(context);
+        final bloc = context.read<ClubsListBloc>();
 
         if (role == 'ADMIN') {
           final result = await Navigator.push(
@@ -33,11 +35,10 @@ class ClubItemTile extends StatelessWidget {
             ),
           );
           if (result == true) {
-            context.read<ClubsListBloc>().add(LoadClubsEvent());
+            bloc.add(LoadClubsEvent());
           }
         } if (role == 'INSPECTOR') {
-          final result = await Navigator.push(
-            context,
+          final result = await navigator.push(
             MaterialPageRoute(
               builder: (_) => ClubInspectorScreen(
                 clubId: clubId,
@@ -47,11 +48,10 @@ class ClubItemTile extends StatelessWidget {
             ),
           );
           if (result == true) {
-            context.read<ClubsListBloc>().add(LoadClubsEvent());
+            bloc.add(LoadClubsEvent());
           }
         } else if (role == 'MEMBER' || role == 'USER') {
-          Navigator.push(
-            context,
+          navigator.push(
             MaterialPageRoute(
               builder: (_) => MemberPage(
                 clubId: clubId,
@@ -61,8 +61,7 @@ class ClubItemTile extends StatelessWidget {
             ),
           );
         } else if (role == 'PENDING_APPROVAL' || role == 'NOT_MEMBER'){
-          Navigator.push(
-            context,
+          navigator.push(
             MaterialPageRoute(
               builder: (_) => NotMemberPage(
                 clubId: clubId,

@@ -6,7 +6,7 @@ class _ClubsListAppBar extends StatefulWidget implements PreferredSizeWidget {
   final void Function(void Function())? onToggleSearchInit;
   final void Function(bool isSearching, String query) onSearchChanged;
 
-  const _ClubsListAppBar({super.key,required this.onSearchChanged, this.onToggleSearchInit});
+  const _ClubsListAppBar({required this.onSearchChanged, this.onToggleSearchInit});
 
   @override
   State<_ClubsListAppBar> createState() => _ClubsListAppBarState();
@@ -105,6 +105,5 @@ class _ClubsListAppBarState extends State<_ClubsListAppBar> {
     );
   }
 
-  @override
   Size get preferredSize => Size.fromHeight(_appBarHeight);
 }

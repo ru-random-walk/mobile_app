@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:clubs/src/data/clubs_api_service.dart';
 import 'package:ui_components/ui_components.dart';
@@ -62,6 +63,7 @@ class _TestFormScreenState extends State<TestFormScreen> {
     if (controller.isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
+    // ignore: deprecated_member_use
     return WillPopScope(
 
       onWillPop: _onExitPressed,

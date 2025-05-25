@@ -1,9 +1,8 @@
-import 'dart:typed_data';
-
 import 'package:clubs/src/data/db/data_source/club_photo.dart';
 import 'package:clubs/src/data/image/repository/cache.dart';
 import 'package:clubs/src/data/image/repository/sender.dart';
 import 'package:core/core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ui_components/ui_components.dart';
 import 'package:ui_utils/ui_utils.dart';
@@ -196,14 +195,16 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
                           questions: questions,
                           approvementId: widget.approvementId,
                         );
-
-                        ScaffoldMessenger.of(context).showSnackBar(
+                        
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             backgroundColor: context.colors.main_50,
                             content: Text('Группа обновлена',
                                 style: context.textTheme.bodySMediumBase0),
                           ),
                         );
+                        }
                       } else {
                         if (!isConditionAdded) {
                           result = await createClub(
@@ -234,7 +235,7 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
                               ?['createClubWithFormApprovement']?['id'];
                         }
 
-                        if (handleGraphQLErrors(context, result,
+                        if (context.mounted && handleGraphQLErrors(context, result,
                             fallbackMessage: 'Не удалось создать группу')) {
                           return;
                         }
@@ -255,18 +256,26 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
                             }
                           }
                         }
-                        ScaffoldMessenger.of(context).showSnackBar(
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             backgroundColor: context.colors.main_50,
                             content: Text('Группа создана',
                                 style: context.textTheme.bodySMediumBase0),
                           ),
                         );
+                        }
                       }
-                      Navigator.pop(context, true);
+                      if (context.mounted) {
+                        Navigator.pop(context, true);
+                      }
                     } catch (e) {
-                      print(e);
-                      showErrorSnackbar(context, 'Произошла ошибка');
+                      if (kDebugMode) {
+                        print(e);
+                      }
+                      if (context.mounted) {
+                        showErrorSnackbar(context, 'Произошла ошибка');
+                      }
                     }
                   }),
             ),

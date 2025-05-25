@@ -57,16 +57,22 @@ class _RequestWidgetState extends State<RequestWidget> {
                                       confirmationId: widget.confirmationId,
                                       apiService: widget.apiService,
                                     );
-                                    if (handleGraphQLErrors(context, result,
+                                    if (context.mounted && handleGraphQLErrors(context, result,
                                         fallbackMessage:
-                                            'Ошибка принятия заявки')) return;
+                                            'Ошибка принятия заявки')) {
+                                      return;
+                                    }
                                     setState(() {
                                       decision = 'approved';
                                     });
                                   } catch (e) {
-                                    print('$e');
-                                    showErrorSnackbar(
+                                    if (kDebugMode) {
+                                      print('$e');
+                                    }
+                                    if (context.mounted) {
+                                      showErrorSnackbar(
                                         context, 'Произошла ошибка');
+                                    }
                                   }
                                 },
                               ),
@@ -84,16 +90,22 @@ class _RequestWidgetState extends State<RequestWidget> {
                                       confirmationId: widget.confirmationId,
                                       apiService: widget.apiService,
                                     );
-                                    if (handleGraphQLErrors(context, result,
+                                    if (context.mounted && handleGraphQLErrors(context, result,
                                         fallbackMessage:
-                                            'Ошибка отклонения заявки')) return;
+                                            'Ошибка отклонения заявки')) {
+                                      return;
+                                    }
                                     setState(() {
                                       decision = 'rejected';
                                     });
                                   } catch (e) {
-                                    print('$e');
-                                    showErrorSnackbar(
+                                    if (kDebugMode) {
+                                      print('$e');
+                                    }
+                                    if (context.mounted) {
+                                      showErrorSnackbar(
                                         context, 'Произошла ошибка');
+                                    }
                                   }
                                 },
                               ),

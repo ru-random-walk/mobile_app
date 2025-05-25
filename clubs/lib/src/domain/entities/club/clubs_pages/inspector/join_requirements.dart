@@ -43,7 +43,7 @@ class JoinRequirementsInspector extends StatelessWidget {
               approverId: userId,
             );
           }
-        }).toList(),
+        }),
       ],
     );
   }

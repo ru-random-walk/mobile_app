@@ -16,7 +16,7 @@ class GetClubsUseCase {
   Future<List<Map<String, dynamic>>> getClubs() async {
     final response = await getUserClubs(userId: userId, apiService: apiService);
 
-    if (handleGraphQLErrors(context, response, fallbackMessage: 'Не удалось загрузить группы')) {
+    if (context.mounted && handleGraphQLErrors(context, response, fallbackMessage: 'Не удалось загрузить группы')) {
       return [];
     }
 
@@ -36,7 +36,7 @@ class GetClubsUseCase {
         apiService: apiService,
       );
 
-    if (handleGraphQLErrors(context, response, fallbackMessage: 'Не удалось выполнить поиск групп')) {
+    if (context.mounted && handleGraphQLErrors(context, response, fallbackMessage: 'Не удалось выполнить поиск групп')) {
       return [];
     }
 

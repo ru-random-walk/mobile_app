@@ -4,7 +4,6 @@ class _SearchPaint extends CustomPainter {
   final Color color;
 
   _SearchPaint({
-    super.repaint,
     this.color = Colors.black,
   });
 

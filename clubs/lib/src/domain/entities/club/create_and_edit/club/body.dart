@@ -16,7 +16,7 @@ class ClubFormBody extends StatelessWidget {
   final bool isEditMode;
 
   const ClubFormBody({
-    Key? key,
+    super.key,
     required this.nameController,
     required this.descriptionController,
     required this.isConditionAdded,
@@ -29,7 +29,7 @@ class ClubFormBody extends StatelessWidget {
     this.imageBytes,
     required this.onChooseImage,
     this.isEditMode = false,
-  }) : super(key: key);
+  });
 
   Future<void> _handleEditCondition(BuildContext context) async {
     if (conditionName == 'Запрос на вступление') {

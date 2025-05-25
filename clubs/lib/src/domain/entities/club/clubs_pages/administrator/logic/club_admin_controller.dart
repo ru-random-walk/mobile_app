@@ -93,7 +93,9 @@ class ClubAdminController {
       hasMore = newMembers.length == _pageSize;
       onUpdate();      
     } catch (e) {
-      print('Ошибка при загрузке участников: $e');
+      if (kDebugMode) {
+        print('Ошибка при загрузке участников: $e');
+      }
       isLoading = false;
       isLoadingMore = false;
     }
@@ -110,8 +112,6 @@ class ClubAdminController {
 
     Overlay.of(context);
 
-    final scaffoldContext = context;
-
      _menuOverlay = OverlayEntry(
         builder: (_) => TapRegion(
           onTapOutside: (_) {
@@ -124,18 +124,21 @@ class ClubAdminController {
             },
             onEdit: () async {
               try {
+                final navigator = Navigator.of(context);
                 final clubData = await getApprovementInfo(clubId: clubId, apiService: apiService,);
 
-                if (handleGraphQLErrors(
+                if (context.mounted && handleGraphQLErrors(
                   context,
                   clubData,
                   fallbackMessage: 'Ошибка при загрузке редактирования',
-                )) return;
+                )) {
+                  return;
+                }
 
                 final approvements = clubData?['data']?['getClub']?['approvements'] as List<dynamic>?; 
                 
                 if (approvements == null || approvements.isEmpty) {
-                  Navigator.of(context).push(
+                  navigator.push(
                     MaterialPageRoute(
                       builder: (context) => ClubFormScreen(
                         initialName: clubName,
@@ -169,7 +172,7 @@ class ClubAdminController {
                   infoCount = data['requiredConfirmationNumber'];
                 }                         
 
-                Navigator.of(context).push(
+                navigator.push(
                   MaterialPageRoute(
                     builder: (context) => ClubFormScreen(
                       initialName: clubName,
@@ -186,8 +189,12 @@ class ClubAdminController {
                   ),
                 );
               }catch (e) {
-                print(e);
-                showErrorSnackbar(context, 'Произошла ошибка');
+                if (kDebugMode) {
+                  print(e);
+                }
+                if (context.mounted){
+                  showErrorSnackbar(context, 'Произошла ошибка');
+                }
               }
               _hideMenu();
             },
@@ -201,22 +208,25 @@ class ClubAdminController {
                     customColor: const Color(0xFFFF281A),
                     onConfirm: () async {
                       try {
+                        final navigator = Navigator.of(context);
                         final result = await removeClub(clubId: clubId, apiService: apiService);
                         
-                        if (handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка при удалении группы')) {
+                        if (context.mounted && handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка при удалении группы')) {
                           return;
                         }
 
-                        Navigator.of(context).pop(true); 
+                        navigator.pop(true); 
                       } catch (e) {
-                        showErrorSnackbar(context, 'Произошла ошибка');
+                        if (context.mounted ) {
+                          showErrorSnackbar(context, 'Произошла ошибка');
+                        }
                       }
                     },
                   );
                 },
               );
 
-              if (confirmed == true) {
+              if (confirmed == true && context.mounted) {
                 _hideMenu();
                 Navigator.of(context).pop(true); 
               }
@@ -267,7 +277,7 @@ class ClubAdminController {
                 apiService: apiService,
               );
 
-              if (handleGraphQLErrors(context, result, fallbackMessage: 'Не удалось изменить роль')) return;
+              if (context.mounted && handleGraphQLErrors(context, result, fallbackMessage: 'Не удалось изменить роль')) return;
 
               final updatedRole = result?['data']?['changeMemberRole']?['role'];
               if (updatedRole != null) {
@@ -276,13 +286,15 @@ class ClubAdminController {
                   members[index]['role'] = updatedRole;
                 }
                 onUpdate();
-              } else {
+              } else if (context.mounted){
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Роль не была обновлена')),
                 );
               }
             } catch (e) {
-              showErrorSnackbar(context, 'Произошла ошибка');
+              if (context.mounted){
+                showErrorSnackbar(context, 'Произошла ошибка');
+              }
             }
           },
         );
@@ -307,13 +319,15 @@ class ClubAdminController {
                 apiService: apiService,
               );
 
-              if (handleGraphQLErrors(context, result, fallbackMessage: 'Не удалось удалить участника')) return;
+              if (context.mounted && handleGraphQLErrors(context, result, fallbackMessage: 'Не удалось удалить участника')) return;
 
               users.removeWhere((u) => u.id == userId);
               members.removeWhere((m) => m['id'] == userId);
               onUpdate();
             } catch (e) {
-              showErrorSnackbar(context, 'Произошла ошибка');
+              if (context.mounted) {
+                showErrorSnackbar(context, 'Произошла ошибка');
+              }
             }
           },
         );

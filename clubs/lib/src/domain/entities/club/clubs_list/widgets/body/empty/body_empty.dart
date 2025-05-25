@@ -67,12 +67,13 @@ class _ClubsListBodyEmpty extends StatelessWidget {
                 type: ButtonType.secondary,
                 customWidth: 200.toFigmaSize,
                 onPressed: () async {
+                  final bloc = context.read<ClubsListBloc>();
                   final result = await Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const ClubFormScreen()),
                   );
                   if (result == true) {
-                    context.read<ClubsListBloc>().add(LoadClubsEvent());
+                    bloc.add(LoadClubsEvent());
                   }
                 }
               ),

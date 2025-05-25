@@ -1,6 +1,7 @@
 import 'package:clubs/src/data/clubs_api_service.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/common/overlay_menu_position.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/common/row_menu.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/common/alert_dialogs.dart';
 import 'package:clubs/utils/qraphql_error_utils.dart';
@@ -60,18 +61,23 @@ class ExitMenuController {
           customColor: const Color(0xFFFF281A),
           onConfirm: () async {
             try {
+              final navigator = Navigator.of(context);
               final result = await removeMemberFromClub(
                 clubId: clubId,
                 memberId: userId,
                 apiService: apiService,
               );
 
-              if (handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка при выходе из группы')) return;
+              if (context.mounted && handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка при выходе из группы')) return;
 
-              Navigator.of(context).pop(); 
+              navigator.pop(); 
             } catch (e) {
-              print('Ошибка при выходе из группы: $e');
-              showErrorSnackbar(context, 'Ошибка при выходе из группы');
+              if (kDebugMode) {
+                print('Ошибка при выходе из группы: $e');
+              }
+              if (context.mounted) {
+                showErrorSnackbar(context, 'Ошибка при выходе из группы');
+              }
             }
           },
         );

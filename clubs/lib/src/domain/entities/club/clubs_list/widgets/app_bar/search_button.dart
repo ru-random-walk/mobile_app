@@ -6,8 +6,8 @@ class _SearchButton extends StatelessWidget {
   final VoidCallback? onTap;
 
   _SearchButton({
-    super.key,
     double? dimension,
+    // ignore: unused_element_parameter
     this.color,
     this.onTap,
   }) : dimension = dimension ?? 24.toFigmaSize;
