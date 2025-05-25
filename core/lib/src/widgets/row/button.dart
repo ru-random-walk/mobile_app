@@ -8,7 +8,6 @@ class _MeetDataPickButton extends StatelessWidget {
   final ButtonSize size;
 
   const _MeetDataPickButton({
-    super.key,
     required this.title,
     this.onTap,
     this.icon,

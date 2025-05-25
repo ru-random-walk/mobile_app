@@ -31,7 +31,7 @@ class ChatMessagingSocketSource {
     void Function() onConnect,
   ) =>
       StompConfig.sockJS(
-        url: '${NetworkConfig.instance.baseUrl}/chat/ws',
+        url: '${NetworkConfig.baseUrl}/chat/ws',
         stompConnectHeaders: authHeaders,
         webSocketConnectHeaders: authHeaders,
         onConnect: (frame) {

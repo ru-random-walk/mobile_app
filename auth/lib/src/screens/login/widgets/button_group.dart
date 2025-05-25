@@ -1,10 +1,11 @@
+import 'dart:developer';
+
 import 'package:auth/src/domain/entities/auth_type/enum.dart';
 import 'package:auth/src/screens/login/bloc/auth_bloc.dart';
 import 'package:auth/src/screens/type_email/page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:main/main.dart';
 import 'package:ui_components/ui_components.dart';
 import 'package:ui_utils/ui_utils.dart';
 
@@ -66,7 +67,7 @@ class LoginButtonGroup extends StatelessWidget {
             text: 'Войти через Yandex',
             textStyle: context.textTheme.bodyMRegularBase90,
             onPressed: () {
-              print('Pressed');
+              log('Pressed');
             },
           ),
           dividerSmall,
@@ -80,7 +81,7 @@ class LoginButtonGroup extends StatelessWidget {
             text: 'Войти через VK',
             textStyle: context.textTheme.bodyMRegularBase90,
             onPressed: () {
-              print('Pressed');
+              log('Pressed');
             },
           ),
         ],

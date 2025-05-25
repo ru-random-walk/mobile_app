@@ -3,7 +3,7 @@ part of '../../page.dart';
 class _AvailableTimeBodyWidget extends StatefulWidget {
   final AvailableTimePageMode pageMode;
 
-  const _AvailableTimeBodyWidget({super.key, required this.pageMode});
+  const _AvailableTimeBodyWidget({required this.pageMode});
 
   @override
   State<_AvailableTimeBodyWidget> createState() =>
@@ -64,7 +64,7 @@ class _AvailableTimeBodyWidgetState extends State<_AvailableTimeBodyWidget> {
                 spacer,
                 const _AvailableTimePicker(),
                 spacer,
-                _AvailableTimeGeolocationPicker(),
+                const _AvailableTimeGeolocationPicker(),
               ],
             ),
           ),

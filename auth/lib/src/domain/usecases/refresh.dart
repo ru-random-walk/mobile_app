@@ -7,7 +7,9 @@ import 'package:utils/utils.dart';
 class AuthWithRefreshTokenUseCase {
   final _authRepository = AuthRepositoryI(
     AuthDataSource(
-      Dio(BaseOptions(baseUrl: NetworkConfig.instance.baseUrl)),
+      Dio(BaseOptions(
+        baseUrl: NetworkConfig.baseUrl,
+      )),
     ),
   );
   final _tokenStorage = TokenStorage();
@@ -27,7 +29,7 @@ class AuthWithRefreshTokenUseCase {
     final res = await _authRepository.refreshToken(refreshToken);
     return await res.fold(
       Left.new,
-      (data) async{
+      (data) async {
         await _tokenStorage.updateData(data);
         return Right(null);
       },

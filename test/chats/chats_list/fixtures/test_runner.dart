@@ -10,7 +10,7 @@ import 'mocks.dart';
 import 'pump_screen.dart';
 
 Future<void> testOnDevice(WidgetTester tester, TestDevice device, 
-    MockChatsListBloc bloc, String imagePath) async {
+    MockChatsListBloc bloc, String imagePath,) async {
 
   final binding = TestWidgetsFlutterBinding.ensureInitialized();
   binding.window.devicePixelRatioTestValue = device.pixelRatio;
