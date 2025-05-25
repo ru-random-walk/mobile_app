@@ -14,7 +14,7 @@ List<ChatEntity> generateChats(int count) {
     ),
     lastMessage: TextMessageEntity(
       id: 'message_$i',
-      timestamp: DateTime.now().subtract(Duration(minutes: i * 3)),
+      timestamp: DateTime(2024, 1, 1, 17, i * 3),
       isMy: i.isEven,
       isChecked: i % 3 == 0,
       text: 'Test message $i',
