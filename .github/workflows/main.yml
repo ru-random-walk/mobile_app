@@ -75,3 +75,11 @@ jobs:
 
       - name: Run golden tests
         run: xvfb-run --auto-servernum flutter test --tags=golden --update-goldens
+
+      - name: Upload golden test artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: golden-test-artifacts
+          path: |
+            test/**/goldens/failures/**
+            test/**/goldens/**

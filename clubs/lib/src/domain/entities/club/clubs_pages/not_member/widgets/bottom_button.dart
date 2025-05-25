@@ -36,15 +36,16 @@ class BottomButton extends StatelessWidget {
 
               if (context.mounted && handleGraphQLErrors(context, result, fallbackMessage: 'Не удалось вступить в клуб')) return;
 
-              final member = result?['data']?['addMemberInClub'];
+              final member = result?['data']?['tryJoinInClub'];
 
               final message = member != null
                   ? 'Вы успешно вступили в клуб'
                   : 'Не удалось вступить в клуб';
-
+              
               if (context.mounted ) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(message)),
+                SnackBar(content: Text(message), 
+                  backgroundColor: member != null ? context.colors.main_50 : Colors.grey,),
               );
               }
 
