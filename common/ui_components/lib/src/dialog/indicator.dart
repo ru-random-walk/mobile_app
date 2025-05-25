@@ -23,6 +23,7 @@ class DialogStatusIndicator extends StatelessWidget {
   }
 
   // TODO: рефакторинг
+  // ignore: unused_element
   Widget _getRecivedWidget(Recieved type, BuildContext context) {
     return SizedBox.square(
       dimension: 28.toFigmaSize,
@@ -42,6 +43,7 @@ class DialogStatusIndicator extends StatelessWidget {
   }
 
   // TODO: рефакторинг
+  // ignore: unused_element
   Widget _getCheckWidget(DialogType type) {
     final path = switch (type) {
       Sended _ => 'assets/icons/checked.svg',
