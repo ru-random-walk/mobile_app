@@ -1,13 +1,12 @@
 import 'package:auth/auth.dart';
 import 'package:core/core.dart';
 import 'package:core/src/network/interceptor.dart';
-import 'package:core/src/network/url.dart';
 import 'package:dio/dio.dart';
 
 class NetworkConfig {
   final Dio dio;
 
-  String get baseUrl => NetworkUrl.baseUrl;
+  static const baseUrl = String.fromEnvironment('NETWORK_URL');
 
   static final _instance = NetworkConfig._();
 
@@ -15,7 +14,9 @@ class NetworkConfig {
 
   NetworkConfig._()
       : dio = Dio(
-          BaseOptions(baseUrl: NetworkUrl.baseUrl),
+          BaseOptions(
+            baseUrl: baseUrl,
+          ),
         );
 
   void init(void Function() onRefreshTokenExpired) {
