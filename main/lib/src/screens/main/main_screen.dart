@@ -26,9 +26,7 @@ class _MainPageState extends State<MainPage> {
     const MatcherPage(),
     const ClubsListPage(),
     const ChatsListPage(),
-    const Center(
-      child: Text('4'),
-    ),
+    const UserSettingsPage(),
   ];
 
   var _currentIndex = 0;

@@ -1,7 +1,7 @@
 name: clubs
 description: "A new Flutter package project."
 version: 0.0.1
-homepage:
+publish_to: none
 
 environment:
   sdk: ^3.5.4
@@ -30,9 +30,9 @@ dependencies:
   provider: ^6.1.5
   drift: ^2.26.1
   drift_flutter: ^0.2.4
+  collection: ^1.19.1
   image_picker: ^1.1.2
   flutter_image_compress: ^2.4.0
-  collection: ^1.19.1
 
 dev_dependencies:
   flutter_test:

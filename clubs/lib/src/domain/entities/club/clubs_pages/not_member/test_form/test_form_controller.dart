@@ -35,7 +35,9 @@ class TestFormController {
             .toList();
       }
     } catch (e) {
-      print('Ошибка при загрузке вопросов: $e');
+      if (kDebugMode) {
+        print('Ошибка при загрузке вопросов: $e');
+      }
     } finally {
       isLoading = false;
       onUpdate();
@@ -112,7 +114,7 @@ class TestFormController {
       apiService: clubApiService,
       );
 
-      if (handleGraphQLErrors(context, response, fallbackMessage: 'Ошибка завершения теста')) return;
+      if (context.mounted && handleGraphQLErrors(context, response, fallbackMessage: 'Ошибка завершения теста')) return;
 
       final answerId = response?['data']?['createApprovementAnswerForm']?['id'];
       String? status;
@@ -122,7 +124,7 @@ class TestFormController {
       answerId: answerId,
       apiService: clubApiService,
       );
-      if (handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка отправки ответов')) return;
+      if (context.mounted && handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка отправки ответов')) return;
        
       status = result?['data']['setAnswerStatusToSent']?['status'];
       }
@@ -132,20 +134,25 @@ class TestFormController {
           clubId: clubId,
           apiService: clubApiService,
         );
-      if (handleGraphQLErrors(context, result, fallbackMessage: 'Не получилось вступить в группу')) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Ответы отправлены'),
-          backgroundColor: context.colors.main_50,
-        ),
-      );
+      if (context.mounted) {  
+        if (handleGraphQLErrors(context, result, fallbackMessage: 'Не получилось вступить в группу')) return;
+        
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Ответы отправлены'),
+            backgroundColor: context.colors.main_50,
+          ),
+        );
 
-      if (context.mounted) {
         Navigator.of(context).pop(status == 'PASSED');
       }
     } catch (e) {
-      print(e);
-      showErrorSnackbar(context, 'Произошла ошибка');
+      if (kDebugMode) {
+        print(e);
+      }
+      if (context.mounted) {
+        showErrorSnackbar(context, 'Произошла ошибка');
+      }
     } 
   }
 }

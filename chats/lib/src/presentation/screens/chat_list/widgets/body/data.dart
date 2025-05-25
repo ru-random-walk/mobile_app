@@ -45,10 +45,8 @@ class _ChatListBodyData extends StatelessWidget {
               isInvitation: lastMessage is InvitationMessageEntity,
               type: Readed(),
               text: lastMessage is TextMessageEntity ? lastMessage.text : null,
-              name: chat.companion.fullName,
+              user: chat.companion,
               date: lastMessage?.timestamp,
-              userId: chat.companion.id,
-              photoVersion: chat.companion.photoVersion,
             ),
           );
         },

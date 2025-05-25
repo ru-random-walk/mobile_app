@@ -1,3 +1,5 @@
+// ignore_for_file: implementation_imports
+
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -17,7 +19,7 @@ class ImageNotPickedError extends BaseError {
   ImageNotPickedError() : super('No image picked', StackTrace.current);
 }
 
-class ImageRepository {
+class ImagePickerRepository {
   final _compressor = ImageCompressor();
   final _picker = ImagePickerDataSource();
 

@@ -24,7 +24,7 @@ class ApprovementUpdater {
             questions: questions!,
             apiService: apiService,
           );
-          if (handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка при добавлении теста')) return;
+          if (context.mounted && handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка при добавлении теста')) return;
         
         } else if (conditionName == 'Запрос на вступление') {
           final result = await addMembersConfirmApprovement(
@@ -32,7 +32,7 @@ class ApprovementUpdater {
             requiredConfirmationNumber: infoCount!,
             apiService: apiService,
           );
-          if (handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка при добавлении подтвержения')) return;
+          if (context.mounted && handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка при добавлении подтвержения')) return;
         }
       
       } else if (initialIsConditionAdded && !isConditionAdded) {
@@ -40,7 +40,7 @@ class ApprovementUpdater {
           approvementId: approvementId!,
           apiService: apiService,
         );
-        if (handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка при удалении условия')) return;
+        if (context.mounted && handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка при удалении условия')) return;
       
       } else if (initialIsConditionAdded && isConditionAdded) {
         final typeChanged = initialConditionName != conditionName;
@@ -49,21 +49,21 @@ class ApprovementUpdater {
             approvementId: approvementId!,
             apiService: apiService,
           );
-          if (handleGraphQLErrors(context, removed, fallbackMessage: 'Ошибка при удалении условия')) return;
+          if (context.mounted && handleGraphQLErrors(context, removed, fallbackMessage: 'Ошибка при удалении условия')) return;
           if (conditionName == 'Тест') {
             final result = await addFormApprovement(
               clubId: clubId,
               questions: questions!,
               apiService: apiService,
             );
-            if (handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка при добавлении теста')) return;
+            if (context.mounted && handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка при добавлении теста')) return;
           } else if (conditionName == 'Запрос на вступление') {
             final result = await addMembersConfirmApprovement(
               clubId: clubId,
               requiredConfirmationNumber: infoCount!,
               apiService: apiService,
             );
-            if (handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка при добавлении подтвержения')) return;
+            if (context.mounted && handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка при добавлении подтвержения')) return;
           }
         } else {
           if (conditionName == 'Запрос на вступление' &&
@@ -73,7 +73,7 @@ class ApprovementUpdater {
               requiredConfirmationNumber: infoCount!,
               apiService: apiService,
             );
-            if (handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка при обновлении подтвержения')) return;
+            if (context.mounted && handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка при обновлении подтвержения')) return;
           } else if (conditionName == 'Тест' &&
               !_areQuestionsEqual(initialQuestions, questions)) {
             final result = await updateFormApprovement(
@@ -81,13 +81,17 @@ class ApprovementUpdater {
               questions: questions!,
               apiService: apiService,
             );
-            if (handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка при обновлении теста')) return;
+            if (context.mounted && handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка при обновлении теста')) return;
           }
         }
       }
     } catch (e) {
-      print(e);
-      showErrorSnackbar(context, 'Произошла ошибка');
+      if (kDebugMode) {
+        print(e);
+      }
+      if (context.mounted) {
+        showErrorSnackbar(context, 'Произошла ошибка');
+      }
     }
   }
 

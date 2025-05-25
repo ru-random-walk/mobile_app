@@ -1,10 +1,11 @@
 import 'package:clubs/src/data/clubs_api_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ui_components/ui_components.dart';
 import 'package:ui_utils/ui_utils.dart';
 
 import 'package:auth/auth.dart';
-import 'package:core/src/network/page_query/page_query.dart';
+import 'package:core/core.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/common/app_bar.dart';
 import 'package:clubs/utils/qraphql_error_utils.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/common/request_list/request_model.dart';
@@ -62,9 +63,13 @@ class _RequestListScreenState extends State<RequestListScreen> {
         size: size,
         apiService: widget.apiService,
       );
+
+      if (!mounted) return;
+
       if (handleGraphQLErrors(context, response,
-          fallbackMessage: 'Ошибка при загрузке списка заявок на вступление'))
+          fallbackMessage: 'Ошибка при загрузке списка заявок на вступление')) {
         return;
+      }
 
       final items = response?['data']?['getApproverWaitingConfirmations']
           as List<dynamic>?;
@@ -99,8 +104,12 @@ class _RequestListScreenState extends State<RequestListScreen> {
         }
       }
     } catch (e) {
-      print('Ошибка загрузки пользователей: $e');
-      showErrorSnackbar(context, 'Произошла ошибка');
+      if (kDebugMode) {
+        print('Ошибка загрузки пользователей: $e');
+      }
+      if (mounted) {
+        showErrorSnackbar(context, 'Произошла ошибка');
+      }
       setState(() {
         isLoading = false;
       });
@@ -145,11 +154,9 @@ class _RequestListScreenState extends State<RequestListScreen> {
                             itemBuilder: (context, index) {
                               final requestUser = requestUsers[index];
                               return RequestWidget(
-                                name: requestUser.user.fullName,
+                                user: requestUser.user,
                                 confirmationId: requestUser.confirmationId,
                                 apiService: widget.apiService,
-                                userId: requestUser.user.id,
-                                photoVersion: requestUser.user.photoVersion,
                               );
                             },
                             separatorBuilder: (context, index) => Divider(

@@ -14,7 +14,7 @@ class GoogleSignInRepositoryI implements GoogleSignInRepository {
     ];
     final gogleSignIn = GoogleSignIn(
       scopes: scopes,
-      clientId: kIsWeb ? const String.fromEnvironment('GOOGLE_CLENT_ID') : null,
+      clientId: kIsWeb ? const String.fromEnvironment('GOOGLE_CLIENT_ID') : null,
     );
     final acc = await gogleSignIn.signIn();
     final auth = await acc?.authentication;

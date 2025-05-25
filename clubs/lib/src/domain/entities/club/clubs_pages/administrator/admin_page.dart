@@ -1,11 +1,12 @@
 import 'package:clubs/src/data/clubs_api_service.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/common/photo_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ui_utils/ui_utils.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:auth/auth.dart';
-import 'package:core/src/network/page_query/page_query.dart';
+import 'package:core/core.dart';
 import 'package:clubs/src/domain/entities/club/create_and_edit/create_club_page.dart';
 import 'package:clubs/src/domain/entities/club/text_format/member_format.dart';
 import 'package:clubs/src/domain/entities/club/clubs_pages/common/row_menu.dart';
@@ -63,6 +64,8 @@ class _ClubAdminScreenState extends State<ClubAdminScreen> {
         apiService: _clubApiService,
       );
 
+      if (!mounted) return;
+
       if (handleGraphQLErrors(context, result,
           fallbackMessage: 'Ошибка загрузки клуба')) {
         setState(() => _isLoading = false);
@@ -85,8 +88,12 @@ class _ClubAdminScreenState extends State<ClubAdminScreen> {
         _isLoading = false;
       });
     } catch (e) {
-      print(e);
-      showErrorSnackbar(context, 'Произошла ошибка');
+      if (kDebugMode) {
+        print(e);
+      }
+      if (context.mounted) {
+        showErrorSnackbar(context, 'Произошла ошибка');
+      }
       setState(() {
         _isLoading = false;
       });

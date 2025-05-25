@@ -53,18 +53,24 @@ class _MemberPageState extends State<MemberPage> {
         apiService: _clubApiService,
       );
 
+      if (!mounted) return;
+
       if (handleGraphQLErrors(
         context,
         data,
         fallbackMessage: 'Не удалось загрузить данные клуба',
-      )) return;
+      )) {
+        return;
+      }
 
       setState(() {
         clubData = data?['data']?['getClub'];
         isLoading = false;
       });
     } catch (e) {
-      showErrorSnackbar(context, 'Произошла ошибка');
+      if (context.mounted) {
+        showErrorSnackbar(context, 'Произошла ошибка');
+      }
       setState(() {
         isLoading = false;
       });

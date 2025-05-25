@@ -31,7 +31,9 @@ Future<List<Map<String, dynamic>>> getClubMembers({
     final errors = result?['errors'] as List<dynamic>?;
     if (errors != null && errors.isNotEmpty) {
       final message = errors.first['message'] as String?;
-      print('[GraphQL Error] $message');
+      if (kDebugMode) {
+        print('[GraphQL Error] $message');
+      }
     }
     return [];
   }
