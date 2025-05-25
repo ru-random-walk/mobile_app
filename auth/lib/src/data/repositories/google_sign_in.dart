@@ -1,4 +1,3 @@
-import 'package:auth/src/data/repositories/google_client_id.dart';
 import 'package:auth/src/domain/repositories/google_sign_in.dart';
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
@@ -15,7 +14,7 @@ class GoogleSignInRepositoryI implements GoogleSignInRepository {
     ];
     final gogleSignIn = GoogleSignIn(
       scopes: scopes,
-      clientId: kIsWeb ? googleClientId : null,
+      clientId: kIsWeb ? const String.fromEnvironment('GOOGLE_CLENT_ID') : null,
     );
     final acc = await gogleSignIn.signIn();
     final auth = await acc?.authentication;
