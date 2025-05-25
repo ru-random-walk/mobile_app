@@ -24,19 +24,19 @@ const List<TestDevice> testDevices = [
   TestDevice(
     name: 'iphone_se',
     size: Size(375, 667),
-    pixelRatio: 2.0,
+    pixelRatio: 2,
     safeArea: EdgeInsets.only(top: 20),
   ),
   TestDevice(
     name: 'ipad',
     size: Size(768, 1024),
-    pixelRatio: 2.0,
+    pixelRatio: 2,
     safeArea: EdgeInsets.all(20),
   ),
   TestDevice(
     name: 'iphone_5',
     size: Size(320, 568),
-    pixelRatio: 2.0,
+    pixelRatio: 2,
     safeArea: EdgeInsets.only(top: 20),
   ),
 ];

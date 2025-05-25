@@ -17,7 +17,8 @@ void main() {
 
   tearDown(commontearDown);
 
-  testWidgets('ChatsListScreen pull to refresh triggers data reload', (tester) async {
+  testWidgets('ChatsListScreen pull to refresh triggers data reload', 
+      (tester) async {
     final chats = generateChats(5);
     bloc = mockBlocWithState(ChatsListData(chats: chats)) as MockChatsListBloc;
 

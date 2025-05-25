@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:io';
 
 import 'package:chats/src/presentation/screens/chat_list/bloc/chats_list_bloc.dart';

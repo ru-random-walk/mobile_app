@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:chats/src/presentation/screens/chat_list/bloc/chats_list_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -17,7 +19,8 @@ void main() {
 
   tearDown(commontearDown);
 
-  testWidgets('ChatsListScreen - layout does not overflow or overlap', (WidgetTester tester) async {
+  testWidgets('ChatsListScreen - layout does not overflow or overlap',
+     (WidgetTester tester) async {
     final chats = generateChats(5);
     bloc = mockBlocWithState(ChatsListData(chats: chats)) as MockChatsListBloc;
 
@@ -29,7 +32,8 @@ void main() {
     final dialogWidgets = find.byType(DialogWidget);
     expect(dialogWidgets, findsNWidgets(chats.length));
 
-    final screenSize = tester.binding.window.physicalSize / tester.binding.window.devicePixelRatio;
+    final screenSize = tester.binding.window.physicalSize 
+      / tester.binding.window.devicePixelRatio;
 
     for (var i = 0; i < chats.length; i++) {
       final dialog = dialogWidgets.at(i);
@@ -42,7 +46,8 @@ void main() {
     }
   });
 
-  testWidgets('ChatsListScreen - empty state layout is correct', (WidgetTester tester) async {
+  testWidgets('ChatsListScreen - empty state layout is correct', 
+      (WidgetTester tester) async {
     bloc = mockBlocWithState(ChatsListEmpty()) as MockChatsListBloc;
 
     await pumpScreen(tester, bloc);
@@ -53,7 +58,9 @@ void main() {
     final imageFinder = find.byType(Image);
     expect(imageFinder, findsOneWidget);
 
-    final screenSize = tester.binding.window.physicalSize / tester.binding.window.devicePixelRatio;
+    final screenSize = tester.binding.window.physicalSize 
+      / tester.binding.window.devicePixelRatio; 
+      
     final rect = tester.getRect(imageFinder);
     expect(rect.left >= 0, true);
     expect(rect.right <= screenSize.width, true);

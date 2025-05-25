@@ -43,7 +43,9 @@ void main() {
     expect(find.text('Chats'), findsOneWidget);
     expect(find.byType(Row), findsWidgets);
     expect(find.text('Чатов пока нет'), findsOneWidget);
-    expect(find.text('Ваши чаты появятся здесь поле назначения прогулки'), findsOneWidget);
+    expect(find.text('Ваши чаты появятся здесь поле назначения прогулки'), 
+      findsOneWidget,);
+      
     final finder = find.byWidgetPredicate((widget) {
       if (widget is Image && widget.image is AssetImage) {
         final assetImage = widget.image as AssetImage;
