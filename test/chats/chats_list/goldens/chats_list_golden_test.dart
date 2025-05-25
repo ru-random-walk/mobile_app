@@ -1,5 +1,5 @@
 // ignore_for_file: deprecated_member_use
-
+@Tags(['golden'])
 import 'package:chats/src/presentation/screens/chat_list/bloc/chats_list_bloc.dart';
 import 'package:core/core.dart';
 import 'package:flutter/services.dart';
