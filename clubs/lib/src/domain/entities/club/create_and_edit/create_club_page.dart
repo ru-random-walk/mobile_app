@@ -222,7 +222,7 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
                             apiService: ClubApiService(),
                           );
                           clubId = result?['data']
-                              ?['createClubWithConfirmApprovement']?['id'];
+                              ?['createClubWithMembersConfirmApprovement']?['id'];
                         } else {
                           result = await createClubWithFormApprovement(
                             name: name,
