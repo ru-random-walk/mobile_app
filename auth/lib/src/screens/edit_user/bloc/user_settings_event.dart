@@ -7,7 +7,7 @@ sealed class UserSettingsEvent {
 
 class UpdateUserSettings extends UserSettingsEvent {
   final UpdateUserInfoEntity? updateInfo;
-  final SetObjectPhotoArgs? photo;
+  final UpdateUserAvatar? photo;
 
   const UpdateUserSettings({
     required this.updateInfo,

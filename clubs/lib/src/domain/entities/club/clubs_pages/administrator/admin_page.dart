@@ -25,6 +25,7 @@ part 'logic/club_admin_controller.dart';
 
 class ClubAdminScreen extends StatefulWidget {
   final String clubId;
+  final int photoVersion;
   final String currentId;
   final int membersCount;
 
@@ -33,6 +34,7 @@ class ClubAdminScreen extends StatefulWidget {
     required this.clubId,
     required this.currentId,
     required this.membersCount,
+    required this.photoVersion,
   });
 
   @override
@@ -76,6 +78,7 @@ class _ClubAdminScreenState extends State<ClubAdminScreen> {
       setState(() {
         _club = data['getClub'];
         _controller = ClubAdminController(
+          photoVersion: widget.photoVersion,
           clubId: widget.clubId,
           apiService: _clubApiService,
           currentUserId: widget.currentId,

@@ -8,7 +8,6 @@ import 'package:utils/utils.dart';
 class RemoteImageClubRepostory implements RemoteImageInfoRepository {
   final _client = ClubPhotoDataSource();
 
-  @override
   Future<Either<BaseError, RemoteImageInfo>> uploadPhotoForObject({
     required String objectId,
     required Uint8List imageBytes,
@@ -18,10 +17,7 @@ class RemoteImageClubRepostory implements RemoteImageInfoRepository {
       clubId: objectId,
       base64Image: base64,
     );
-    return res.fold(
-      Left.new,
-      (url) => Right(RemoteImageInfo(url: url, version: 1)),
-    );
+    return res;
   }
 
   @override

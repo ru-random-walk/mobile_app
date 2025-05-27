@@ -6,6 +6,7 @@ class ClubAdminController {
   final String currentUserId;
   final VoidCallback onUpdate;
   final String clubName;
+  final int? photoVersion;
   final String description;
   final List<Map<String, dynamic>> approvement;
 
@@ -32,6 +33,7 @@ class ClubAdminController {
     required this.clubName,
     required this.description,
     required this.approvement,
+    required this.photoVersion,
   });
 
   void init() {
@@ -60,7 +62,8 @@ class ClubAdminController {
   }
 
   String getUserRole(String userId) {
-    final member = members.firstWhere((m) => m['id'] == userId, orElse: () => {});
+    final member =
+        members.firstWhere((m) => m['id'] == userId, orElse: () => {});
     return member['role'] ?? 'USER';
   }
 
@@ -76,7 +79,8 @@ class ClubAdminController {
       );
 
       final ids = newMembers.map((m) => m['id'] as String).toList();
-      final result = await UsersDataSource().getUsers(PageQueryModel(page: 0, size: ids.length), ids);
+      final result = await UsersDataSource()
+          .getUsers(PageQueryModel(page: 0, size: ids.length), ids);
       final newUsers = result.content.map((u) => u.toDomain()).toList();
 
       if (page == 0) {
@@ -91,7 +95,7 @@ class ClubAdminController {
       _countRoles();
       _currentPage = page;
       hasMore = newMembers.length == _pageSize;
-      onUpdate();      
+      onUpdate();
     } catch (e) {
       if (kDebugMode) {
         print('Ошибка при загрузке участников: $e');
@@ -103,8 +107,8 @@ class ClubAdminController {
 
   void _countRoles() {
     inspectorAndAdminCount = members
-      .where((m) => m['role'] == 'ADMIN' || m['role'] == 'INSPECTOR')
-      .length;
+        .where((m) => m['role'] == 'ADMIN' || m['role'] == 'INSPECTOR')
+        .length;
   }
 
   void showMenuClub(BuildContext context, double dy) {
@@ -112,128 +116,137 @@ class ClubAdminController {
 
     Overlay.of(context);
 
-     _menuOverlay = OverlayEntry(
-        builder: (_) => TapRegion(
-          onTapOutside: (_) {
+    _menuOverlay = OverlayEntry(
+      builder: (_) => TapRegion(
+        onTapOutside: (_) {
+          _hideMenu();
+        },
+        child: ClubAdminMenu(
+          dY: dy,
+          closeMenu: () {
             _hideMenu();
           },
-          child: ClubAdminMenu(
-            dY: dy,
-            closeMenu: () {
-              _hideMenu();
-            },
-            onEdit: () async {
-              try {
-                final navigator = Navigator.of(context);
-                final clubData = await getApprovementInfo(clubId: clubId, apiService: apiService,);
+          onEdit: () async {
+            try {
+              final navigator = Navigator.of(context);
+              final clubData = await getApprovementInfo(
+                clubId: clubId,
+                apiService: apiService,
+              );
 
-                if (context.mounted && handleGraphQLErrors(
-                  context,
-                  clubData,
-                  fallbackMessage: 'Ошибка при загрузке редактирования',
-                )) {
-                  return;
-                }
+              if (context.mounted &&
+                  handleGraphQLErrors(
+                    context,
+                    clubData,
+                    fallbackMessage: 'Ошибка при загрузке редактирования',
+                  )) {
+                return;
+              }
 
-                final approvements = clubData?['data']?['getClub']?['approvements'] as List<dynamic>?; 
-                
-                if (approvements == null || approvements.isEmpty) {
-                  navigator.push(
-                    MaterialPageRoute(
-                      builder: (context) => ClubFormScreen(
-                        initialName: clubName,
-                        initialDescription: description,
-                        inspectorAndAdminCount: inspectorAndAdminCount,
-                        initialIsConditionAdded: false,
-                        isEditMode: true,
-                        clubId: clubId,
-                      ),
-                    ),
-                  );
-                  return;
-                }
+              final approvements = clubData?['data']?['getClub']
+                  ?['approvements'] as List<dynamic>?;
 
-                final data = approvements.first['data'];
-                final typename = data['__typename'];
-
-                String conditionName = '';
-                int infoCount = 0;
-                List<Map<String, dynamic>>? questions; 
-                String approvementId = approvements.first['id'];
-
-                if (typename == 'FormApprovementData') {
-                  conditionName = 'Тест';
-                  questions = (data['questions'] as List<dynamic>?)
-                    ?.map((q) => Map<String, dynamic>.from(q))
-                    .toList();
-                  infoCount = questions?.length ?? 0;
-                } else if (typename == 'MembersConfirmApprovementData') {
-                  conditionName = 'Запрос на вступление';
-                  infoCount = data['requiredConfirmationNumber'];
-                }                         
-
+              if (approvements == null || approvements.isEmpty) {
                 navigator.push(
                   MaterialPageRoute(
                     builder: (context) => ClubFormScreen(
                       initialName: clubName,
                       initialDescription: description,
-                      initialIsConditionAdded: true,
-                      initialConditionName: conditionName,
-                      initialInfoCount: infoCount,
-                      initialQuestions: questions,
                       inspectorAndAdminCount: inspectorAndAdminCount,
+                      initialIsConditionAdded: false,
                       isEditMode: true,
                       clubId: clubId,
-                      approvementId: approvementId,
                     ),
                   ),
                 );
-              }catch (e) {
-                if (kDebugMode) {
-                  print(e);
-                }
-                if (context.mounted){
-                  showErrorSnackbar(context, 'Произошла ошибка');
-                }
+                return;
               }
-              _hideMenu();
-            },
-            onDelete: () async {
-              final confirmed = await showDialog<bool>(
-                context: context,
-                builder: (dialogContext) {
-                  return ConfirmActionDialog(
-                    message: 'Вы уверены, что хотите удалить группу?',
-                    confirmText: 'Удалить',
-                    customColor: const Color(0xFFFF281A),
-                    onConfirm: () async {
-                      try {
-                        final navigator = Navigator.of(context);
-                        final result = await removeClub(clubId: clubId, apiService: apiService);
-                        
-                        if (context.mounted && handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка при удалении группы')) {
-                          return;
-                        }
 
-                        navigator.pop(true); 
-                      } catch (e) {
-                        if (context.mounted ) {
-                          showErrorSnackbar(context, 'Произошла ошибка');
-                        }
-                      }
-                    },
-                  );
-                },
+              final data = approvements.first['data'];
+              final typename = data['__typename'];
+
+              String conditionName = '';
+              int infoCount = 0;
+              List<Map<String, dynamic>>? questions;
+              String approvementId = approvements.first['id'];
+
+              if (typename == 'FormApprovementData') {
+                conditionName = 'Тест';
+                questions = (data['questions'] as List<dynamic>?)
+                    ?.map((q) => Map<String, dynamic>.from(q))
+                    .toList();
+                infoCount = questions?.length ?? 0;
+              } else if (typename == 'MembersConfirmApprovementData') {
+                conditionName = 'Запрос на вступление';
+                infoCount = data['requiredConfirmationNumber'];
+              }
+
+              navigator.push(
+                MaterialPageRoute(
+                  builder: (context) => ClubFormScreen(
+                    initialName: clubName,
+                    initialDescription: description,
+                    initialIsConditionAdded: true,
+                    initialConditionName: conditionName,
+                    initialInfoCount: infoCount,
+                    initialQuestions: questions,
+                    inspectorAndAdminCount: inspectorAndAdminCount,
+                    isEditMode: true,
+                    clubId: clubId,
+                    approvementId: approvementId,
+                    photoVersion: photoVersion,
+                  ),
+                ),
               );
-
-              if (confirmed == true && context.mounted) {
-                _hideMenu();
-                Navigator.of(context).pop(true); 
+            } catch (e) {
+              if (kDebugMode) {
+                print(e);
               }
-            },
-          ),
+              if (context.mounted) {
+                showErrorSnackbar(context, 'Произошла ошибка');
+              }
+            }
+            _hideMenu();
+          },
+          onDelete: () async {
+            final confirmed = await showDialog<bool>(
+              context: context,
+              builder: (dialogContext) {
+                return ConfirmActionDialog(
+                  message: 'Вы уверены, что хотите удалить группу?',
+                  confirmText: 'Удалить',
+                  customColor: const Color(0xFFFF281A),
+                  onConfirm: () async {
+                    try {
+                      final navigator = Navigator.of(context);
+                      final result = await removeClub(
+                          clubId: clubId, apiService: apiService);
+
+                      if (context.mounted &&
+                          handleGraphQLErrors(context, result,
+                              fallbackMessage: 'Ошибка при удалении группы')) {
+                        return;
+                      }
+
+                      navigator.pop(true);
+                    } catch (e) {
+                      if (context.mounted) {
+                        showErrorSnackbar(context, 'Произошла ошибка');
+                      }
+                    }
+                  },
+                );
+              },
+            );
+
+            if (confirmed == true && context.mounted) {
+              _hideMenu();
+              Navigator.of(context).pop(true);
+            }
+          },
         ),
-      );
+      ),
+    );
     Overlay.of(context).insert(_menuOverlay!);
   }
 
@@ -261,7 +274,8 @@ class ClubAdminController {
     _menuOverlay = null;
   }
 
-  Future<void> roleChangeMember(BuildContext context, String userId, String newRole) async {
+  Future<void> roleChangeMember(
+      BuildContext context, String userId, String newRole) async {
     showDialog(
       context: context,
       builder: (context) {
@@ -277,7 +291,11 @@ class ClubAdminController {
                 apiService: apiService,
               );
 
-              if (context.mounted && handleGraphQLErrors(context, result, fallbackMessage: 'Не удалось изменить роль')) return;
+              if (context.mounted &&
+                  handleGraphQLErrors(context, result,
+                      fallbackMessage: 'Не удалось изменить роль')) {
+                return;
+              }
 
               final updatedRole = result?['data']?['changeMemberRole']?['role'];
               if (updatedRole != null) {
@@ -286,13 +304,13 @@ class ClubAdminController {
                   members[index]['role'] = updatedRole;
                 }
                 onUpdate();
-              } else if (context.mounted){
+              } else if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Роль не была обновлена')),
                 );
               }
             } catch (e) {
-              if (context.mounted){
+              if (context.mounted) {
                 showErrorSnackbar(context, 'Произошла ошибка');
               }
             }
@@ -319,7 +337,11 @@ class ClubAdminController {
                 apiService: apiService,
               );
 
-              if (context.mounted && handleGraphQLErrors(context, result, fallbackMessage: 'Не удалось удалить участника')) return;
+              if (context.mounted &&
+                  handleGraphQLErrors(context, result,
+                      fallbackMessage: 'Не удалось удалить участника')) {
+                return;
+              }
 
               users.removeWhere((u) => u.id == userId);
               members.removeWhere((m) => m['id'] == userId);

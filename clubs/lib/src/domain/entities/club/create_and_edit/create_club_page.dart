@@ -1,6 +1,8 @@
 import 'package:clubs/src/data/db/data_source/club_photo.dart';
 import 'package:clubs/src/data/image/repository/cache.dart';
 import 'package:clubs/src/data/image/repository/sender.dart';
+import 'package:clubs/src/domain/entities/club/clubs_pages/common/photo_widget.dart';
+import 'package:clubs/src/domain/usecases/update_club_photo.dart';
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +39,7 @@ class ClubFormScreen extends StatefulWidget {
   final bool isEditMode;
   final String? clubId;
   final String? approvementId;
+  final int? photoVersion;
 
   const ClubFormScreen({
     super.key,
@@ -50,6 +53,7 @@ class ClubFormScreen extends StatefulWidget {
     this.isEditMode = false,
     this.clubId,
     this.approvementId,
+    this.photoVersion,
   });
 
   @override
@@ -71,7 +75,7 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
   @override
   void initState() {
     super.initState();
-    _imageSetter = SetPhotoForObjectWithId(
+    _imageSetter = UpdateClubPhotoUseCase(
       sender: RemoteImageClubRepostory(),
       dbInfo: ClubPhotoDatabaseInfoDataSource(
         context.read(),
@@ -123,9 +127,10 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
           content: Text(errorMessage),
         ),
       );
-    }, (imageBytes) {
+    }, (file) async {
+      final bytes = await file.readAsBytes();
       setState(() {
-        this.imageBytes = imageBytes;
+        imageBytes = bytes;
       });
     });
   }
@@ -150,6 +155,8 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
             isEditMode: widget.isEditMode,
             onChooseImage: _pickImage,
             imageBytes: imageBytes,
+            clubId: widget.clubId,
+            photoVersion: widget.photoVersion,
           ),
           bottomNavigationBar: Padding(
             padding: EdgeInsets.symmetric(
@@ -195,15 +202,33 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
                           questions: questions,
                           approvementId: widget.approvementId,
                         );
-                        
+
+                        if (imageBytes != null) {
+                          try {
+                            await _imageSetter(
+                              SetObjectPhotoArgs(
+                                imageBytes: imageBytes!,
+                                objectId: widget.clubId!,
+                              ),
+                            );
+                          } catch (e) {
+                            if (context.mounted) {
+                              showErrorSnackbar(
+                                context,
+                                'Произошла ошибка при загрузке фото',
+                              );
+                            }
+                          }
+                        }
+
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            backgroundColor: context.colors.main_50,
-                            content: Text('Группа обновлена',
-                                style: context.textTheme.bodySMediumBase0),
-                          ),
-                        );
+                            SnackBar(
+                              backgroundColor: context.colors.main_50,
+                              content: Text('Группа обновлена',
+                                  style: context.textTheme.bodySMediumBase0),
+                            ),
+                          );
                         }
                       } else {
                         if (!isConditionAdded) {
@@ -222,7 +247,8 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
                             apiService: ClubApiService(),
                           );
                           clubId = result?['data']
-                              ?['createClubWithMembersConfirmApprovement']?['id'];
+                                  ?['createClubWithMembersConfirmApprovement']
+                              ?['id'];
                         } else {
                           result = await createClubWithFormApprovement(
                             name: name,
@@ -235,8 +261,9 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
                               ?['createClubWithFormApprovement']?['id'];
                         }
 
-                        if (context.mounted && handleGraphQLErrors(context, result,
-                            fallbackMessage: 'Не удалось создать группу')) {
+                        if (context.mounted &&
+                            handleGraphQLErrors(context, result,
+                                fallbackMessage: 'Не удалось создать группу')) {
                           return;
                         }
                         if (imageBytes != null) {
@@ -258,12 +285,12 @@ class _ClubFormScreenState extends State<ClubFormScreen> {
                         }
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            backgroundColor: context.colors.main_50,
-                            content: Text('Группа создана',
-                                style: context.textTheme.bodySMediumBase0),
-                          ),
-                        );
+                            SnackBar(
+                              backgroundColor: context.colors.main_50,
+                              content: Text('Группа создана',
+                                  style: context.textTheme.bodySMediumBase0),
+                            ),
+                          );
                         }
                       }
                       if (context.mounted) {
