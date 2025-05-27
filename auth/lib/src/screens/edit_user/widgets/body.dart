@@ -13,7 +13,7 @@ class _EditUserInfoBodyWidget extends StatefulWidget {
 class _EditUserInfoBodyWidgetState extends State<_EditUserInfoBodyWidget> {
   final nameEditingController = TextEditingController();
   final aboutEditingController = TextEditingController();
-  Uint8List? newImage;
+  UpdateUserAvatar? newImage;
   final _imagePicker = ImagePickerRepository();
   final _canPressButton = ValueNotifier<bool>(false);
 
@@ -62,8 +62,12 @@ class _EditUserInfoBodyWidgetState extends State<_EditUserInfoBodyWidget> {
     );
   }
 
-  void setNewImage(Uint8List image) {
-    newImage = image;
+  void setNewImage(XFile image) async {
+    newImage = UpdateUserAvatar(
+      imageBytes: await image.readAsBytes(),
+      objectId: widget.profile.id,
+      file: image,
+    );
     _validateCanPressButton();
     setState(() {});
   }
@@ -150,7 +154,7 @@ class _EditUserInfoBodyWidgetState extends State<_EditUserInfoBodyWidget> {
               builder: (context, value, child) => CustomButton(
                 text: 'Готово',
                 disabled: !value,
-                onPressed: () {
+                onPressed: () async {
                   final bloc = context.read<UserSettingsBloc>();
                   final isUserInfoChanged = isNameChanged || isAboutChanged;
                   final aboutMe = aboutEditingController.text;
@@ -161,17 +165,11 @@ class _EditUserInfoBodyWidgetState extends State<_EditUserInfoBodyWidget> {
                         )
                       : null;
                   final localNewImage = newImage;
-                  final updateImage = localNewImage != null
-                      ? SetObjectPhotoArgs(
-                          imageBytes: localNewImage,
-                          objectId: widget.profile.id,
-                        )
-                      : null;
-                  if (updateInfo == null && updateImage == null) return;
+                  if (updateInfo == null && localNewImage == null) return;
                   bloc.add(
                     UpdateUserSettings(
                       updateInfo: updateInfo,
-                      photo: updateImage,
+                      photo: localNewImage,
                     ),
                   );
                 },
@@ -184,13 +182,13 @@ class _EditUserInfoBodyWidgetState extends State<_EditUserInfoBodyWidget> {
   }
 
   Widget get avatarWidget {
-    final newImageBytes = newImage;
-    if (newImageBytes != null) {
+    final newImageData = newImage;
+    if (newImageData != null) {
       return ClipOval(
         child: SizedBox.square(
           dimension: 125.toFigmaSize,
           child: Image.memory(
-            newImageBytes,
+            newImageData.imageBytes,
             fit: BoxFit.cover,
           ),
         ),

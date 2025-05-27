@@ -2,7 +2,6 @@ import 'package:auth/src/data/models/user/avatar_info.dart';
 import 'package:auth/src/data/models/user/detailed_user.dart';
 import 'package:auth/src/data/models/user/page_user.dart';
 import 'package:auth/src/data/models/user/update_info.dart';
-import 'package:auth/src/data/models/user/upload_image.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart' hide Headers;
 import 'package:retrofit/retrofit.dart';
@@ -35,8 +34,9 @@ abstract class UsersDataSource {
   );
 
   @PUT('$_prefix/userinfo/avatar/upload')
+  @Headers({'Content-Type': 'multipart/form-data'})
   Future<UserAvatarInfoModel> changeUserAvatar(
-    @Body() UploadUserAvatarModel uploadAvatarModel,
+    @Body() FormData file,
   );
 
   @POST('$_prefix/userinfo/logout')
