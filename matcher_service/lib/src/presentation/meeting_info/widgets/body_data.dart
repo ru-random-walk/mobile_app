@@ -28,6 +28,10 @@ class _MeetingInfoBodyData extends StatelessWidget {
             if (meetingInfo is AppointmentEntity)
               _MeetingInfoUserWidget(
                 partner: meetingInfo.partner,
+              ),
+            if (meetingInfo is AvailableTimeEntity)
+              _MeetingInfoClubsWidget(
+                clubs: meetingInfo.clubs,
               )
           ],
         ),

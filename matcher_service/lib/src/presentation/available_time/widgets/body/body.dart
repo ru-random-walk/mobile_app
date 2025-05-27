@@ -31,6 +31,7 @@ class _AvailableTimeBodyWidgetState extends State<_AvailableTimeBodyWidget> {
       selectedTimeFrom = entity.timeStart;
       selectedTimeUntil = entity.timeEnd;
       selectedGeolocation = entity.location;
+      selectedClubs.value = [...entity.clubs];
     }
   }
 
@@ -116,5 +117,11 @@ class _AvailableTimeBodyWidgetState extends State<_AvailableTimeBodyWidget> {
             ),
           ),
         );
+  }
+
+  @override
+  void dispose() {
+    selectedClubs.dispose();
+    super.dispose();
   }
 }

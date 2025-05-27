@@ -1,4 +1,5 @@
 import 'package:auth/auth.dart';
+import 'package:clubs/clubs.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,6 +33,7 @@ part 'widgets/body.dart';
 part 'widgets/menu.dart';
 part 'widgets/menu_row.dart';
 part 'widgets/user_row.dart';
+part 'widgets/clubs.dart';
 
 class MeetingInfoPage extends StatelessWidget {
   final MeetingInfoArgs args;

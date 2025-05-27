@@ -1,12 +1,22 @@
-import 'package:matcher_service/src/data/mapper/person/schedule_time_frame.dart';
+import 'dart:async';
+
+import 'package:matcher_service/src/data/model/schedule/schedule_time_frame.dart';
 import 'package:matcher_service/src/data/model/schedule/user_schedule.dart';
 import 'package:matcher_service/src/domain/entity/meeting_info/list.dart';
+import 'package:matcher_service/src/domain/entity/meeting_info/preview.dart';
 
 extension PersonScheduleMapper on UserScheduleModel {
-  MeetingsForDayEntity toEntity() {
+  Future<MeetingsForDayEntity> toEntity(
+    FutureOr<List<MeetingPreviewInfoEntity>> Function(
+      List<ScheduleTimeFrameModel> timeFrame,
+      DateTime date,
+    ) mapper,
+  ) async {
+    final res = await mapper(timeFrames, date);
     return MeetingsForDayEntity(
       date: date,
-      meetings: timeFrames.map((e) => e.toEntity(date)).toList(),
+      meetings: res,
+      // meetings: timeFrames.map((e) => e.toEntity(date)).toList(),
     );
   }
 }
