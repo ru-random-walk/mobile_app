@@ -1,6 +1,7 @@
 import 'package:auth/auth.dart';
 import 'package:clubs/clubs.dart';
 import 'package:core/core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -19,6 +20,7 @@ import 'package:matcher_service/src/presentation/shared/widgets/status_icon.dart
 import 'package:provider/provider.dart';
 import 'package:ui_components/ui_components.dart';
 import 'package:ui_utils/ui_utils.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../domain/entity/meeting_info/base.dart';
 

@@ -19,14 +19,23 @@ class _MapPreview extends StatelessWidget {
               child: CustomButton(
                 text: 'Проложить маршрут',
                 onPressed: () async {
-                  final availableMaps = await MapLauncher.installedMaps;
-                  if (availableMaps.isNotEmpty) {
-                    await availableMaps.first.showDirections(
-                      destination: Coords(
-                        geolocation.point.latitude,
-                        geolocation.point.longitude,
-                      ),
+                  if (kIsWeb) {
+                    final lat = geolocation.point.latitude.toString();
+                    final lon = geolocation.point.longitude.toString();
+                    final appleMapsUri = Uri.parse(
+                      'https://maps.apple.com/?daddr=$lat,$lon&dirflg=d',
                     );
+                    launchUrl(appleMapsUri);
+                  } else {
+                    final availableMaps = await MapLauncher.installedMaps;
+                    if (availableMaps.isNotEmpty) {
+                      await availableMaps.first.showDirections(
+                        destination: Coords(
+                          geolocation.point.latitude,
+                          geolocation.point.longitude,
+                        ),
+                      );
+                    }
                   }
                 },
               ),
