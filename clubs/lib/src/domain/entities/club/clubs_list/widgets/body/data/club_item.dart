@@ -31,6 +31,7 @@ class ClubItemTile extends StatelessWidget {
                 clubId: clubId,
                 currentId: currentUserId,
                 membersCount: group.membersCount,
+                photoVersion: group.photoVersion,
               ),
             ),
           );

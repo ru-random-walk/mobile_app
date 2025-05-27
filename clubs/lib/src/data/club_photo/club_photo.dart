@@ -37,7 +37,7 @@ class ClubPhotoDataSource {
     }
   }
 
-  Future<Either<BaseError, String>> uploadPhotoForClub({
+  Future<Either<BaseError, RemoteImageInfo>> uploadPhotoForClub({
     required String clubId,
     required String base64Image,
   }) async {
@@ -49,8 +49,16 @@ class ClubPhotoDataSource {
         }
       };
       final result = await apiService.performPostRequest(mutation, variables);
-      final url = result!['data']['uploadPhotoForClub']['url'] as String;
-      return Right(url);
+      final data =
+          result!['data']['uploadPhotoForClub'] as Map<String, dynamic>;
+      final url = data['url'] as String;
+      final photoVersion = data['photoVersion'] as int;
+      return Right(
+        RemoteImageInfo(
+          url: url,
+          version: photoVersion,
+        ),
+      );
     } catch (e, stackTrace) {
       return Left(
         BaseError(

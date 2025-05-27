@@ -1,16 +1,15 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:auth/src/data/data_source/remote/user.dart';
 import 'package:auth/src/data/mappers/detailed_user.dart';
 import 'package:auth/src/data/mappers/pageable_users.dart';
 import 'package:auth/src/data/mappers/update_user_info.dart';
-import 'package:auth/src/data/models/user/upload_image.dart';
 import 'package:auth/src/domain/entities/user/detailed.dart';
 import 'package:auth/src/domain/entities/user/pageable_users.dart';
 import 'package:auth/src/domain/entities/user/update_user_info.dart';
 import 'package:auth/src/domain/repositories/user.dart';
 import 'package:core/core.dart';
+import 'package:dio/dio.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:mime/mime.dart';
 import 'package:utils/utils.dart';
 
 class UserRepository implements UserRepositoryI, RemoteImageInfoRepository {
@@ -52,16 +51,22 @@ class UserRepository implements UserRepositoryI, RemoteImageInfoRepository {
     }
   }
 
-  @override
   Future<Either<BaseError, RemoteImageInfo>> uploadPhotoForObject({
     required String objectId,
-    required Uint8List imageBytes,
+    required XFile xfile,
   }) async {
     try {
-      final base64 = base64Encode(imageBytes);
-      final res = await _usersDataSource.changeUserAvatar(
-        UploadUserAvatarModel(file: base64),
+      final mimeType = lookupMimeType(xfile.path)?.split('/') ?? ['image', 'jpeg'];
+      final file = FormData.fromMap(
+        {
+          'file': MultipartFile.fromBytes(
+            await xfile.readAsBytes(),
+            filename: xfile.name,
+            contentType: DioMediaType(mimeType[0], mimeType[1]),
+          ),
+        },
       );
+      final res = await _usersDataSource.changeUserAvatar(file);
       final avatarUrl = res.avatarUrl;
       if (avatarUrl == null) return Left(BaseError('Avatar not found', null));
       final newImageInfo = RemoteImageInfo(

@@ -14,6 +14,8 @@ class ClubFormBody extends StatelessWidget {
   final List<Map<String, dynamic>>? questions;
   final int inspectorAndAdminCount;
   final bool isEditMode;
+  final String? clubId;
+  final int? photoVersion;
 
   const ClubFormBody({
     super.key,
@@ -29,6 +31,8 @@ class ClubFormBody extends StatelessWidget {
     this.imageBytes,
     required this.onChooseImage,
     this.isEditMode = false,
+    required this.clubId,
+    required this.photoVersion,
   });
 
   Future<void> _handleEditCondition(BuildContext context) async {
@@ -65,6 +69,7 @@ class ClubFormBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localClubId = clubId;
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(
         horizontal: 20.toFigmaSize,
@@ -80,12 +85,17 @@ class ClubFormBody extends StatelessWidget {
                 width: 120.toFigmaSize,
                 height: 120.toFigmaSize,
                 child: imageBytes == null
-                    ? Center(
-                        child: Text(
-                          'Нет фото',
-                          style: context.textTheme.captionMedium,
-                        ),
-                      )
+                    ? localClubId == null
+                        ? Center(
+                            child: Text(
+                              'Нет фото',
+                              style: context.textTheme.captionMedium,
+                            ),
+                          )
+                        : ClubDetailPhotoWidget(
+                            clubId: localClubId,
+                            photoVersion: photoVersion ?? 0,
+                          )
                     : Image.memory(
                         imageBytes!,
                         fit: BoxFit.contain,

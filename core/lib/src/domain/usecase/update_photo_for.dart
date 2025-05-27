@@ -14,30 +14,26 @@ class SetObjectPhotoArgs {
   });
 }
 
-class SetPhotoForObjectWithId
-    implements BaseUseCase<BaseError, void, SetObjectPhotoArgs> {
-  final RemoteImageInfoRepository _sender;
+abstract class SetPhotoForObjectWithId<Arg extends SetObjectPhotoArgs>
+    implements BaseUseCase<BaseError, void, Arg> {
   final LocalImageInfoRepository _dbInfo;
   final CacheImageRepository _cache;
 
   SetPhotoForObjectWithId({
-    required RemoteImageInfoRepository sender,
     required LocalImageInfoRepository dbInfo,
     required CacheImageRepository cache,
-  })  : _sender = sender,
-        _dbInfo = dbInfo,
+  })  : _dbInfo = dbInfo,
         _cache = cache;
+
+  Future<Either<BaseError, RemoteImageInfo>> uploadPhoto(Arg args);
 
   @override
   Future<Either<BaseError, void>> call(
-    SetObjectPhotoArgs args,
+    Arg args,
   ) async {
     final bytes = args.imageBytes;
     final objectId = args.objectId;
-    final res = await _sender.uploadPhotoForObject(
-      objectId: objectId,
-      imageBytes: bytes,
-    );
+    final res = await uploadPhoto(args);
     if (res.isLeft) return res;
     final remoteImageInfo = res.rightValue;
     final newLocalImageInfo = LocalImageInfo(
