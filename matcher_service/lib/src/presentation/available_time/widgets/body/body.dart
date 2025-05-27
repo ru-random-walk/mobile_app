@@ -19,6 +19,8 @@ class _AvailableTimeBodyWidgetState extends State<_AvailableTimeBodyWidget> {
 
   Geolocation? selectedGeolocation;
 
+  final selectedClubs = ValueNotifier<List<ShortClubEntity>>([]);
+
   @override
   void initState() {
     super.initState();
@@ -29,6 +31,7 @@ class _AvailableTimeBodyWidgetState extends State<_AvailableTimeBodyWidget> {
       selectedTimeFrom = entity.timeStart;
       selectedTimeUntil = entity.timeEnd;
       selectedGeolocation = entity.location;
+      selectedClubs.value = [...entity.clubs];
     }
   }
 
@@ -53,25 +56,39 @@ class _AvailableTimeBodyWidgetState extends State<_AvailableTimeBodyWidget> {
             );
           case Idle():
           case AvailableTimeCreatingLoading _:
+          case AvailableTimeStateLoadingClubs():
         }
       },
-      child: Column(
-        children: [
-          Expanded(
-            child: Column(
-              children: [
-                _AvailableTimeDatePicker(),
-                spacer,
-                const _AvailableTimePicker(),
-                spacer,
-                const _AvailableTimeGeolocationPicker(),
-              ],
-            ),
-          ),
-          _AddAvailableTimeButton(
-            onTap: () => _addAvailableTime(context),
-          ),
-        ],
+      child: BlocBuilder<AvailableTimeBloc, AvailableTimeState>(
+        builder: (context, state) {
+          return switch (state) {
+            AvailableTimeStateLoadingClubs() => const Center(
+                child: CircularProgressIndicator.adaptive(),
+              ),
+            AvailableTimeStateClubsResult clubsResult => Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          _AvailableTimeDatePicker(),
+                          spacer,
+                          const _AvailableTimePicker(),
+                          spacer,
+                          const _AvailableTimeGeolocationPicker(),
+                          spacer,
+                          _AvailableTimeClubsPicker(clubsResult.clubs),
+                        ],
+                      ),
+                    ),
+                  ),
+                  _AddAvailableTimeButton(
+                    onTap: () => _addAvailableTime(context),
+                  ),
+                ],
+              ),
+          };
+        },
       ),
     );
   }
@@ -96,9 +113,15 @@ class _AvailableTimeBodyWidgetState extends State<_AvailableTimeBodyWidget> {
               timeStart: selectedTimeFrom!,
               timeEnd: selectedTimeUntil!,
               location: selectedGeolocation!,
-              clubs: [],
+              clubs: selectedClubs.value,
             ),
           ),
         );
+  }
+
+  @override
+  void dispose() {
+    selectedClubs.dispose();
+    super.dispose();
   }
 }

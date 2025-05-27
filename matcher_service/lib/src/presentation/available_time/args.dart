@@ -5,6 +5,7 @@ sealed class AvailableTimePageMode {
 }
 
 class AvailableTimePageModeAdd extends AvailableTimePageMode {
+
   const AvailableTimePageModeAdd();
 }
 

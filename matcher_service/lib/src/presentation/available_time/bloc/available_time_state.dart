@@ -3,17 +3,34 @@ part of 'available_time_bloc.dart';
 @immutable
 sealed class AvailableTimeState {}
 
-final class AvailableTimeCreatingLoading extends AvailableTimeState {}
+final class AvailableTimeStateLoadingClubs extends AvailableTimeState {}
 
-final class AvailableTimeCreatingSuccess extends AvailableTimeState {}
-
-final class AvailableTimeCreatingError extends AvailableTimeState {}
-
-final class Idle extends AvailableTimeState {}
-
-final class AvailableTimeUpdateSucces extends AvailableTimeState {
-  final AvailableTimeModifyEntity entity;
-  AvailableTimeUpdateSucces(this.entity);
+sealed class AvailableTimeStateClubsResult extends AvailableTimeState {
+  final List<ShortClubEntity> clubs;
+  AvailableTimeStateClubsResult(this.clubs);
 }
 
-final class AvailableTimeUpdateError extends AvailableTimeState {}
+final class AvailableTimeCreatingLoading extends AvailableTimeStateClubsResult {
+  AvailableTimeCreatingLoading(super.clubs);
+}
+
+final class AvailableTimeCreatingSuccess extends AvailableTimeStateClubsResult {
+  AvailableTimeCreatingSuccess(super.clubs);
+}
+
+final class AvailableTimeCreatingError extends AvailableTimeStateClubsResult {
+  AvailableTimeCreatingError(super.clubs);
+}
+
+final class Idle extends AvailableTimeStateClubsResult {
+  Idle(super.clubs);
+}
+
+final class AvailableTimeUpdateSucces extends AvailableTimeStateClubsResult {
+  final AvailableTimeModifyEntity entity;
+  AvailableTimeUpdateSucces(this.entity, super.clubs);
+}
+
+final class AvailableTimeUpdateError extends AvailableTimeStateClubsResult {
+  AvailableTimeUpdateError(super.clubs);
+}
