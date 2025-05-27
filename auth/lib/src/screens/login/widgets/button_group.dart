@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:auth/src/domain/entities/auth_type/enum.dart';
 import 'package:auth/src/screens/login/bloc/auth_bloc.dart';
 import 'package:auth/src/screens/type_email/page.dart';
@@ -43,6 +41,7 @@ class LoginButtonGroup extends StatelessWidget {
             ),
           ),
           dividerSmall,
+          dividerSmall,
           CustomButton(
             size: ButtonSize.M,
             leftIcon: Padding(
@@ -55,35 +54,41 @@ class LoginButtonGroup extends StatelessWidget {
             onPressed: () => bloc.add(LoginVia(AuthProvider.google)),
           ),
           dividerSmall,
-          CustomButton(
-            size: ButtonSize.M,
-            leftIcon: Padding(
-              padding: EdgeInsets.only(right: 8.toFigmaSize),
-              child: SvgPicture.asset(
-                'packages/auth/assets/icons/yandex.svg',
-              ),
-            ),
-            type: ButtonType.secondary,
-            text: 'Войти через Yandex',
-            textStyle: context.textTheme.bodyMRegularBase90,
-            onPressed: () {
-              log('Pressed');
-            },
+          SizedBox(
+            height: 52.toFigmaSize,
           ),
+          // CustomButton(
+          //   size: ButtonSize.M,
+          //   leftIcon: Padding(
+          //     padding: EdgeInsets.only(right: 8.toFigmaSize),
+          //     child: SvgPicture.asset(
+          //       'packages/auth/assets/icons/yandex.svg',
+          //     ),
+          //   ),
+          //   type: ButtonType.secondary,
+          //   text: 'Войти через Yandex',
+          //   textStyle: context.textTheme.bodyMRegularBase90,
+          //   onPressed: () {
+          //     log('Pressed');
+          //   },
+          // ),
           dividerSmall,
-          CustomButton(
-            size: ButtonSize.M,
-            leftIcon: Padding(
-              padding: EdgeInsets.only(right: 8.toFigmaSize),
-              child: SvgPicture.asset('packages/auth/assets/icons/vk.svg'),
-            ),
-            type: ButtonType.secondary,
-            text: 'Войти через VK',
-            textStyle: context.textTheme.bodyMRegularBase90,
-            onPressed: () {
-              log('Pressed');
-            },
+          SizedBox(
+            height: 52.toFigmaSize,
           ),
+          // CustomButton(
+          //   size: ButtonSize.M,
+          //   leftIcon: Padding(
+          //     padding: EdgeInsets.only(right: 8.toFigmaSize),
+          //     child: SvgPicture.asset('packages/auth/assets/icons/vk.svg'),
+          //   ),
+          //   type: ButtonType.secondary,
+          //   text: 'Войти через VK',
+          //   textStyle: context.textTheme.bodyMRegularBase90,
+          //   onPressed: () {
+          //     log('Pressed');
+          //   },
+          // ),
         ],
       ),
     );
