@@ -8,5 +8,5 @@ abstract interface class PersonRepositoryI {
 
   Future<void> loadUserSchedule();
 
-  Future<Either<BaseError, List<ShortClubEntity>>> getCurrentUserClubs(String userId);
+  Future<Either<BaseError, List<ShortClubEntity>>> getCurrentUserClubs();
 }

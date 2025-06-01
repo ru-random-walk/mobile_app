@@ -63,28 +63,13 @@ class PersonRepository implements PersonRepositoryI {
   }
 
   @override
-  Future<Either<BaseError, List<ShortClubEntity>>> getCurrentUserClubs(
-    String userId,
-  ) async {
+  Future<Either<BaseError, List<ShortClubEntity>>> getCurrentUserClubs() async {
     try {
-      final res = await getUserClubs(
-        userId: userId,
-        apiService: ClubApiService(),
+      final res = await _matcherDataSource.getUserClubs();
+      final clubs = await Future.wait(
+        res.map((e) => getClubInfoById(e.id)).toList(),
       );
-      final clubsMapsList = (res!['data']['getUserClubsWithRole'] as List)
-          .cast<Map<String, dynamic>>();
-      final clubs = clubsMapsList
-          .map(
-            (e) => ShortClubEntity(
-              id: e['club']['id'] as String,
-              name: e['club']['name'] as String,
-            ),
-          )
-          .toList();
       return Right(clubs);
-      // return Right(
-      //   clubsMapsList.map((e) => ShortClubEntity()).toList(),
-      // );
     } catch (e, s) {
       return Left(BaseError(e.toString(), s));
     }
