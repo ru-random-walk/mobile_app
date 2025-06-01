@@ -1,6 +1,7 @@
 import 'package:core/core.dart';
 import 'package:dio/dio.dart' hide Headers;
 import 'package:matcher_service/src/data/model/appointment.dart';
+import 'package:matcher_service/src/data/model/club_id.dart';
 import 'package:matcher_service/src/data/model/schedule/user_schedule.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -40,6 +41,9 @@ abstract class MatcherDataSource {
   /// Person
   @GET('$_person/schedule')
   Future<List<UserScheduleModel>> getUserSchedule();
+
+  @GET('$_person/clubs')
+  Future<List<ClubIdModel>> getUserClubs();
 
   /// Appointment
   @GET(_appointmentId)
