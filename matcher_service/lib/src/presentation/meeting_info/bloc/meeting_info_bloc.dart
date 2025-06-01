@@ -44,7 +44,7 @@ class MeetingInfoBloc extends Bloc<MeetingInfoEvent, MeetingInfoState> {
   ) async {
     final res = await _getAppointmentDetailsUseCase(appointmentId!);
     res.fold((e) {
-      emit(AppointmentInfoError());
+      emit(AppointmentInfoError(error: e));
     }, (data) {
       emit(AppointmentInfoSuccess(data));
     });

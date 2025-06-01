@@ -11,7 +11,11 @@ final class AppointmentInfoSuccess extends MeetingInfoState {
   AppointmentInfoSuccess(this.appointment);
 }
 
-final class AppointmentInfoError extends MeetingInfoState {}
+final class AppointmentInfoError extends MeetingInfoState {
+  final BaseError error;
+
+  AppointmentInfoError({required this.error});
+}
 
 final class AvailableTimeInfo extends MeetingInfoState {
   final AvailableTimeEntity availableTime;

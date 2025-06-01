@@ -19,6 +19,16 @@ class _MeetingInfoBodyWidget extends StatelessWidget {
               ),
             );
             Navigator.of(context).pop();
+          case AppointmentInfoError err:
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Err: ${err.error.message}\n${err.error.stackTrace}',
+                  maxLines: 10,
+                ),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
           case AppointmentDeleteError():
           case AvailableTimeDeleteError():
             ScaffoldMessenger.of(context).showSnackBar(
