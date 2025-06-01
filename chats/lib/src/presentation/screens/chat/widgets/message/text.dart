@@ -13,9 +13,21 @@ class _ChatTextMessageWidget extends StatelessWidget {
       maxWidth: 320.toFigmaSize,
       isMy: message.isMy,
       timestamp: message.timestamp,
-      child: Text(
+      child: LinkifyText(
         message.text,
-        style: context.textTheme.bodyMRegularBase90,
+        textStyle: context.textTheme.bodyMRegularBase90,
+        linkStyle: context.textTheme.bodyMRegularBase90.copyWith(
+          color: context.colors.main_70,
+          decoration: TextDecoration.underline,
+          decorationColor: context.colors.main_70,
+        ),
+        linkTypes: const [LinkType.url],
+        onTap: (link) {
+          final uri = Uri.tryParse(link.value ?? '');
+          if (uri != null) {
+            launchUrl(uri);
+          }
+        },
       ),
     );
   }
