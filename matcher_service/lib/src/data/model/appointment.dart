@@ -6,6 +6,7 @@ part 'appointment.g.dart';
 class AppointmentDetailsModel {
   final String id;
   final List<String> participants;
+  @JsonKey(fromJson: fromJsonTime)
   final DateTime startsAt;
   final DateTime? updatedAt;
   final DateTime? endedAt;
@@ -23,6 +24,11 @@ class AppointmentDetailsModel {
     required this.longitude,
     required this.latitude,
   });
+
+  static DateTime fromJsonTime(String json) {
+    final date = DateTime.parse(json);
+    return date.toLocal();
+  }
 
   factory AppointmentDetailsModel.fromJson(Map<String, dynamic> json) =>
       _$AppointmentDetailsModelFromJson(json);
