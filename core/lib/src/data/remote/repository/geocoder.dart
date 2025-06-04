@@ -23,8 +23,8 @@ class GeocoderRepositoryI implements GeocoderRepository {
       final geoLocation = Geolocation(
         latitude: latitude,
         longitude: longitude,
-        city: res.city ?? '',
-        street: res.street ?? '',
+        city: res.city,
+        street: res.street,
         building: res.building,
       );
       return Right(geoLocation);
