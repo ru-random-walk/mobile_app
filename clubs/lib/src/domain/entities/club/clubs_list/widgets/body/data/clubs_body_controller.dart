@@ -31,7 +31,7 @@ class ClubsBodyController {
       case 2:
         return groups.where((g) => g.userRole == 'PENDING_APPROVAL').toList();
       default:
-        return groups;
+        return groups.where((g) => g.userRole != 'PENDING_APPROVAL').toList();
     }
   }
 
