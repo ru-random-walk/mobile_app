@@ -16,6 +16,8 @@ part 'change_member_role/change_member_role.dart';
 part 'change_member_role/remove_member_from_club.dart';
 part 'change_member_role/add_member_in_club.dart';
 part 'answers/create_answer_form.dart';
+part 'answers/get_user_answers.dart';
+part 'answers/update_answer_form.dart';
 part 'join_in_club/send_answers.dart';
 part 'join_in_club/send_answers_sync.dart';
 part 'search_clubs/search_clubs.dart';

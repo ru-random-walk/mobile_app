@@ -18,11 +18,15 @@ part 'test_form_controller.dart';
 class TestFormScreen extends StatefulWidget {
   final String clubId;
   final String userId;
+  final String? answerId;
+  final Map<int, List<int>>? savedAnswers;
 
   const TestFormScreen({
     super.key,
     required this.clubId,
     required this.userId,
+    this.answerId,
+    this.savedAnswers,
   });
 
   @override
@@ -38,6 +42,8 @@ class _TestFormScreenState extends State<TestFormScreen> {
     controller = TestFormController(
       widget.clubId, 
       userId: widget.userId,
+      savedAnswers: widget.savedAnswers,
+      answerId: widget.answerId,
       onUpdate: () => setState(() {}));
     controller.loadQuestions();
   }
@@ -47,11 +53,12 @@ class _TestFormScreenState extends State<TestFormScreen> {
       context: context,
       builder: (_) => ConfirmActionDialog(
         message: 'Покинуть тест?',
-        subMessage: 'Ответы не будут сохранены.',
+        subMessage: 'Ваши ответы будут сохранены.',
         confirmText: 'Выйти',
-        customColor: const Color(0xFFFF281A),
-        onConfirm: () {
-          Navigator.of(context).pop();
+        onConfirm: () async {
+          await controller._submitAnswers(context, sendForReview: false);
+          if (!mounted) return;
+          Navigator.of(context).pop();   
         },
       ),
     );

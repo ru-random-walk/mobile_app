@@ -5,6 +5,8 @@ class TestFormController {
   final String userId;
   final VoidCallback onUpdate;
   final ClubApiService clubApiService = ClubApiService();
+  final Map<int, List<int>>? savedAnswers;
+  String? answerId;
 
   List<Question> questions = [];
   Map<int, List<int>> answersMap = {};
@@ -14,7 +16,13 @@ class TestFormController {
   bool isLoading = true;
   String? approvementId;
 
-  TestFormController(this.clubId, {required this.userId,required this.onUpdate});
+  TestFormController(
+    this.clubId, 
+    {required this.userId,
+    required this.onUpdate,
+    this.savedAnswers,
+    this.answerId,
+  });
 
   Question get currentQuestion => questions[currentIndex];
   int get totalQuestions => questions.length;
@@ -33,6 +41,14 @@ class TestFormController {
         questions = questionsJson
             .map((q) => Question.fromJson(q as Map<String, dynamic>))
             .toList();
+
+        if (savedAnswers != null) {
+          answersMap = savedAnswers!;
+          if (answersMap.isNotEmpty) {
+            currentIndex = 0;
+            _restoreSelectedIndexes();
+          }
+        }
       }
     } catch (e) {
       if (kDebugMode) {
@@ -108,36 +124,50 @@ class TestFormController {
         }).toList();
 
     try {
-      final response = await createAnswerForm(
-      approvementId: approvementId!,
-      questionAnswers: questionAnswers,
-      apiService: clubApiService,
-      );
+      Map<String, dynamic>? response;
+      if (answerId != null && answerId != "") {
+        response = await updateAnswerForm(
+          answerId: answerId!,
+          questionAnswers: questionAnswers,
+          apiService: clubApiService,
+        );
+        if (context.mounted && handleGraphQLErrors(context, response, fallbackMessage: 'Ошибка обновления ответов теста')) return;
+      } else {
+        final response = await createAnswerForm(
+        approvementId: approvementId!,
+        questionAnswers: questionAnswers,
+        apiService: clubApiService,
+        );
 
-      if (context.mounted && handleGraphQLErrors(context, response, fallbackMessage: 'Ошибка завершения теста')) return;
+        if (context.mounted && handleGraphQLErrors(context, response, fallbackMessage: 'Ошибка завершения теста')) return;
 
-      final answerId = response?['data']?['createApprovementAnswerForm']?['id'];
+        answerId = response?['data']?['createApprovementAnswerForm']?['id'];
+      }
+      
       String? status;
 
       if (sendForReview && answerId != null) {
-      final result = await sendAnswersSync(
-      answerId: answerId,
-      apiService: clubApiService,
-      );
-      if (context.mounted && handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка отправки ответов')) return;
-       
-      status = result?['data']['setAnswerStatusToSentSync']?['status'];
-      }
-
-      final result = await tryJoinInClub(
-          userId: userId,
-          clubId: clubId,
+        final result = await sendAnswersSync(
+          answerId: answerId!,
           apiService: clubApiService,
         );
-      if (context.mounted) {  
-        if (handleGraphQLErrors(context, result, fallbackMessage: 'Не получилось вступить в группу')) return;
+        if (context.mounted && handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка отправки ответов')) return;
+        
+        status = result?['data']['setAnswerStatusToSentSync']?['status'];
+        if (context.mounted) {
+          Navigator.of(context).pop(status == 'PASSED');
+        }
 
-        Navigator.of(context).pop(status == 'PASSED');
+        // final response = await tryJoinInClub(
+        //     userId: userId,
+        //     clubId: clubId,
+        //     apiService: clubApiService,
+        //   );
+        // if (context.mounted) {  
+        //   if (handleGraphQLErrors(context, response, fallbackMessage: 'Не получилось вступить в группу')) return;
+
+        //   Navigator.of(context).pop(status == 'PASSED');
+        // }
       }
     } catch (e) {
       if (kDebugMode) {
