@@ -1,4 +1,4 @@
-import 'package:chats/src/data/models/date_converter.dart';
+import 'package:chats/src/data/mappers/date_with_tz.dart';
 import 'package:chats/src/data/models/messages/payload/payload.dart';
 import 'package:chats/src/data/models/messages/type.dart';
 import 'package:core/core.dart';
@@ -10,6 +10,7 @@ part 'response.dart';
 
 sealed class BaseRequestForWalkPayloadModel extends Payload {
   final GeolocationModel location;
+  
   final DateTime startsAt;
 
   BaseRequestForWalkPayloadModel({

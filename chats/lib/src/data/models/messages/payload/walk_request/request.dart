@@ -2,7 +2,7 @@ part of 'base.dart';
 
 @JsonSerializable(
   converters: [
-    DateJsonConverter(),
+    DateWithTimeZoneConverter(),
   ],
   explicitToJson: true,
   includeIfNull: false,
