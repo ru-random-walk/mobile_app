@@ -41,17 +41,20 @@ class _MapPreview extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
-            left: 20.toFigmaSize,
-            right: 20.toFigmaSize,
-            top: 20.toFigmaSize,
-            child: SafeArea(
-              child: Text(
-                geolocation.toString(),
-                maxLines: 2,
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-                style: context.textTheme.h5,
+          Visibility(
+            visible: geolocation.hasDisplayName,
+            child: Positioned(
+              left: 20.toFigmaSize,
+              right: 20.toFigmaSize,
+              top: 20.toFigmaSize,
+              child: SafeArea(
+                child: Text(
+                  geolocation.toString(),
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  style: context.textTheme.h5,
+                ),
               ),
             ),
           )

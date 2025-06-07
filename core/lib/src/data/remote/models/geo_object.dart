@@ -12,7 +12,15 @@ class GeoObjectModel {
   });
 
   factory GeoObjectModel.fromJson(Map<String, dynamic> json) {
-    final response = (json['suggestions'] as List<dynamic>).first;
+    final response = (json['suggestions'] as List<dynamic>).firstOrNull;
+    if (response == null) {
+      return GeoObjectModel(
+        country: null,
+        city: null,
+        street: null,
+        building: null,
+      );
+    }
     final data = response['data'];
     final country = data['country'] as String?;
     final city = data['city'] as String?;
