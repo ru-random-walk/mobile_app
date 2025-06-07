@@ -28,7 +28,8 @@ class PersonRepository implements PersonRepositoryI {
     try {
       final res = await _matcherDataSource.getUserSchedule();
       final entities = res.map((e) => e.toEntity(_map)).toList();
-      final awaitedEntities = await Future.wait(entities);
+      final awaitedEntities = await Future.wait(entities)
+        ..sort((e1, e2) => e1.date.compareTo(e2.date));
       _controller.add(Right(awaitedEntities));
     } catch (e, s) {
       _controller.add(Left(BaseError(e.toString(), s)));

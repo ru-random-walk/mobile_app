@@ -15,8 +15,7 @@ extension PersonScheduleMapper on UserScheduleModel {
     final res = await mapper(timeFrames, date);
     return MeetingsForDayEntity(
       date: date,
-      meetings: res,
-      // meetings: timeFrames.map((e) => e.toEntity(date)).toList(),
+      meetings: res..sort((e1, e2) => e1.timeStart.compareTo(e2.timeStart)),
     );
   }
 }
