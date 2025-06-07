@@ -11,6 +11,7 @@ import 'package:chats/src/presentation/screens/chat/args.dart';
 import 'package:chats/src/presentation/screens/chat/bloc/chat_bloc.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -36,6 +37,7 @@ part 'widgets/message/shared/base.dart';
 part 'widgets/message/invitation.dart';
 part 'widgets/body/data.dart';
 part 'widgets/body/loading.dart';
+part 'widgets/message/menu.dart';
 
 class ChatPage extends StatefulWidget {
   final ChatPageArgs args;
