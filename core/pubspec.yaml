@@ -30,7 +30,7 @@ dependencies:
   bloc_concurrency: ^0.2.5
   flutter_svg: ^2.0.10+1
   rxdart: ^0.28.0
-  maplibre_gl: ^0.21.0
+  maplibre_gl: ^0.22.0
   geolocator: ^14.0.0
   drift: ^2.26.1
   drift_flutter: ^0.2.4
@@ -40,22 +40,22 @@ dependencies:
   flutter_image_compress: ^2.4.0
   meta:
 
-dependency_overrides:
-  maplibre_gl:
-    git:
-      url: https://github.com/maplibre/flutter-maplibre-gl.git
-      ref: main
-      path: maplibre_gl
-  maplibre_gl_web:
-    git:
-      url: https://github.com/maplibre/flutter-maplibre-gl.git
-      ref: main
-      path: maplibre_gl_web
-  maplibre_gl_platform_interface:
-    git:
-      url: https://github.com/maplibre/flutter-maplibre-gl.git
-      ref: main
-      path: maplibre_gl_platform_interface
+# dependency_overrides:
+#   maplibre_gl:
+#     git:
+#       url: https://github.com/maplibre/flutter-maplibre-gl.git
+#       ref: main
+#       path: maplibre_gl
+#   maplibre_gl_web:
+#     git:
+#       url: https://github.com/maplibre/flutter-maplibre-gl.git
+#       ref: main
+#       path: maplibre_gl_web
+#   maplibre_gl_platform_interface:
+#     git:
+#       url: https://github.com/maplibre/flutter-maplibre-gl.git
+#       ref: main
+#       path: maplibre_gl_platform_interface
 
 dev_dependencies:
   flutter_test:

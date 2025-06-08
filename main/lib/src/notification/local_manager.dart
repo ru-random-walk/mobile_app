@@ -43,7 +43,7 @@ class _LocalNotificationsManager {
   Future<void> init(
     OnNotificationTap onNotificationTap,
   ) async {
-    if (Platform.isAndroid) {
+    if (UniversalPlatform.isAndroid) {
       _onNotificationTap = onNotificationTap;
       await _initNotificationsChannels();
       _init(_onForegroungMessageTap);
@@ -79,7 +79,7 @@ class _LocalNotificationsManager {
   /// Используется только для `Android`
   ///
   void showNotification(RemoteMessage message) {
-    if (Platform.isIOS) return;
+    if (UniversalPlatform.isIOS) return;
     final notification = message.notification;
     final android = message.notification?.android;
 

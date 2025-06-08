@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:core/core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 import 'push_data/push_data.dart';
 
@@ -47,8 +47,7 @@ class NotificationManager {
   /// - Инициализирует [_firebaseNotificationManager]
   ///
   Future<void> init() async {
-    /// TODO: убрать Platform
-    if (_initialized || Platform.isIOS) return;
+    if (_initialized || UniversalPlatform.isIOS) return;
     await _firebaseTokenManager.init();
     await _localNotificationsManager.init(
       _handleNotificationData,
