@@ -82,6 +82,21 @@ class _FirebaseNotificationsManager {
   /// для `iOS`
   ///
   void _initListenToTapNotificationFromBackgrond() {
-    FirebaseMessaging.onMessageOpenedApp.listen(_onFirebaseNotificationTap);
+    if (UniversalPlatform.isAndroid) {
+      FirebaseMessaging.onMessageOpenedApp.listen(_onFirebaseNotificationTap);
+    } else if (UniversalPlatform.isWeb) {
+      window.onMessage.listen(
+        (msg) {
+          try {
+          Logger().i('Window Message with type: ${msg.type}');
+          final data = jsonDecode(msg.data.toString()) as Map<String, dynamic>;
+          Logger().i('Window Message data: $data');
+          _onNotificationTap(data);
+          } catch (e) {
+            Logger().e(e.toString());
+          }
+        },
+      );
+    }
   }
 }

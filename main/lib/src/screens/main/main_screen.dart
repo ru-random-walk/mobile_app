@@ -4,6 +4,7 @@ import 'package:clubs/clubs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:logger/logger.dart';
 import 'package:main/src/screens/main/cubit/notifications_cubit.dart';
 import 'package:main/src/screens/main/paths.dart';
 import 'package:matcher_service/matcher_service.dart';
@@ -33,6 +34,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    Logger().i('MainPage build');
     return BlocProvider(
       lazy: false,
       create: (context) => NotificationsCubit(),

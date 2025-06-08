@@ -36,6 +36,9 @@ dependencies:
   rxdart: ^0.28.0
   meta:
   universal_platform: ^1.1.0
+  js_notifications: ^0.0.5
+  web:
+  logger:
 
 
 dev_dependencies:

@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'package:logger/logger.dart';
+import 'package:web/web.dart';
 
 import 'package:core/core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:js_notifications/platform_interface/js_notifications_platform_interface.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -65,6 +68,7 @@ class NotificationManager {
   /// странице, которую необходимо открыть при нажатии на пуш
   ///
   void _handleNotificationData(Map<String, dynamic> data) {
+    log('Notification data tapped: $data');
     final pushData = PushData.fromMap(data);
     _pushDataStreamController.add(pushData);
   }

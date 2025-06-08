@@ -21,8 +21,8 @@ const _initSettings = InitializationSettings(
 );
 
 /// Менеджер для отображения уведомлений вручную
-/// 
-/// В данный момент используется только для отображения уведомлений в 
+///
+/// В данный момент используется только для отображения уведомлений в
 /// состоянии `Foreground` полученных на системе `Android`
 ///
 class _LocalNotificationsManager {
@@ -43,8 +43,15 @@ class _LocalNotificationsManager {
   Future<void> init(
     OnNotificationTap onNotificationTap,
   ) async {
+    _onNotificationTap = onNotificationTap;
+    if (UniversalPlatform.isWeb) {
+      JsNotificationsPlatform.instance.tapStream.listen(
+        (data) => _onNotificationTap(
+          data.data ?? <String, dynamic>{},
+        ),
+      );
+    }
     if (UniversalPlatform.isAndroid) {
-      _onNotificationTap = onNotificationTap;
       await _initNotificationsChannels();
       _init(_onForegroungMessageTap);
     }
@@ -75,35 +82,44 @@ class _LocalNotificationsManager {
 
   /// Метод для отображения локального уведомления из уведомления [message],
   /// которое было получено от `Firebase`
-  /// 
+  ///
   /// Используется только для `Android`
   ///
   void showNotification(RemoteMessage message) {
-    if (UniversalPlatform.isIOS) return;
-    final notification = message.notification;
-    final android = message.notification?.android;
-
-    String? payload;
-
-    try {
-      payload = jsonEncode(message.data);
-    } catch (_) {}
-
-    if (notification != null && android != null) {
-      _localNotificationsPlugin.show(
-        notification.hashCode,
-        notification.title,
-        notification.body,
-        NotificationDetails(
-          android: AndroidNotificationDetails(
-            _androidChannel.id,
-            _androidChannel.name,
-            channelDescription: _androidChannel.description,
-            icon: _androidIconPath,
-          ),
-        ),
-        payload: payload,
+    log('Foreground message arrived: ${message.notification?.title}');
+    if (UniversalPlatform.isWeb) {
+      JsNotificationsPlatform.instance.showNotification(
+        message.notification?.title ?? '',
+        body: message.notification?.body,
+        data: message.data,
       );
+    }
+    if (UniversalPlatform.isAndroid) {
+      final notification = message.notification;
+      final android = message.notification?.android;
+
+      String? payload;
+
+      try {
+        payload = jsonEncode(message.data);
+      } catch (_) {}
+
+      if (notification != null && android != null) {
+        _localNotificationsPlugin.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              _androidChannel.id,
+              _androidChannel.name,
+              channelDescription: _androidChannel.description,
+              icon: _androidIconPath,
+            ),
+          ),
+          payload: payload,
+        );
+      }
     }
   }
 
