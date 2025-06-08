@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:auth/auth.dart';
 import 'package:chats/src/domain/entity/meet_data/invite.dart';
 import 'package:chats/src/domain/entity/message/base.dart';
 import 'package:chats/src/domain/repository/chat_messaging.dart';
@@ -19,14 +20,17 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final SendMessageUseCase _sendMessageUseCase;
   final ApproveAppointmentRequestUseCase _approveAppointmentRequest;
   final RejectAppointmentRequestUseCase _rejectAppointmentRequest;
+  final GetUsersUseCase _getUsersUseCase;
 
   ChatBloc(
-      this._getMessagesUseCase,
-      this._chatMessagingRepository,
-      this._sendMessageUseCase,
-      this._approveAppointmentRequest,
-      this._rejectAppointmentRequest)
-      : super(ChatLoading()) {
+    this._getMessagesUseCase,
+    this._chatMessagingRepository,
+    this._sendMessageUseCase,
+    this._approveAppointmentRequest,
+    this._rejectAppointmentRequest,
+    this._getUsersUseCase,
+    UserEntity? companion,
+  ) : super(ChatLoading(companion)) {
     _initMessagesListener();
     on<LoadData>(_onLoadData);
     on<TextMessageSended>(_onTextMessageAdded);
@@ -63,6 +67,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           newMessage,
           ..._currentMessages,
         ],
+        state.companion,
       ),
     );
   }
@@ -182,14 +187,32 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   void _onLoadData(LoadData event, Emitter emit) async {
+    final UserEntity? currentCompanion;
+    switch (state) {
+      case ChatLoading state:
+        currentCompanion = state.companion;
+      case ChatData state:
+        currentCompanion = state.companion;
+    }
+    ;
     if (_getMessagesUseCase.allPagesLoaded) return;
     final res = await _getMessagesUseCase();
+    UserEntity? companion;
+    if (currentCompanion == null) {
+      final res = await _getUsersUseCase([event.companionId]);
+      res.fold((e) {}, (users) {
+        companion = users.first;
+      });
+    } else {
+      companion = currentCompanion;
+    }
     res.fold((e) {
       /// TODO
     }, (messages) {
       emit(
         ChatData(
           _currentMessages..addAll(messages),
+          companion,
         ),
       );
     });

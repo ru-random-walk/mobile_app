@@ -1,7 +1,6 @@
 import 'package:auth/auth.dart';
 import 'package:auth/src/data/repositories/avatar_cache.dart';
 import 'package:auth/src/data/repositories/avatars_info.dart';
-import 'package:auth/src/data/repositories/user.dart';
 import 'package:auth/src/domain/usecases/user/get_avatar.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
