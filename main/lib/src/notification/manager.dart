@@ -2,16 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'package:logger/logger.dart';
-import 'package:web/web.dart';
 
 import 'package:core/core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:js_notifications/platform_interface/js_notifications_platform_interface.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
 
+import 'platform/barrel.dart';
 import 'push_data/push_data.dart';
 
 part 'firebase_manager.dart';
@@ -58,6 +57,7 @@ class NotificationManager {
     await _firebaseNotificationManager.init(
       onNewMessageInForeground: _localNotificationsManager.showNotification,
       onNotificationTap: _handleNotificationData,
+      onBackgroundMessageTap: initListenToTapNotificationFromBackgrond,
     );
     _initialized = true;
   }

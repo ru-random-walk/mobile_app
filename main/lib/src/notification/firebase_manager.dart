@@ -25,11 +25,12 @@ class _FirebaseNotificationsManager {
   Future<void> init({
     required OnNewRemoteMessage onNewMessageInForeground,
     required OnNotificationTap onNotificationTap,
+    required void Function() onBackgroundMessageTap,
   }) async {
     _onNotificationTap = onNotificationTap;
     await _requestPermissions();
     await _checkIfAppOpenedFromTerminatedState();
-    _initListenToTapNotificationFromBackgrond();
+    _initListenToTapNotificationFromBackgrond(onBackgroundMessageTap);
     _listenToNewMessage(onNewMessageInForeground);
   }
 
@@ -81,22 +82,11 @@ class _FirebaseNotificationsManager {
   /// Также обрабатывает нажатие на уведомление в состоянии `Foreground`
   /// для `iOS`
   ///
-  void _initListenToTapNotificationFromBackgrond() {
+  void _initListenToTapNotificationFromBackgrond(void Function() listenToBackgroud) {
     if (UniversalPlatform.isAndroid) {
       FirebaseMessaging.onMessageOpenedApp.listen(_onFirebaseNotificationTap);
     } else if (UniversalPlatform.isWeb) {
-      window.onMessage.listen(
-        (msg) {
-          try {
-          Logger().i('Window Message with type: ${msg.type}');
-          final data = jsonDecode(msg.data.toString()) as Map<String, dynamic>;
-          Logger().i('Window Message data: $data');
-          _onNotificationTap(data);
-          } catch (e) {
-            Logger().e(e.toString());
-          }
-        },
-      );
+      listenToBackgroud();
     }
   }
 }
