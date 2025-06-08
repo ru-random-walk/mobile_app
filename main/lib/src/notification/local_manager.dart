@@ -45,11 +45,7 @@ class _LocalNotificationsManager {
   ) async {
     _onNotificationTap = onNotificationTap;
     if (UniversalPlatform.isWeb) {
-      JsNotificationsPlatform.instance.tapStream.listen(
-        (data) => _onNotificationTap(
-          data.data ?? <String, dynamic>{},
-        ),
-      );
+      initListenToTapNotificationFromForeground(onNotificationTap);
     }
     if (UniversalPlatform.isAndroid) {
       await _initNotificationsChannels();
@@ -88,11 +84,7 @@ class _LocalNotificationsManager {
   void showNotification(RemoteMessage message) {
     log('Foreground message arrived: ${message.notification?.title}');
     if (UniversalPlatform.isWeb) {
-      JsNotificationsPlatform.instance.showNotification(
-        message.notification?.title ?? '',
-        body: message.notification?.body,
-        data: message.data,
-      );
+      showNotificationFromMessage(message);
     }
     if (UniversalPlatform.isAndroid) {
       final notification = message.notification;
