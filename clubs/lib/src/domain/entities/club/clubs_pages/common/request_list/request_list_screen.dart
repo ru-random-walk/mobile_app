@@ -77,9 +77,11 @@ class _RequestListScreenState extends State<RequestListScreen> {
         hasMore = false;
       } else {
         final filtered = items
-            .where((e) =>
-                e['answer']?['approvement']?['club']?['id'] == widget.clubId)
-            .toList();
+            .where((e){
+              final clubId = e['answer']?['approvement']?['club']?['id'];
+              final status = e['status'];
+              return clubId == widget.clubId && status == 'WAITING';
+            }).toList();
 
         if (filtered.isNotEmpty) {
           final ids = filtered.map((e) => e['userId'] as String).toList();

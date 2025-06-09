@@ -1,6 +1,6 @@
 part of '../not_member_page.dart';
 
-class JoinRequirements extends StatelessWidget {
+class JoinRequirements extends StatefulWidget {
   final List<Map<String, dynamic>> approvements;
   final String clubId;
   final String userId;
@@ -16,6 +16,76 @@ class JoinRequirements extends StatelessWidget {
     required this.clubApiService,
   });
 
+   @override
+  State<JoinRequirements> createState() => _JoinRequirementsState();
+}
+
+class _JoinRequirementsState extends State<JoinRequirements> {
+  Map<String, String> answerStatusByApprovementId = {};
+  Map<String, Map<int, List<int>>> savedAnswersByApprovementId = {};
+  String answerId = '';
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserAnswers();
+  }
+
+  Future<void> fetchUserAnswers() async {
+    try{
+      final result = await getUserAnswers(
+        userId: widget.userId,
+        page: 0,
+        size: 20,
+        apiService: widget.clubApiService,
+      );
+
+      if (!mounted) return;
+      if (handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка при загрузке условий вступления в группу')) return;
+
+      final Map<String, String> answers = {};
+      final Map<String, Map<int, List<int>>> answersData = {};
+
+      for (final answer in result?['data']?['getUserAnswers'] ?? []) {
+        final approvement = answer['approvement'];
+        final club = approvement?['club'];
+        if (club?['id'] == widget.clubId) {
+          answerId = answer['id'];
+          final approvementId = approvement['id'];
+          final status = answer['status'];
+          answers[approvementId] = status;
+          
+          final data = answer['data'];
+          if (data != null && data['questionAnswers'] != null) {
+            final questionAnswers = data['questionAnswers'] as List<dynamic>;
+            final Map<int, List<int>> questionAnswerMap = {};
+
+            for (int i = 0; i < questionAnswers.length; i++) {
+              final optionNumbers = questionAnswers[i]['optionNumbers'] as List<dynamic>? ?? [];
+              questionAnswerMap[i] = optionNumbers.map((e) => e as int).toList();
+            }
+
+            answersData[approvementId] = questionAnswerMap;
+          }
+        }
+      }
+
+      if (mounted) {
+        setState(() {
+          answerStatusByApprovementId = answers;
+          savedAnswersByApprovementId = answersData;
+        });
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      if (context.mounted) {
+        showErrorSnackbar(context, 'Произошла ошибка');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -29,8 +99,25 @@ class JoinRequirements extends StatelessWidget {
           ),
         ),
         SizedBox(height: 4.toFigmaSize),
-        ...approvements.map((approvement) {
+        ...widget.approvements.map((approvement) {
           final isTest = approvement['type'] == 'FORM';
+          final approvementId = approvement['id'];
+          final answerStatus = answerStatusByApprovementId[approvementId];
+          final bool hasAnswer = answerStatus != null;
+          
+          String buttonText;
+          if (isTest) {
+            buttonText = !hasAnswer ? 'Пройти' : 'Продолжить';
+          } else {
+            if (hasAnswer) {
+              buttonText = 'Отправлено';
+            } else {
+              buttonText = 'Отправить';
+            }
+          }
+            
+          final bool disableButton = (answerStatus == 'SENT' || answerStatus == 'PASSED' || answerStatus == 'FAILED' || answerStatus == 'IN_REVIEW');
+
           return Column(
             children: [
               Row(
@@ -45,15 +132,30 @@ class JoinRequirements extends StatelessWidget {
                     ),
                   ),
                   CustomButton(
-                    text: isTest ? 'Пройти' : 'Отправить',
+                    text: buttonText,
                     customWidth: 140.toFigmaSize,
                     customHeight: 44.toFigmaSize,
                     padding: EdgeInsets.all(4.toFigmaSize),
-                    onPressed: () async {
+                    customColor: disableButton ? context.colors.base_20 : null,
+                    onPressed: disableButton
+                      ? () { 
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Вы не можете повторно пройти тест'),
+                            ),
+                          );
+                        }
+                      : () async {
                       if (isTest) {
+                        final savedAnswers = savedAnswersByApprovementId[approvementId];
                         final result = await Navigator.of(context).push<bool>(
                           MaterialPageRoute(
-                            builder: (_) => TestFormScreen(clubId: clubId, userId: userId),
+                            builder: (_) => TestFormScreen(
+                              clubId: widget.clubId, 
+                              userId: widget.userId, 
+                              answerId: answerId,
+                              savedAnswers: savedAnswers,
+                            ),
                           ),
                         );
 
@@ -67,9 +169,9 @@ class JoinRequirements extends StatelessWidget {
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
                                 builder: (_) => MemberPage(
-                                  clubId: clubId,
-                                  currentId: userId,
-                                  membersCount: membersCount,
+                                  clubId: widget.clubId,
+                                  currentId: widget.userId,
+                                  membersCount: widget.membersCount,
                                 ),
                               ),
                             );
@@ -79,29 +181,26 @@ class JoinRequirements extends StatelessWidget {
                         try {
                           final response = await createApprovementAnswerMembersConfirm(
                             approvementId: approvement['id'],
-                            apiService: clubApiService,
+                            apiService: widget.clubApiService,
                           );
                           if (context.mounted && handleGraphQLErrors(context, response, fallbackMessage: 'Ошибка при создании запроса')) return;
 
-                          final answerId = response?['data']?['CreateApprovementAnswerMembersConfirm']?['id'];
+                          String answerId = response?['data']?['createApprovementAnswerMembersConfirm']?['id'];
                           String? status;
-
-                          if (answerId != null) {
-                            final result = await sendAnswers(
-                              answerId: answerId,
-                              apiService: clubApiService,
+                          final result = await sendAnswers(
+                            answerId: answerId,
+                            apiService: widget.clubApiService,
+                          );
+                          if (context.mounted && handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка отправки запроса')) return;
+                        
+                          status = result?['data']['setAnswerStatusToSent']?['status'];
+                          if (context.mounted && status == 'SENT'){
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: const Text('Запрос отправлен'),
+                                backgroundColor: context.colors.main_50,
+                              ),
                             );
-                            if (context.mounted && handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка отправки запроса')) return;
-                          
-                            status = result?['data']['setAnswerStatusToSent']?['status'];
-                            if (context.mounted && status == 'SENT'){
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: const Text('Запрос отправлен'),
-                                  backgroundColor: context.colors.main_50,
-                                ),
-                              );
-                            }
                           }
                         } catch (e) {
                           if (kDebugMode) {
