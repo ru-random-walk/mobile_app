@@ -21,8 +21,8 @@ const _initSettings = InitializationSettings(
 );
 
 /// Менеджер для отображения уведомлений вручную
-/// 
-/// В данный момент используется только для отображения уведомлений в 
+///
+/// В данный момент используется только для отображения уведомлений в
 /// состоянии `Foreground` полученных на системе `Android`
 ///
 class _LocalNotificationsManager {
@@ -43,8 +43,11 @@ class _LocalNotificationsManager {
   Future<void> init(
     OnNotificationTap onNotificationTap,
   ) async {
-    if (Platform.isAndroid) {
-      _onNotificationTap = onNotificationTap;
+    _onNotificationTap = onNotificationTap;
+    if (UniversalPlatform.isWeb) {
+      initListenToTapNotificationFromForeground(onNotificationTap);
+    }
+    if (UniversalPlatform.isAndroid) {
       await _initNotificationsChannels();
       _init(_onForegroungMessageTap);
     }
@@ -75,35 +78,40 @@ class _LocalNotificationsManager {
 
   /// Метод для отображения локального уведомления из уведомления [message],
   /// которое было получено от `Firebase`
-  /// 
+  ///
   /// Используется только для `Android`
   ///
   void showNotification(RemoteMessage message) {
-    if (Platform.isIOS) return;
-    final notification = message.notification;
-    final android = message.notification?.android;
+    log('Foreground message arrived: ${message.notification?.title}');
+    if (UniversalPlatform.isWeb) {
+      showNotificationFromMessage(message);
+    }
+    if (UniversalPlatform.isAndroid) {
+      final notification = message.notification;
+      final android = message.notification?.android;
 
-    String? payload;
+      String? payload;
 
-    try {
-      payload = jsonEncode(message.data);
-    } catch (_) {}
+      try {
+        payload = jsonEncode(message.data);
+      } catch (_) {}
 
-    if (notification != null && android != null) {
-      _localNotificationsPlugin.show(
-        notification.hashCode,
-        notification.title,
-        notification.body,
-        NotificationDetails(
-          android: AndroidNotificationDetails(
-            _androidChannel.id,
-            _androidChannel.name,
-            channelDescription: _androidChannel.description,
-            icon: _androidIconPath,
+      if (notification != null && android != null) {
+        _localNotificationsPlugin.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              _androidChannel.id,
+              _androidChannel.name,
+              channelDescription: _androidChannel.description,
+              icon: _androidIconPath,
+            ),
           ),
-        ),
-        payload: payload,
-      );
+          payload: payload,
+        );
+      }
     }
   }
 

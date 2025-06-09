@@ -25,24 +25,29 @@ class _FirebaseNotificationsManager {
   Future<void> init({
     required OnNewRemoteMessage onNewMessageInForeground,
     required OnNotificationTap onNotificationTap,
+    required void Function(OnNotificationTap onNotificationTap)
+        onBackgroundMessageTap,
   }) async {
     _onNotificationTap = onNotificationTap;
     await _requestPermissions();
     await _checkIfAppOpenedFromTerminatedState();
-    _initListenToTapNotificationFromBackgrond();
+    _initListenToTapNotificationFromBackgrond(onBackgroundMessageTap);
     _listenToNewMessage(onNewMessageInForeground);
   }
 
   /// Метод для подписки на уведомления, получаемые в состоянии `Foreground`
   void _listenToNewMessage(OnNewRemoteMessage onNewMessage) {
-    FirebaseMessaging.onMessage.listen(onNewMessage);
+    FirebaseMessaging.onMessage.listen((msg) {
+      onNewMessage(msg);
+      log('FCM Message arrived: ${msg.data}');
+    });
   }
 
   /// Запрашивает разрешение на отправку уведомлений
-  /// 
-  /// Также устанавливает параметры для показа уведомления в состоянии 
+  ///
+  /// Также устанавливает параметры для показа уведомления в состоянии
   /// `Foreground` для iOS
-  /// 
+  ///
   Future<void> _requestPermissions() async {
     await _messaging.requestPermission();
     await _messaging.setForegroundNotificationPresentationOptions(
@@ -72,13 +77,21 @@ class _FirebaseNotificationsManager {
     _onNotificationTap(data);
   }
 
-  /// Инициализация прослушивания нажатия на уведомления в состоянии 
+  /// Инициализация прослушивания нажатия на уведомления в состоянии
   /// `Background` на обоих платформах
-  /// 
-  /// Также обрабатывает нажатие на уведомление в состоянии `Foreground` 
+  ///
+  /// Также обрабатывает нажатие на уведомление в состоянии `Foreground`
   /// для `iOS`
-  /// 
-  void _initListenToTapNotificationFromBackgrond() {
-    FirebaseMessaging.onMessageOpenedApp.listen(_onFirebaseNotificationTap);
+  ///
+  void _initListenToTapNotificationFromBackgrond(
+    void Function(
+      OnNotificationTap onNotificationTap,
+    ) listenToBackgroud,
+  ) {
+    if (UniversalPlatform.isAndroid) {
+      FirebaseMessaging.onMessageOpenedApp.listen(_onFirebaseNotificationTap);
+    } else if (UniversalPlatform.isWeb) {
+      listenToBackgroud(_onNotificationTap);
+    }
   }
 }

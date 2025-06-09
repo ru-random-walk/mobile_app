@@ -30,6 +30,9 @@ class _ApiTokenSetter {
       final res = await req;
       return res.statusCode == 200;
     } catch (e) {
+      Logger().e(
+        'Failed to update push token with oldToken $oldToken and newToken $token',
+      );
       return false;
     }
   }

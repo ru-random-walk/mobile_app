@@ -36,7 +36,9 @@ class _FirebaseTokenManager {
 
   /// Получение нового токена
   Future<String?> get _newToken async {
-    final newToken = await _messaging.getToken();
+    final newToken = await _messaging.getToken(
+      vapidKey: const String.fromEnvironment('VAPID_KEY'),
+    );
     log('FCM token: $newToken');
     return newToken;
   }
@@ -51,7 +53,8 @@ class _FirebaseTokenManager {
   Future<bool> updateTokenOnServer(String oldToken, String newToken) =>
       tokenSender.updateToken(oldToken, newToken);
 
-  Future<bool> setNewTokenOnServer(String token) => tokenSender.setNewToken(token);
+  Future<bool> setNewTokenOnServer(String token) =>
+      tokenSender.setNewToken(token);
 
   /// Иницализация токена при самом первом запуске приложения
   Future<void> _initTokenOnVeryFirstLaunch() async {
