@@ -23,6 +23,9 @@ Future<Map<String, dynamic>?> getUserAnswers({
               optionNumbers
             }
           }
+          ... on MembersConfirmAnswerData {
+            actualConfirmationNumber
+          }
         }
       }
     }

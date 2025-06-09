@@ -104,14 +104,19 @@ class _JoinRequirementsState extends State<JoinRequirements> {
           final approvementId = approvement['id'];
           final answerStatus = answerStatusByApprovementId[approvementId];
           final bool hasAnswer = answerStatus != null;
-          String buttonText = isTest
-              ? (!hasAnswer
-                  ? 'Пройти'
-                  : 'Продолжить')
-              : 'Отправить';
+          
+          String buttonText;
+          if (isTest) {
+            buttonText = !hasAnswer ? 'Пройти' : 'Продолжить';
+          } else {
+            if (hasAnswer) {
+              buttonText = 'Отправлено';
+            } else {
+              buttonText = 'Отправить';
+            }
+          }
             
-          final bool disableButton = isTest &&
-              (answerStatus == 'SENT' || answerStatus == 'PASSED' || answerStatus == 'FAILED');
+          final bool disableButton = (answerStatus == 'SENT' || answerStatus == 'PASSED' || answerStatus == 'FAILED' || answerStatus == 'IN_REVIEW');
 
           return Column(
             children: [
@@ -131,6 +136,7 @@ class _JoinRequirementsState extends State<JoinRequirements> {
                     customWidth: 140.toFigmaSize,
                     customHeight: 44.toFigmaSize,
                     padding: EdgeInsets.all(4.toFigmaSize),
+                    customColor: disableButton ? context.colors.base_20 : null,
                     onPressed: disableButton
                       ? () { 
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -179,25 +185,22 @@ class _JoinRequirementsState extends State<JoinRequirements> {
                           );
                           if (context.mounted && handleGraphQLErrors(context, response, fallbackMessage: 'Ошибка при создании запроса')) return;
 
-                          final answerId = response?['data']?['CreateApprovementAnswerMembersConfirm']?['id'];
+                          String answerId = response?['data']?['createApprovementAnswerMembersConfirm']?['id'];
                           String? status;
-
-                          if (answerId != null) {
-                            final result = await sendAnswers(
-                              answerId: answerId,
-                              apiService: widget.clubApiService,
+                          final result = await sendAnswers(
+                            answerId: answerId,
+                            apiService: widget.clubApiService,
+                          );
+                          if (context.mounted && handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка отправки запроса')) return;
+                        
+                          status = result?['data']['setAnswerStatusToSent']?['status'];
+                          if (context.mounted && status == 'SENT'){
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: const Text('Запрос отправлен'),
+                                backgroundColor: context.colors.main_50,
+                              ),
                             );
-                            if (context.mounted && handleGraphQLErrors(context, result, fallbackMessage: 'Ошибка отправки запроса')) return;
-                          
-                            status = result?['data']['setAnswerStatusToSent']?['status'];
-                            if (context.mounted && status == 'SENT'){
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: const Text('Запрос отправлен'),
-                                  backgroundColor: context.colors.main_50,
-                                ),
-                              );
-                            }
                           }
                         } catch (e) {
                           if (kDebugMode) {

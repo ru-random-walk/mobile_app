@@ -157,17 +157,6 @@ class TestFormController {
         if (context.mounted) {
           Navigator.of(context).pop(status == 'PASSED');
         }
-
-        // final response = await tryJoinInClub(
-        //     userId: userId,
-        //     clubId: clubId,
-        //     apiService: clubApiService,
-        //   );
-        // if (context.mounted) {  
-        //   if (handleGraphQLErrors(context, response, fallbackMessage: 'Не получилось вступить в группу')) return;
-
-        //   Navigator.of(context).pop(status == 'PASSED');
-        // }
       }
     } catch (e) {
       if (kDebugMode) {
