@@ -194,7 +194,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       case ChatData state:
         currentCompanion = state.companion;
     }
-    ;
     if (_getMessagesUseCase.allPagesLoaded) return;
     final res = await _getMessagesUseCase();
     UserEntity? companion;

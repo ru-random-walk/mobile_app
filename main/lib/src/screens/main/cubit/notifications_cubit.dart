@@ -12,7 +12,10 @@ class NotificationsCubit extends Cubit<NotificationsState> {
     init();
   }
 
-  void init() {
-    notificationManager.init();
+  Future<void> init() async {
+    await notificationManager.init();
+    notificationManager.pushDataStream.listen((pushData) {
+      emit(NotificationArrived(pushData));
+    });
   }
 }

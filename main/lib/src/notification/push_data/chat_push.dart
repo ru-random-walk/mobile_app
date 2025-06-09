@@ -25,15 +25,19 @@ class ChatMessagePushData extends PushData {
   factory ChatMessagePushData.fromMap(
     Map<String, dynamic> data,
   ) {
+    log('Data from push: $data');
     final chatId = data['chatId'] as String;
     final senderId = data['sender'] as String;
-    final chatMemberIds = data['chat_members'] as List<String>;
+    final chatMemberIdsString = data['chat_members'] as String;
+    final chatMemberIds =
+        (chatMemberIdsString.substring(1, chatMemberIdsString.length - 1))
+            .split(',');
     final currentUserId = chatMemberIds.firstWhere((id) => id != senderId);
     final companionId = chatMemberIds.firstWhere((id) => id != currentUserId);
     return ChatMessagePushData._(
       chatId: chatId,
-      currentUserId: currentUserId,
-      companionId: companionId,
+      currentUserId: currentUserId.trim(),
+      companionId: companionId.trim(),
     );
   }
 }
