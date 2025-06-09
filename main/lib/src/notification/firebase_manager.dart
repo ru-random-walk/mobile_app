@@ -25,7 +25,8 @@ class _FirebaseNotificationsManager {
   Future<void> init({
     required OnNewRemoteMessage onNewMessageInForeground,
     required OnNotificationTap onNotificationTap,
-    required void Function() onBackgroundMessageTap,
+    required void Function(OnNotificationTap onNotificationTap)
+        onBackgroundMessageTap,
   }) async {
     _onNotificationTap = onNotificationTap;
     await _requestPermissions();
@@ -82,11 +83,15 @@ class _FirebaseNotificationsManager {
   /// Также обрабатывает нажатие на уведомление в состоянии `Foreground`
   /// для `iOS`
   ///
-  void _initListenToTapNotificationFromBackgrond(void Function() listenToBackgroud) {
+  void _initListenToTapNotificationFromBackgrond(
+    void Function(
+      OnNotificationTap onNotificationTap,
+    ) listenToBackgroud,
+  ) {
     if (UniversalPlatform.isAndroid) {
       FirebaseMessaging.onMessageOpenedApp.listen(_onFirebaseNotificationTap);
     } else if (UniversalPlatform.isWeb) {
-      listenToBackgroud();
+      listenToBackgroud(_onNotificationTap);
     }
   }
 }
