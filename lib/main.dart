@@ -45,7 +45,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     return MultiProvider(
       providers: providersScope,
       child: MultiBlocProvider(
@@ -57,9 +56,18 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ],
-        child: MaterialApp(
-          theme: lightTheme,
-          home: const SplashPage(),
+        child: AnnotatedRegion<SystemUiOverlayStyle>(
+          value: const SystemUiOverlayStyle(
+            statusBarBrightness: Brightness.light,
+            statusBarIconBrightness: Brightness.dark,
+            statusBarColor: Colors.transparent,
+            systemNavigationBarColor: Colors.transparent,
+            systemNavigationBarIconBrightness: Brightness.dark,
+          ),
+          child: MaterialApp(
+            theme: lightTheme,
+            home: const SplashPage(),
+          ),
         ),
       ),
     );
