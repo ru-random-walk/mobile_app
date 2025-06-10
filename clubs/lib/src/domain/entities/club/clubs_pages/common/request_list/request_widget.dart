@@ -30,9 +30,9 @@ class _RequestWidgetState extends State<RequestWidget> {
             size: 80.toFigmaSize,
           ),
           SizedBox(width: 16.toFigmaSize),
-          SizedBox(
+          Expanded(
+            child: SizedBox(
             height: 80.toFigmaSize,
-            child: Expanded(
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
