@@ -21,7 +21,11 @@ final class _MessageRecieved extends ChatEvent {
   _MessageRecieved({required this.message});
 }
 
-final class LoadData extends ChatEvent {}
+final class LoadData extends ChatEvent {
+  final String companionId;
+
+  LoadData(this.companionId);
+}
 
 sealed class AppointmentRequestDecision extends ChatEvent {
   final String messageId;

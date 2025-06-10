@@ -25,7 +25,7 @@ class _ChatListBodyData extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (_) => ChatPage(
-                  args: ChatPageArgs(
+                  args: ChatPageArgsWithCompanion(
                     chatId: chat.id,
                     companion: chat.companion,
                     currentUserId: currentUserId,

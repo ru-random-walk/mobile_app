@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:auth/auth.dart';
-import 'package:auth/src/data/repositories/user.dart';
 import 'package:auth/src/domain/entities/user/update_user_info.dart';
 import 'package:core/core.dart';
 import 'package:utils/utils.dart';

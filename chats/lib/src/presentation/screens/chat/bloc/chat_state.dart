@@ -1,15 +1,26 @@
 part of 'chat_bloc.dart';
 
 @immutable
-sealed class ChatState {}
+sealed class ChatState {
+  final UserEntity? companion;
 
-final class ChatLoading extends ChatState {}
+  const ChatState(this.companion);
+}
+
+final class ChatLoading extends ChatState {
+  const ChatLoading(super.companion);
+}
 
 final class ChatData extends ChatState {
   final List<MessageEntity> messages;
-  ChatData(this.messages);
+
+  const ChatData(
+    this.messages,
+    super.companion,
+  );
 
   ChatData copyWith({List<MessageEntity>? messages}) => ChatData(
         messages ?? this.messages,
+        companion,
       );
 }

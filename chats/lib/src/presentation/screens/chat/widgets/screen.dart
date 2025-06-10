@@ -1,11 +1,9 @@
 part of '../page.dart';
 
 class _ChatScreen extends StatelessWidget {
-  final UserEntity companion;
+  final String companionId;
 
-  const _ChatScreen({
-    required this.companion,
-  });
+  const _ChatScreen(this.companionId);
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +14,7 @@ class _ChatScreen extends StatelessWidget {
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: context.colors.base_0,
-          appBar: _ChatAppBarWidget(
-            companion: companion,
-          ),
+          appBar: const _ChatAppBarWidget(),
           body: Stack(
             children: [
               Positioned.fill(
@@ -29,7 +25,9 @@ class _ChatScreen extends StatelessWidget {
               ),
               BlocBuilder<ChatBloc, ChatState>(
                 builder: (_, state) => switch (state) {
-                  ChatData _ => _ChatBodyData(),
+                  ChatData _ => _ChatBodyData(
+                      companionId: companionId,
+                    ),
                   ChatLoading _ => _ChatBodyLoading(),
                 },
               ),

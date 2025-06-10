@@ -1,5 +1,4 @@
 import 'package:auth/auth.dart';
-import 'package:auth/src/data/repositories/user.dart';
 import 'package:auth/src/domain/usecases/user/logout.dart';
 import 'package:auth/src/screens/edit_user/page.dart';
 import 'package:auth/src/screens/settings/bloc/settings_bloc.dart';

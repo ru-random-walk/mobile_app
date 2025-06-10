@@ -1,6 +1,10 @@
 part of '../../page.dart';
 
 class _ChatBodyData extends StatefulWidget {
+  final String companionId;
+
+  const _ChatBodyData({required this.companionId});
+
   @override
   State<_ChatBodyData> createState() => _ChatBodyDataState();
 }
@@ -37,7 +41,7 @@ class _ChatBodyDataState extends State<_ChatBodyData> {
                       order: StickyGroupedListOrder.DESC,
                       indexedItemBuilder: (_, message, index) {
                         if (index == messages.length - 5) {
-                          bloc.add(LoadData());
+                          bloc.add(LoadData(widget.companionId));
                         }
                         return _ChatMessageWidget(
                           message: message,

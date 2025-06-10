@@ -73,6 +73,11 @@ class _ChatPageState extends State<ChatPage> {
       child: MultiProvider(
         providers: [
           Provider(
+            create: (_) => UserRepository(
+              UsersDataSource(),
+            ),
+          ),
+          Provider(
             create: (_) => GetMessagesUseCase(
               currentUserId: args.currentUserId,
               chatId: args.chatId,
@@ -92,7 +97,7 @@ class _ChatPageState extends State<ChatPage> {
               context.read<ChatMessagingRepository>(),
               args.chatId,
               args.currentUserId,
-              args.companion.id,
+              args.companionId,
             ),
           ),
           Provider(
@@ -101,6 +106,11 @@ class _ChatPageState extends State<ChatPage> {
           Provider(
             create: (_) => RejectAppointmentRequestUseCase(),
           ),
+          Provider(
+            create: (context) => GetUsersUseCase(
+              context.read<UserRepository>(),
+            ),
+          )
         ],
         child: BlocProvider(
           create: (context) => ChatBloc(
@@ -109,7 +119,11 @@ class _ChatPageState extends State<ChatPage> {
             context.read(),
             context.read(),
             context.read(),
-          )..add(LoadData()),
+            context.read(),
+            args is ChatPageArgsWithCompanion
+                ? (args as ChatPageArgsWithCompanion).companion
+                : null,
+          )..add(LoadData(args.companionId)),
           child: Builder(
             builder: (context) => BlocListener<ChatBloc, ChatState>(
               listener: (context, state) {
@@ -117,9 +131,7 @@ class _ChatPageState extends State<ChatPage> {
                   lastMessage = state.messages.firstOrNull;
                 }
               },
-              child: _ChatScreen(
-                companion: args.companion,
-              ),
+              child: _ChatScreen(args.companionId),
             ),
           ),
         ),

@@ -2,6 +2,7 @@ library auth;
 
 export 'src/screens/login/page.dart';
 export 'src/domain/entities/token/response.dart';
+export 'src/domain/usecases/user/users.dart';
 export 'src/domain/usecases/refresh.dart';
 export 'src/domain/usecases/user/profile.dart';
 export 'src/domain/entities/user/user.dart';
@@ -13,3 +14,4 @@ export 'src/data/models/user/user.dart';
 export 'src/data/mappers/user.dart';
 export 'src/screens/avatar/widget.dart';
 export 'src/screens/settings/page.dart';
+export 'src/data/repositories/user.dart';
